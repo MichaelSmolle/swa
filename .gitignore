@@ -8,3 +8,7 @@
 .idea
 target
 ./javadoc
+.classpath
+.project
+.settings/
+
