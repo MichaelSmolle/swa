@@ -11,8 +11,8 @@
     <name>Parent Project for SwaZam Lab</name>
 
     <modules>
-        <!--<module>swazam-client</module>-->
-        <!--<module>swazam-peer</module>-->
+        <module>swazam-client</module>
+        <module>swazam-peer</module>
 	<module>swazam-webapp</module>
     </modules>
 
