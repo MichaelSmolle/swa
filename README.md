@@ -1,9 +1,13 @@
-swa
-===
+##########################
+# swa                    #
+##########################
 
-Lab 2 (2012)
+#Lab 2 (2012)
 
-initialize locat repo:
+Before you do someting, IMPORT fingerprint.jar
 
-# don't ferget to change -Dversion=#Number
-mvn install:install-file -DlocalRepositoryPath=repo -DcreateChecksum=true -Dpackaging=jar -Dfile=fingerprint.jar -DgroupId=org.tuwien.swalab2 -DartifactId=swazam-parent -Dversion=1.0
+#go to importMe
+cd importMe
+
+mvn install:install-file -Dfile=fingerprint.jar -DgroupId=ac.at.tuwien.infosys.swa.audio -DartifactId=fingerprint -Dversion=0.1.1 -Dpackaging=jar
+
