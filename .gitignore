@@ -7,7 +7,7 @@
 *.iml
 .idea
 target
-./javadoc
+javadoc
 .classpath
 .project
 .settings/
