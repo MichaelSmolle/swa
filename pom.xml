@@ -11,9 +11,9 @@
     <name>Parent Project for SwaZam Lab</name>
 
     <modules>
-        <module>swazam-client</module>
-        <module>swazam-peer</module>
-		<module>swazam-webapp</module>
+        <!--<module>swazam-client</module>-->
+        <!--<module>swazam-peer</module>-->
+	<module>swazam-webapp</module>
     </modules>
 
     <build>
@@ -23,8 +23,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                     </configuration>
                 </plugin>
             </plugins>
