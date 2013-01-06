@@ -38,30 +38,37 @@
                 </executions>  
             </plugin>  
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <!--classpathPrefix>lib/</classpathPrefix-->
                             <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>
                         </manifest>
                     </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
 
-    <!--repositories>
+    <repositories>
         <repository>
-            <id>in-project</id>
-            <name>In Project Repo</name>
-            <url>file://${project.basedir}/lib</url>
+            <id>lib</id>
+            <url>../${project.baseUri}/lib</url>
         </repository>
-    </repositories-->
-
+    </repositories>
+    
 
     <dependencies>
         <dependency>
@@ -74,7 +81,23 @@
             <groupId>ac.at.tuwien.infosys.swa.audio</groupId>
             <artifactId>fingerprint</artifactId>
             <version>0.1.1</version>
-            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>jtransforms</groupId>
+            <artifactId>jtransforms</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>javazoom</groupId>
+            <artifactId>mp3spi</artifactId>
+            <version>1.9.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>tritonus</groupId>
+            <artifactId>misc</artifactId>
+            <version>0.3.6</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
     

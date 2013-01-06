@@ -25,9 +25,11 @@ public class Client
   else {
 
    filename = args[1];    
-   System.out.println(filename.toString());    
+       
 
    File fileIn = new File(filename);
+
+   System.out.println(fileIn.getAbsolutePath());
 
    try {
     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(fileIn);
