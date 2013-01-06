@@ -65,7 +65,7 @@
     <repositories>
         <repository>
             <id>lib</id>
-            <url>${project.parent.baseUri}lib</url>
+            <url>${project.baseUri}lib</url>
         </repository>
     </repositories>
     
