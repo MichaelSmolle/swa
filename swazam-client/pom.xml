@@ -31,7 +31,7 @@
                             <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>  
                             <arguments>  
                                 <argument>query</argument>  
-                                <argument>${project.basedir}/../music/sample1.mp3</argument>  
+                                <argument>${project.basedir}/sample1.mp3</argument>  
                             </arguments>  
                         </configuration>  
                     </execution>  
