@@ -25,11 +25,11 @@ public class Client
   else {
 
    filename = args[1];    
+   System.out.println(filename.toString());    
 
    File fileIn = new File(filename);
 
    try {
-        
     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(fileIn);
 
     System.out.println("Trying to fingerprint " + fileIn.getName());

@@ -17,20 +17,51 @@
 
     <build>
         <plugins>
+            <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>exec-maven-plugin</artifactId>  
+                <version>1.2.1</version>  
+                <executions>  
+                    <execution>  
+                        <phase>test</phase>  
+                        <goals>  
+                            <goal>java</goal>  
+                        </goals>  
+                        <configuration>  
+                            <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>  
+                            <arguments>  
+                                <argument>query</argument>  
+                                <argument>${project.basedir}/../music/sample1.mp3</argument>  
+                            </arguments>  
+                        </configuration>  
+                    </execution>  
+                </executions>  
+            </plugin>  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
+                            <!--classpathPrefix>lib/</classpathPrefix-->
                             <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>
                         </manifest>
                     </archive>
-                </configuration>S
+                </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <!--repositories>
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+    </repositories-->
+
 
     <dependencies>
         <dependency>
@@ -43,6 +74,7 @@
             <groupId>ac.at.tuwien.infosys.swa.audio</groupId>
             <artifactId>fingerprint</artifactId>
             <version>0.1.1</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     
