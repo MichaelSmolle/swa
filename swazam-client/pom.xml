@@ -29,10 +29,10 @@
                         </goals>  
                         <configuration>  
                             <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>  
-                            <arguments>  
+                            <!--arguments>  
                                 <argument>query</argument>  
                                 <argument>${project.basedir}/sample1.mp3</argument>  
-                            </arguments>  
+                            </arguments-->  
                         </configuration>  
                     </execution>  
                 </executions>  
