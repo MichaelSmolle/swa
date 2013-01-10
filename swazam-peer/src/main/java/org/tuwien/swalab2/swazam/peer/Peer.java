@@ -30,6 +30,7 @@ public class Peer {
 		id = arg0;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		Integer arg0;
 		
@@ -46,6 +47,21 @@ public class Peer {
 		peer.setUp();
 		
 //		load library
+		File file = new File(id + ".lib");
+	    try {
+			FileInputStream f = new FileInputStream(file);
+			ObjectInputStream s = new ObjectInputStream(f);
+			peer.library = ((ConcurrentHashMap<Fingerprint, File>) s.readObject());
+			s.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Could not load library, setting up new one"); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		
