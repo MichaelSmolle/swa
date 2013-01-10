@@ -1,6 +1,7 @@
 package org.tuwien.swalab2.swazam.peer;
 
 import ac.at.tuwien.infosys.swa.audio.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +12,10 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sound.sampled.AudioInputStream;
@@ -130,7 +134,12 @@ public class Peer {
 							System.out.println("Couldn't find file \n");
 						}
 					}
-
+				} else if (cmd.equals("list")) {
+					Iterator<Entry<Fingerprint, File>> it = library.entrySet().iterator();
+					while (it.hasNext()){
+						System.out.println(it.next().getValue());
+					}
+					
 				} else if (cmd.equals("usage")) {
 					usage();
 				} else if (cmd.equals("quit")) {
@@ -165,7 +174,8 @@ public class Peer {
 	private void usage() {
 		System.out.println("\n Interactive commands:"
 				+ "\n - add <path to mp3>" 
-				+ "\n - add <id> <path to mp3>" 
+				+ "\n - add <id> <path to mp3>"
+				+ "\n - list" 				
 				+ "\n - quit" 
 				+ "\n - usage"
 				+ "\n");
