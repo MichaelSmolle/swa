@@ -10,17 +10,20 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
+import sun.org.mozilla.javascript.tools.debugger.SwingGui;
 
 /**
  * Hello world!
  * 
  */
 public class Client {
-
+private SwingUI swingUI;
+    
 	public static void main(String[] args) {
 		Client client = new Client();
 		client.setUp();
-		client.startSwingUI();
+		client.startSwingUI(args);
 
 		client.startCLI(args);
 
@@ -32,8 +35,9 @@ public class Client {
 		// ToDo: somehow bootstrap
 	}
 
-	private void startSwingUI() {
-		// ToDo: start Swing UI
+	private void startSwingUI(String[] args) {
+		swingUI = new SwingUI();
+                swingUI.main(args);
 	}
 
 	private void startCLI(String[] args) {
@@ -86,9 +90,9 @@ public class Client {
 				}
 			}
 		}
-
+                swingUI.close();
 		System.out.println("Shutting down Client");
-
+                
 	}
 
 	private void usage() {
