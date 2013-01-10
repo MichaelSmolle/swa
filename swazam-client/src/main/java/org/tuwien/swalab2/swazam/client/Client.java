@@ -38,6 +38,8 @@ public class Client {
     private void startCLI(String[] args) {
         String cmd = "";
         String filename = "";
+        Fingerprint fingerprint = null;
+        
         usage();
 
         boolean run = true;
@@ -45,7 +47,7 @@ public class Client {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             String input;
             Scanner s = null;
-
+            
 
             try {
                 input = in.readLine();
@@ -66,7 +68,7 @@ public class Client {
                 File file = new File(filename);
                 try{
                 if (file.getName().contains("mp3") || file.getName().contains("MP3")) {
-                     fingerprint(file);
+                     fingerprint = fingerprint(file);
                 }else{
                     System.out.println("The file must be of type mp3 \n");
                 }
@@ -95,7 +97,7 @@ public class Client {
                 + "\n");
     }
 
-    private void fingerprint(File file) {
+    private Fingerprint fingerprint(File file) {
             
 
             try {
@@ -106,10 +108,13 @@ public class Client {
                 Fingerprint resultFingerpring = FingerprintSystem.fingerprint(audioInputStream);
 
                 System.out.println("Fingerprinting of file " + file.getName() + " is: " + resultFingerpring.toString());
-
+                
+                return resultFingerpring;
             } catch (Exception e) {
                 System.out.println("Somewhere something went horribly wrong...");
                 System.out.println(e.toString());
             }
+            
+            return null;
     }
 }
