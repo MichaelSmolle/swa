@@ -3,9 +3,17 @@ package org.tuwien.swalab2.swazam.peer;
 import ac.at.tuwien.infosys.swa.audio.*;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
@@ -14,10 +22,33 @@ import javax.sound.sampled.AudioSystem;
  * 
  */
 public class Peer {
+	
+	private ConcurrentHashMap<Fingerprint, File> library = new ConcurrentHashMap<Fingerprint, File>();
+	private static Integer id = null;
+
+	public Peer(Integer arg0) {
+		id = arg0;
+	}
 
 	public static void main(String[] args) {
-		Peer peer = new Peer();
+		Integer arg0;
+		
+		try {
+			arg0 = Integer.valueOf(args[0]);
+		} catch (NumberFormatException e) {
+
+			System.out.println("peer [id]");
+			return;
+		}
+		
+		
+		Peer peer = new Peer(arg0);
 		peer.setUp();
+		
+//		load library
+		
+		
+		
 		peer.startSwingUI();
 
 		peer.startCLI(args);
@@ -35,6 +66,7 @@ public class Peer {
 	}
 
 	private void startCLI(String[] args) {
+		
 		String cmd = "";
 		String filename = "";
 		Fingerprint fingerprint = null;
@@ -73,6 +105,7 @@ public class Peer {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
 								fingerprint = fingerprint(file);
+								library.put(fingerprint, file);
 							} else {
 								System.out
 										.println("The file must be of type mp3 \n");
@@ -91,7 +124,25 @@ public class Peer {
 				}
 			}
 		}
-		System.out.println("Shutting down Client");
+		
+		
+		System.out.println("Saving library");
+	    File file = new File(id + ".lib" );
+        try {
+			FileOutputStream f = new FileOutputStream(file);
+			ObjectOutputStream s = new ObjectOutputStream(f);
+			s.writeObject(library);
+			s.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) { 
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.out.println("Shutting down Peer");
+	    
+		
 
 	}
 

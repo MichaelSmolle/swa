@@ -27,7 +27,10 @@
                             <goal>java</goal>  
                         </goals>  
                         <configuration>  
-                            <mainClass>org.tuwien.swalab2.swazam.peer.Peer</mainClass>   
+                            <mainClass>org.tuwien.swalab2.swazam.peer.Peer</mainClass>  
+                            <arguments>  
+                                <argument>1234</argument>  
+                            </arguments> 
                         </configuration>  
                     </execution>  
                 </executions>  
