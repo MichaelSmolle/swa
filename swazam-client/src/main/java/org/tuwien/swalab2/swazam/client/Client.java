@@ -1,17 +1,14 @@
 package org.tuwien.swalab2.swazam.client;
 
-import ac.at.tuwien.infosys.swa.audio.*;
-
-import java.awt.color.CMMException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
+
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
-import sun.org.mozilla.javascript.tools.debugger.SwingGui;
+
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 /**
  * Hello world!
@@ -25,7 +22,7 @@ private SwingUI swingUI;
 		client.setUp();
 		client.startSwingUI(args);
 
-		client.startCLI(args);
+		client.startCLI();
 
 	}
 
@@ -37,10 +34,11 @@ private SwingUI swingUI;
 
 	private void startSwingUI(String[] args) {
 		swingUI = new SwingUI();
+		//TODO: better
                 swingUI.main(args);
 	}
 
-	private void startCLI(String[] args) {
+	private void startCLI() {
 		String cmd = "";
 		String filename = "";
 		Fingerprint fingerprint = null;
@@ -73,7 +71,7 @@ private SwingUI swingUI;
 					try {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
-							fingerprint = fingerprint(file);
+							fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint.fingerprint(file);
 						} else {
 							System.out
 									.println("The file must be of type mp3 \n");
@@ -103,26 +101,4 @@ private SwingUI swingUI;
 				+ "\n");
 	}
 
-	private Fingerprint fingerprint(File file) {
-
-		try {
-			AudioInputStream audioInputStream = AudioSystem
-					.getAudioInputStream(file);
-
-			System.out.println("Trying to fingerprint " + file.getName());
-
-			Fingerprint resultFingerpring = FingerprintSystem
-					.fingerprint(audioInputStream);
-
-			System.out.println("Fingerprinting of file " + file.getName()
-					+ " is: " + resultFingerpring.toString());
-
-			return resultFingerpring;
-		} catch (Exception e) {
-			System.out.println("Somewhere something went horribly wrong...");
-			System.out.println(e.toString());
-		}
-
-		return null;
-	}
 }
