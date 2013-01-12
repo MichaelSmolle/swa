@@ -18,6 +18,8 @@ import javax.rmi.CORBA.Util;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
+
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
@@ -148,7 +150,7 @@ public class Peer implements MessageReceiver {
 						try {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
-								fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+								fingerprint = FingerprintFile
 										.fingerprint(file);
 								library.put(fingerprint, file);
 							} else {
@@ -161,7 +163,8 @@ public class Peer implements MessageReceiver {
 					}
 				} else if (cmd.equals("list")) {
 					
-					SearchSession s = connection.createSearchSession("bla",10,1,this);
+					SearchSession session = connection.createSearchSession("bla",10,1,0, this);
+					session.close();
 					
 					Iterator<Entry<Fingerprint, File>> it = library.entrySet()
 							.iterator();
@@ -177,7 +180,7 @@ public class Peer implements MessageReceiver {
 					try {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
-							fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+							fingerprint = FingerprintFile
 									.fingerprint(file);
 							
 							Fingerprint[] fingerprints = fingerprint.split();
