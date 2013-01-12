@@ -165,7 +165,8 @@ public class Peer implements MessageReceiver {
 					
 					SearchSession session = connection.createSearchSession("bla",10,1,0, this);
 					try {
-						wait(10);
+//						wait(10);
+						Thread.sleep(4000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
