@@ -99,6 +99,7 @@ public class Peer implements MessageReceiver {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.connection.getConnectionData().setIncomingPort(37000);
 		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
 		this.connection.getHostCache().addHost(new Host("84.112.183.143",37000, 10, 10));
 		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
