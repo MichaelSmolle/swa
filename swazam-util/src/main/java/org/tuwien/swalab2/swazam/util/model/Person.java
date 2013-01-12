@@ -1,4 +1,4 @@
-package org.tuwien.swalab2.model;
+package org.tuwien.swalab2.swazam.util.model;
  
 import java.io.Serializable;
 import java.util.Date;
@@ -23,7 +23,8 @@ public class Person implements Serializable{
 	@GeneratedValue
 	private Long				id;
 	
-	public Person(){}
+	public Person(){            
+        }
 	
 	public void setId(Long id){
 		this.id = id;
