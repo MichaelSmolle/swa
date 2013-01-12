@@ -100,8 +100,9 @@ public class Peer implements MessageReceiver {
 			e.printStackTrace();
 		}
 		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("84.112.183.143",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("194.166.33.97",37000, 10, 10));
 		//this.hostCache.addHost(new Host("",37000));
 		
 		// ToDo: somehow bootstrap
