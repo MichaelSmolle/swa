@@ -14,18 +14,20 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.rmi.CORBA.Util;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
+import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
 
 /**
  * Hello world!
  * 
  */
 public class Peer {
-	
+
 	private ConcurrentHashMap<Fingerprint, File> library = new ConcurrentHashMap<Fingerprint, File>();
 	private static Integer id = null;
 
@@ -36,7 +38,7 @@ public class Peer {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		Integer arg0;
-		
+
 		try {
 			arg0 = Integer.valueOf(args[0]);
 		} catch (NumberFormatException e) {
@@ -44,20 +46,20 @@ public class Peer {
 			System.out.println("peer [id]");
 			return;
 		}
-		
-		
+
 		Peer peer = new Peer(arg0);
 		peer.setUp();
-		
-//		load library
+
+		// load library
 		File file = new File(id + ".lib");
-	    try {
+		try {
 			FileInputStream f = new FileInputStream(file);
 			ObjectInputStream s = new ObjectInputStream(f);
-			peer.library = ((ConcurrentHashMap<Fingerprint, File>) s.readObject());
+			peer.library = ((ConcurrentHashMap<Fingerprint, File>) s
+					.readObject());
 			s.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Could not load library, setting up new one"); 
+			System.out.println("Could not load library, setting up new one");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -65,9 +67,7 @@ public class Peer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
 		peer.startSwingUI();
 
 		peer.startCLI(args);
@@ -85,7 +85,7 @@ public class Peer {
 	}
 
 	private void startCLI(String[] args) {
-		
+
 		String cmd = "";
 		String filename = "";
 		Fingerprint fingerprint = null;
@@ -111,19 +111,20 @@ public class Peer {
 				cmd = s.next();
 
 				if (cmd.equals("add")) {
-					
+
 					if (s.hasNextInt()) {
 						// TODO: send file to peer
 						System.out.println("TODO: send file to peer");
 						Integer id = Integer.valueOf(s.next());
 					} else {
 						filename = s.next();
-						
+
 						File file = new File(filename);
 						try {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
-								fingerprint = fingerprint(file);
+								fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+										.fingerprint(file);
 								library.put(fingerprint, file);
 							} else {
 								System.out
@@ -134,11 +135,51 @@ public class Peer {
 						}
 					}
 				} else if (cmd.equals("list")) {
-					Iterator<Entry<Fingerprint, File>> it = library.entrySet().iterator();
-					while (it.hasNext()){
+					Iterator<Entry<Fingerprint, File>> it = library.entrySet()
+							.iterator();
+					while (it.hasNext()) {
 						System.out.println(it.next().getValue());
 					}
-					
+				} else if (cmd.equals("match")) {
+					// org.tuwien.swalab2.swazam.util.Fingerprint.fingerprint("file");
+					double time = -1;
+					filename = s.next();
+
+					File file = new File(filename);
+					try {
+						if (file.getName().contains("mp3")
+								|| file.getName().contains("MP3")) {
+							fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+									.fingerprint(file);
+							
+							Fingerprint[] fingerprints = fingerprint.split();
+							System.out.println("split fingerprint count");
+							System.out.println(fingerprints.length);
+							System.out.println();
+//							System.out.println(fingerprints[0]);
+//							System.out.println();
+							
+							SubFingerprint[] sfingerprints = fingerprints[0].getSubFingerprints();
+							System.out.println("subfingerprint count");
+							System.out.println(sfingerprints.length);
+							System.out.println();
+
+							Iterator<Entry<Fingerprint, File>> it = library
+									.entrySet().iterator();
+							while (it.hasNext()) {
+
+								
+								time = it.next().getKey().match(fingerprint);
+								System.out.print(time + "\n");
+							}
+						} else {
+							System.out
+									.println("The file must be of type mp3 \n");
+						}
+					} catch (Exception e) {
+						System.out.println("Couldn't find file \n");
+					}
+
 				} else if (cmd.equals("usage")) {
 					usage();
 				} else if (cmd.equals("quit")) {
@@ -148,11 +189,11 @@ public class Peer {
 				}
 			}
 		}
-		
-		
+
 		System.out.println("Saving library");
-	    File file = new File(id + ".lib" );
-        try {
+		File file = new File(id + ".lib");
+
+		try {
 			FileOutputStream f = new FileOutputStream(file);
 			ObjectOutputStream s = new ObjectOutputStream(f);
 			s.writeObject(library);
@@ -160,46 +201,19 @@ public class Peer {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) { 
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.out.println("Shutting down Peer");
-	    
-		
+		System.out.println("Shutting down Peer");
 
 	}
 
 	private void usage() {
 		System.out.println("\n Interactive commands:"
-				+ "\n - add <path to mp3>" 
-				+ "\n - add <id> <path to mp3>"
-				+ "\n - list" 				
-				+ "\n - quit" 
-				+ "\n - usage"
-				+ "\n");
+				+ "\n - add <path to mp3>" + "\n - add <id> <path to mp3>"
+				+ "\n - match <path to mp3>" + "\n - list" + "\n - quit"
+				+ "\n - usage" + "\n");
 	}
 
-	private Fingerprint fingerprint(File file) {
-
-		try {
-			AudioInputStream audioInputStream = AudioSystem
-					.getAudioInputStream(file);
-
-			System.out.println("Trying to fingerprint " + file.getName());
-
-			Fingerprint resultFingerpring = FingerprintSystem
-					.fingerprint(audioInputStream);
-
-			System.out.println("Fingerprinting of file " + file.getName()
-					+ " is: " + resultFingerpring.toString());
-
-			return resultFingerpring;
-		} catch (Exception e) {
-			System.out.println("Somewhere something went horribly wrong...");
-			System.out.println(e.toString());
-		}
-
-		return null;
-	}
 }
