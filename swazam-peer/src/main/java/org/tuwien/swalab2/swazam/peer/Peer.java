@@ -65,7 +65,7 @@ public class Peer implements MessageReceiver {
 		}
 
 		Peer peer = new Peer(arg0);
-		peer.setUp();
+		peer.setUp(arg0);
 
 		// load library
 		File file = new File(id + ".lib");
@@ -91,15 +91,16 @@ public class Peer implements MessageReceiver {
 
 	}
 
-	private void setUp() {
-		System.out.println("Welcome to the SWAzam client.");
+	private void setUp(Integer arg0) {
+		System.out.println("Welcome to the SWAzam client.");	
 		try {
-			this.connection = new GNUTellaConnection();
+			ConnectionData cn = new ConnectionData();
+			cn.setIncomingPort(arg0);
+			this.connection = new GNUTellaConnection(cn);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.connection.getConnectionData().setIncomingPort(37000);
 		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
 		this.connection.getHostCache().addHost(new Host("84.112.183.143",37000, 10, 10));
 		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
