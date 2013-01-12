@@ -104,7 +104,7 @@ public class Peer implements MessageReceiver {
 		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
 		this.connection.getHostCache().addHost(new Host("194.166.33.97",37000, 10, 10));
 		//this.hostCache.addHost(new Host("",37000));
-		
+		this.connection.start();
 		// ToDo: somehow bootstrap
 	}
 
