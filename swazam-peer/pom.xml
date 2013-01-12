@@ -89,5 +89,11 @@
             <artifactId>swazam-util</artifactId>
             <version>1.0</version>
         </dependency>
+		<!--dependency>
+			<groupId>jtella</groupId>
+			<artifactId>jtella</artifactId>
+			<version>0.9</version>
+		</dependency-->
     </dependencies>
+    
 </project>

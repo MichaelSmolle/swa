@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.swazam.util;
+package org.tuwien.swalab2.swazam.util.fingerprint;
 
 import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import java.io.File;
@@ -13,7 +13,7 @@ import javax.sound.sampled.AudioSystem;
  *
  * @author smolle
  */
-public class Fingerprint {
+public class FingerprintFile {
     
     	public static ac.at.tuwien.infosys.swa.audio.Fingerprint fingerprint(File file) {
 

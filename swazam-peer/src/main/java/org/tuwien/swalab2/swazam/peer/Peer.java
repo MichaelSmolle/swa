@@ -123,7 +123,7 @@ public class Peer {
 						try {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
-								fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+								fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile
 										.fingerprint(file);
 								library.put(fingerprint, file);
 							} else {
@@ -149,7 +149,7 @@ public class Peer {
 					try {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
-							fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
+							fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile
 									.fingerprint(file);
 							
 							Fingerprint[] fingerprints = fingerprint.split();
