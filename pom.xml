@@ -13,6 +13,7 @@
         <module>swazam-client</module>
         <module>swazam-peer</module>
         <module>swazam-webapp</module>
+	<module>swazam-util</module>
     </modules>
 
     <build>
@@ -28,6 +29,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-    </build>
+    </build>   
 	
 </project>

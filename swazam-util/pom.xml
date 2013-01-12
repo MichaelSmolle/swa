@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.tuwien.swalab2</groupId>
-    <artifactId>swazam-client</artifactId>
+    <artifactId>swazam-util</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>swazam-client</name>
+    <name>swazam-util</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -16,48 +16,15 @@
 
 
     <build>
-        <plugins>
-            <!--<plugin>  
-                <groupId>org.codehaus.mojo</groupId>  
-                <artifactId>exec-maven-plugin</artifactId>  
-                <version>1.2.1</version>  
-                <executions>  
-                    <execution>  
-                        <phase>test</phase>  
-                        <goals>  
-                            <goal>java</goal>  
-                        </goals>  
-                        <configuration>  
-                            <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>  
-                            <arguments>  
-                                <argument>query</argument>  
-                                <argument>${project.basedir}/sample1.mp3</argument>  
-                            </arguments> 
-                        </configuration>  
-                    </execution>  
-                </executions>  
-            </plugin> --> 
-            <plugin>
+        <plugins>           
+	<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.tuwien.swalab2.swazam.client.Client</mainClass>
-                        </manifest>
-                    </archive>
+                    
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                </configuration>
-                <executions>
-                     <execution>
-                        <id>make-assembly</id> 
-                        <phase>package</phase> 
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                </configuration>              
             </plugin>
         </plugins>
     </build>
@@ -77,7 +44,6 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!--
         <dependency>
             <groupId>ac.at.tuwien.infosys.swa.audio</groupId>
             <artifactId>fingerprint</artifactId>
@@ -99,14 +65,7 @@
             <artifactId>misc</artifactId>
             <version>0.3.6</version>
             <scope>runtime</scope>
-        </dependency>-->
-        
-	<dependency>
-            <groupId>org.tuwien.swalab2</groupId>
-            <artifactId>swazam-util</artifactId>
-            <version>1.0</version>
         </dependency>
-		
     </dependencies>
 
 </project>
