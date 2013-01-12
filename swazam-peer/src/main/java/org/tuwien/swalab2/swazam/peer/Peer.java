@@ -164,6 +164,12 @@ public class Peer implements MessageReceiver {
 				} else if (cmd.equals("list")) {
 					
 					SearchSession session = connection.createSearchSession("bla",10,1,0, this);
+					try {
+						wait(10);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					session.close();
 					
 					Iterator<Entry<Fingerprint, File>> it = library.entrySet()
