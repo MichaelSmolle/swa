@@ -22,17 +22,32 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
 
+import com.kenmccrary.jtella.*;
+
 /**
  * Hello world!
  * 
  */
-public class Peer {
+public class Peer implements MessageReceiver {
 
 	private ConcurrentHashMap<Fingerprint, File> library = new ConcurrentHashMap<Fingerprint, File>();
 	private static Integer id = null;
+	private GNUTellaConnection connection;
 
 	public Peer(Integer arg0) {
 		id = arg0;
+	}
+	
+	public void receiveSearch(SearchMessage m) {
+	         System.out.println("stub");                                  
+	}
+	
+	public void receiveSearchReply(SearchReplyMessage m) {
+		System.out.println("stub");
+	}
+	
+	public void receivePush(PushMessage m) {
+		System.out.println("stub");	
 	}
 
 	@SuppressWarnings("unchecked")
@@ -60,7 +75,7 @@ public class Peer {
 			s.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("Could not load library, setting up new one");
-		} catch (IOException e) {
+		} catch (IOException e) { 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -76,7 +91,17 @@ public class Peer {
 
 	private void setUp() {
 		System.out.println("Welcome to the SWAzam client.");
-
+		try {
+			this.connection = new GNUTellaConnection();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
+		//this.hostCache.addHost(new Host("",37000));
+		
 		// ToDo: somehow bootstrap
 	}
 
@@ -123,7 +148,7 @@ public class Peer {
 						try {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
-								fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile
+								fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
 										.fingerprint(file);
 								library.put(fingerprint, file);
 							} else {
@@ -135,6 +160,9 @@ public class Peer {
 						}
 					}
 				} else if (cmd.equals("list")) {
+					
+					SearchSession s = connection.createSearchSession("bla",10,1,this);
+					
 					Iterator<Entry<Fingerprint, File>> it = library.entrySet()
 							.iterator();
 					while (it.hasNext()) {
@@ -149,7 +177,7 @@ public class Peer {
 					try {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
-							fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile
+							fingerprint = org.tuwien.swalab2.swazam.util.Fingerprint
 									.fingerprint(file);
 							
 							Fingerprint[] fingerprints = fingerprint.split();
