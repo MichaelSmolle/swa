@@ -14,12 +14,10 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.rmi.CORBA.Util;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
+
+import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
 
 /**
@@ -123,8 +121,7 @@ public class Peer {
 						try {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
-								fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile
-										.fingerprint(file);
+								fingerprint = FingerprintFile.fingerprint(file);
 								library.put(fingerprint, file);
 							} else {
 								System.out
