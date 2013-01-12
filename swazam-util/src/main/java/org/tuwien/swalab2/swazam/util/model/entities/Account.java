@@ -2,24 +2,65 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.swazam.util.model;
+package org.tuwien.swalab2.swazam.util.model.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author gh
  */
 @Entity
+@XmlRootElement
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @OneToOne
+    private Person person;
+    
+    @ManyToOne
+    private List<SwaZamTransaction> performedSearches;
+        
+    private int coinBalance;
+
+    public List<SwaZamTransaction> getPerformedSearches() {
+        return performedSearches;
+    }
+
+    public void setPerformedSearches(List<SwaZamTransaction> performedSearches) {
+        this.performedSearches = performedSearches;
+    }
+    
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public int getCoinBalance() {
+        return coinBalance;
+    }
+
+    public void setCoinBalance(int coinBalance) {
+        this.coinBalance = coinBalance;
+    }
+    
+    
+    
+    
 
     public Long getId() {
         return id;
