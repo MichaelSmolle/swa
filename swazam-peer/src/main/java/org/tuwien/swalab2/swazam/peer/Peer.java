@@ -35,6 +35,8 @@ public class Peer implements MessageReceiver {
 	private ConcurrentHashMap<Fingerprint, File> library = new ConcurrentHashMap<Fingerprint, File>();
 	private static Integer id = null;
 	private GNUTellaConnection connection;
+	private FileServerSession fbla;
+	private SearchMonitorSession sbla;
 
 	public Peer(Integer arg0) {
 		id = arg0;
@@ -93,20 +95,34 @@ public class Peer implements MessageReceiver {
 
 	private void setUp(Integer arg0) {
 		System.out.println("Welcome to the SWAzam client.");	
+		System.setProperty("JTella.Debug", "JTella.Debug");
 		try {
 			ConnectionData cn = new ConnectionData();
 			cn.setIncomingPort(arg0);
+			cn.setOutgoingConnectionCount(10);
+		    cn.setIncommingConnectionCount(10);
+		    cn.setConnectionGreeting("test"); 
 			this.connection = new GNUTellaConnection(cn);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.connection.getHostCache().addHost(new Host("91.186.155.61",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("84.112.183.143",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 1, 1));
 		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("194.166.33.97",37000, 10, 10));
-		//this.hostCache.addHost(new Host("",37000));
+		this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 10, 10));
+		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
+			System.out.println("Empty Cache");
+		}
 		this.connection.start();
+		System.out.println("starting...");
+		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
+			System.out.println("Empty Cache");
+		}
+		fbla = connection.createFileServerSession(this);
+		sbla = connection.getSearchMonitorSession(this);
+		
+		//this.hostCache.addHost(new Host("",37000));
 		// ToDo: somehow bootstrap
 	}
 
@@ -174,7 +190,16 @@ public class Peer implements MessageReceiver {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					session.close();
+					System.out.println(connection.getConnectionData().getIncomingPort());
+					if(this.connection.isOnline()) {
+						System.out.println("connected");
+					} else {
+						System.out.println("not connected");
+					}
+					
+					if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
+						System.out.println("Empty Cache");
+					}
 					
 					Iterator<Entry<Fingerprint, File>> it = library.entrySet()
 							.iterator();
