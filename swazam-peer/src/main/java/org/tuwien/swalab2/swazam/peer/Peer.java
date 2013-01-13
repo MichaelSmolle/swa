@@ -102,6 +102,7 @@ public class Peer implements MessageReceiver {
 			cn.setOutgoingConnectionCount(10);
 		    cn.setIncommingConnectionCount(10);
 		    cn.setConnectionGreeting("test"); 
+		    cn.setUltrapeer(true);
 			this.connection = new GNUTellaConnection(cn);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -114,13 +115,14 @@ public class Peer implements MessageReceiver {
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
 			System.out.println("Empty Cache");
 		}
+		fbla = connection.createFileServerSession(this);
+		sbla = connection.getSearchMonitorSession(this);
 		this.connection.start();
 		System.out.println("starting...");
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
 			System.out.println("Empty Cache");
 		}
-		fbla = connection.createFileServerSession(this);
-		sbla = connection.getSearchMonitorSession(this);
+		
 		
 		//this.hostCache.addHost(new Host("",37000));
 		// ToDo: somehow bootstrap
