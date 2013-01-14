@@ -106,9 +106,9 @@ public class Peer implements MessageReceiver {
 			cn.setOutgoingConnectionCount(100);
 		    cn.setIncommingConnectionCount(100);
 		    cn.setConnectionGreeting("test"); 
-		    //if(arg0%2 == 0) {
-		    //	cn.setUltrapeer(true);
-		    //}
+		    if(arg0%2 == 0) {
+		    	cn.setUltrapeer(true);
+		    }
 			this.connection = new GNUTellaConnection(cn);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -116,7 +116,6 @@ public class Peer implements MessageReceiver {
 		}
 		
 		//BasicConfigurator.configure();
-		
 		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 1, 1));
 		//this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
 		//this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
@@ -124,8 +123,8 @@ public class Peer implements MessageReceiver {
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
 			System.out.println("Empty Cache");
 		}
-		fbla = connection.createFileServerSession(this);
-		sbla = connection.getSearchMonitorSession(this);
+		//fbla = connection.createFileServerSession(this);
+		//sbla = connection.getSearchMonitorSession(this);
 		this.connection.start();
 		System.out.println("starting...");
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
@@ -193,15 +192,16 @@ public class Peer implements MessageReceiver {
 					}
 				} else if (cmd.equals("list")) {
 					
-					SearchSession session = connection.createSearchSession("bla",10,1,0, this);
-					try {
-//						wait(10);
-						Thread.sleep(4000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					session.close();
+					 SearchSession session = connection.createSearchSession("bla",0,1,1, this);
+					 try {
+//							wait(10);
+							Thread.sleep(4000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					 session.close();
+					
 					System.out.println(connection.getConnectionData().getIncomingPort());
 					if(this.connection.isOnline()) {
 						List<NodeConnection> l = connection.getConnectionList();
