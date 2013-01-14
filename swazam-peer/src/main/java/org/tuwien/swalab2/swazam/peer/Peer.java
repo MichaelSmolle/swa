@@ -1,4 +1,7 @@
 package org.tuwien.swalab2.swazam.peer;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Layout;
+import org.apache.log4j.RollingFileAppender;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,19 +103,24 @@ public class Peer implements MessageReceiver {
 		try {
 			ConnectionData cn = new ConnectionData();
 			cn.setIncomingPort(arg0);
-			cn.setOutgoingConnectionCount(10);
-		    cn.setIncommingConnectionCount(10);
+			cn.setOutgoingConnectionCount(100);
+		    cn.setIncommingConnectionCount(100);
 		    cn.setConnectionGreeting("test"); 
-		    cn.setUltrapeer(true);
+		    //if(arg0%2 == 0) {
+		    //	cn.setUltrapeer(true);
+		    //}
 			this.connection = new GNUTellaConnection(cn);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 1, 1));
-		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 10, 10));
+		
+		//BasicConfigurator.configure();
+		
+		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 1, 1));
+		//this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
+		//this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
+		//this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 10, 10));
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
 			System.out.println("Empty Cache");
 		}
@@ -192,9 +201,13 @@ public class Peer implements MessageReceiver {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					session.close();
 					System.out.println(connection.getConnectionData().getIncomingPort());
 					if(this.connection.isOnline()) {
-						System.out.println("connected");
+						List<NodeConnection> l = connection.getConnectionList();
+						for(int i = 0; i < l.size(); i++) {
+							System.out.println(l.get(i).getConnectedServant() + " " + l.get(i).getConnectedServantPort());
+						}
 					} else {
 						System.out.println("not connected");
 					}
