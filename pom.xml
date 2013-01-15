@@ -13,7 +13,8 @@
         <module>swazam-client</module>
         <module>swazam-peer</module>
         <module>swazam-webapp</module>
-	<module>swazam-util</module>
+	    <module>swazam-util</module>
+        <module>jtella</module>
     </modules>
 
     <build>
