@@ -97,7 +97,7 @@
 		<dependency>
   				<groupId>com.kenmccrary</groupId>
   				<artifactId>jtella</artifactId>
-  				<version>0.9</version>
+  				<version>0.10-rc1</version>
 		</dependency>
     </dependencies>
     
