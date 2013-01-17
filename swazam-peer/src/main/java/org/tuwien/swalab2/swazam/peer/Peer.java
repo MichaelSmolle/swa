@@ -116,12 +116,14 @@ public class Peer implements MessageReceiver {
 		}
 		
 		//BasicConfigurator.configure();
-//		this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 1, 1));
-		//this.connection.getHostCache().addHost(new Host("84.112.1.12",37000, 10, 10));
-		//this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("localhost",37001, 10, 10));
+//		this.connection.getHostCache().addHost(new Host("188.181.243.73",37001, 10, 10));
+//		this.connection.getHostCache().addHost(new Host("194.166.35.63",37001, 10, 10));
+//		this.connection.getHostCache().addHost(new Host("192.168.1.45",37000, 10, 10));
 		//this.connection.getHostCache().addHost(new Host("192.168.2.3",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("192.168.1.45",37000, 1, 1));
-		this.connection.getHostCache().addHost(new Host("192.168.1.21",37000, 1, 1));
+		//this.connection.getHostCache().addHost(new Host("192.168.1.45",37000, 1, 1));
+		//this.connection.getHostCache().addHost(new Host("192.168.1.21",37000, 1, 1));
 		if(this.connection.getHostCache().getKnownHosts().isEmpty()) {
 			System.out.println("Empty Cache");
 		}

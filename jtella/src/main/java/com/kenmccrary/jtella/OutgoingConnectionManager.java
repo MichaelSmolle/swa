@@ -137,9 +137,12 @@ class OutgoingConnectionManager extends ConnectionManager {
 						+ host.getIPAddress()
 						+ ":"
 						+ host.getPort());
-
-				if (connectionList.contains(host.getIPAddress())) { //, host.getPort()
-					// avoid duplicate connection  
+//
+//				We want to have several peers on 1 Machine
+//	
+//				if (connectionList.contains(host.getIPAddress())) { //, host.getPort()
+				if (connectionList.contains(host.getIPAddress(), host.getPort())){
+				// avoid duplicate connection  
 					LOG.info(
 						"Aborting start on duplicate host: " + host.toString());
 					continue;

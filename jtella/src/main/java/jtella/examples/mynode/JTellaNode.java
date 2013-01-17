@@ -23,7 +23,9 @@ public class JTellaNode implements MessageReceiver {
 
 
 	private static final String defaultIpAddress = "190.156.46.30";
+//	private static final String defaultIpAddress = "194.166.35.63";
 	private static final int defaultListenPort = 6346;
+//	private static final int defaultListenPort = 37000;
 	private static final String LOGFILE = "mynode.log4j.properties";
 	private JTellaGUI gui;
 	
