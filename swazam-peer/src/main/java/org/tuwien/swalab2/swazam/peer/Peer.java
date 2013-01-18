@@ -1,34 +1,36 @@
 package org.tuwien.swalab2.swazam.peer;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Layout;
-import org.apache.log4j.RollingFileAppender;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException; 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.rmi.CORBA.Util;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-
+import org.apache.log4j.BasicConfigurator;
 import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import ac.at.tuwien.infosys.swa.audio.FingerprintSystem;
 import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
 
-import com.kenmccrary.jtella.*;
+import com.kenmccrary.jtella.ConnectionData;
+import com.kenmccrary.jtella.FileServerSession;
+import com.kenmccrary.jtella.GNUTellaConnection;
+import com.kenmccrary.jtella.Host;
+import com.kenmccrary.jtella.MessageReceiver;
+import com.kenmccrary.jtella.NodeConnection;
+import com.kenmccrary.jtella.PushMessage;
+import com.kenmccrary.jtella.SearchMessage;
+import com.kenmccrary.jtella.SearchMonitorSession;
+import com.kenmccrary.jtella.SearchReplyMessage;
+import com.kenmccrary.jtella.SearchSession;
 
 /**
  * Hello world!
@@ -115,10 +117,12 @@ public class Peer implements MessageReceiver {
 			e.printStackTrace();
 		}
 		
-		//BasicConfigurator.configure();
+		BasicConfigurator.configure();
 //		this.connection.getHostCache().addHost(new Host("192.168.1.21",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("192.168.1.19",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("192.168.1.19",37002, 10, 10));
+		if(arg0 != 37010) {
+			this.connection.getHostCache().addHost(new Host("127.0.0.1",37010, 10, 10));
+		}
+//		this.connection.getHostCache().addHost(new Host("192.168.1.19",37002, 10, 10));
 		
 //		this.connection.getHostCache().addHost(new Host("localhost",37002, 10, 10));
 //		this.connection.getHostCache().addHost(new Host("188.181.243.73",37001, 10, 10));
