@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui" template="/WEB-INF/templates/default.xhtml" >
+   
+       
+            <body>
+               <h:form>
+                            <h:outputText value="Account details"/>
+
+                
+                <h:panelGrid columns="2">
+                    
+                    <h:outputLabel for="firstName" value="Firstname:"/>
+                    <h:outputText  id="firstName" value="#{authenticationBean.user.firstName}"/>                    
+                    
+                    <h:outputLabel for="lastName" value="Lastname:"/>
+                    <h:outputText  id="lastName" value="#{authenticationBean.user.lastName}"/>                    
+                    
+                    <h:outputLabel for="balance" value="Account balance:"/>
+                    <h:outputText  id="balance" value="#{authenticationBean.user.account.balance}"/>                    
+
+                </h:panelGrid>
+                
+                <h:commandButton  value="Change"  action="editPerson" />
+           </h:form>
+
+</body>
+
+
+
+
+</html>

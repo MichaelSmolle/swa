@@ -3,7 +3,8 @@
   <persistence-unit name="myPu" transaction-type="JTA">
     <provider>oracle.toplink.essentials.PersistenceProvider</provider>    
     <jta-data-source>jdbc/__default</jta-data-source>
-    <class>org.tuwien.swalab2.swazam.util.model.Person</class>
+    <class>org.tuwien.swalab2.swazam.util.model.entities.Person</class>
+    <class>org.tuwien.swalab2.swazam.util.model.entities.SwazamAccount</class>
     <properties>
       <property name="toplink.ddl-generation" value="drop-and-create-tables"/>
     </properties>
@@ -11,3 +12,4 @@
   </persistence-unit>
   
 </persistence>
+

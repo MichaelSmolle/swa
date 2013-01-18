@@ -6,7 +6,11 @@
       <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://java.sun.com/xml/ns/javaee
       http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-   --><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="       http://java.sun.com/xml/ns/javaee       http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+   --><web-app 
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    id="YourProjectName" version="3.0">
    <!-- Activate the JSF 2.0 servlet -->
    <servlet>
       <servlet-name>Faces Servlet</servlet-name>
@@ -17,8 +21,13 @@
    <!-- Tell the context which URLs to process as facelets.  -->
    <servlet-mapping>
       <servlet-name>Faces Servlet</servlet-name>
-      <url-pattern>*.jsf</url-pattern>
+      <url-pattern>*.xhtml</url-pattern>
    </servlet-mapping>
+    <context-param>
+        <description>Development or Production</description>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value> 
+    </context-param>
 
    <!-- This is an optional parameter, but it makes troubleshooting errors much easier.  -->
    <!-- You may want to delete it before final deployment -->
@@ -44,5 +53,9 @@
         <servlet-name>Jersey Servlet</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+    
+    <welcome-file-list>  
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
 
 </web-app>

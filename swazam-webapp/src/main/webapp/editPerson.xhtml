@@ -10,25 +10,25 @@
             <h:outputText value="Create a new account"/>
        
 
-            <h:outputLabel for="firstName" value="Firstname"/>
-            <h:form>
+            <h:form id="accountForm">
                 <p:messages id="messages"/>
                 <h:panelGrid columns="2">
 
                     <h:outputLabel for="firstName" value="Firstname"/>
-                    <p:inputText id="firstName" required="true" value="${ createPersonBean.person.firstName}" />
+                    
+                    <p:inputText id="firstName" required="true" value="#{authenticationBean.user.firstName}" />
 
                     <h:outputLabel for="lastName" value="Lastname" />
-                    <p:inputText id="lastName" required="true" value="${createPersonBean.person.lastName}" />
+                    <p:inputText id="lastName" required="true" value="#{authenticationBean.user.lastName}" />
                     
-                      <h:outputLabel for="userName" value="Username"/>
-                      <p:inputText id="userName" required="true" value="${ createPersonBean.person.userName}" />
+                    <h:outputLabel for="userName" value="Username"/>
+                    <p:inputText id="userName" required="true" value="#{ authenticationBean.user.userName}" />
 
                     <h:outputLabel for="passWord" value="Password" />
-                    <h:inputSecret id="passWord"  value="${createPersonBean.person.passWord}" />
+                    <h:inputSecret id="passWord"  value="#{authenticationBean.user.passWord}" />
 
                 </h:panelGrid>
-                <h:commandButton value="Submit"  action="${createPersonBean.createAndPersistPerson()}" />
+                <h:commandButton value="Submit"  action="#{editPersonBean.saveChanges()}" />
             </h:form>           
 
 

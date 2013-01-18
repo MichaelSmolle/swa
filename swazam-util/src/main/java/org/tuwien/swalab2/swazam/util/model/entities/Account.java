@@ -22,17 +22,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     
-    @OneToOne
-    private Person person;
+    
+    @Id
+    @GeneratedValue
+    private Long id;  
     
     @ManyToOne
     private List<SwaZamTransaction> performedSearches;
         
-    private int coinBalance;
+    private int coinBalance = 0;
+
+    public Account() {
+    }
+    
+    
+    
 
     public List<SwaZamTransaction> getPerformedSearches() {
         return performedSearches;
@@ -40,15 +45,8 @@ public class Account implements Serializable {
 
     public void setPerformedSearches(List<SwaZamTransaction> performedSearches) {
         this.performedSearches = performedSearches;
-    }
-    
-    public Person getPerson() {
-        return person;
-    }
+    } 
 
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 
     public int getCoinBalance() {
         return coinBalance;

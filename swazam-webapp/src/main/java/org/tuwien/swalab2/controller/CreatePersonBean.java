@@ -4,6 +4,7 @@
  */
 package org.tuwien.swalab2.controller;
 
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,8 +15,8 @@ import org.tuwien.swalab2.swazam.util.model.entities.Person;
  *
  * @author gh
  */
-@Named("createPerson")
 @RequestScoped
+@ManagedBean
 public class CreatePersonBean {
 
     @Inject
@@ -31,12 +32,9 @@ public class CreatePersonBean {
         
         personFacade.create(person);
         
-        return "";
+        return "index";
     }
 
-    public String getPenis(){
-        return "B===>";
-    }
     public Person getPerson() {
         return person;
     }

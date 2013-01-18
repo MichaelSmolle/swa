@@ -5,10 +5,23 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui" template="/WEB-INF/templates/default.xhtml" >
-        <ui:define name="content">
-            <h:outputText value="Create a new account"/>
-        </ui:define>
+
       
-56rtzr
+    <h:form id="main">
+                <p:messages id="messages"/>
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel for="userName" value="Username"/>
+                    <h:inputText id="userName" required="true" value="${authenticationBean.userName}" />
+
+                    <h:outputLabel for="lastName" value="Lastname" />
+                    <h:inputSecret id="lastName" required="true" value="${authenticationBean.passWord}" />
+
+                </h:panelGrid>
+                <h:commandButton  value="Login"   action="${authenticationBean.doLogin}"  />
+                
+                <h:commandButton  value="Create Account"   action="createPerson?faces-redirect=true"  />
+            </h:form>  
+    
 
 </html>
