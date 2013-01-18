@@ -5,10 +5,16 @@
 package org.tuwien.swalab2.controller;
 
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.view.facelets.FaceletContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import org.tuwien.swalab2.services.PersonService;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
 
@@ -23,6 +29,9 @@ public class AuthenticationBean implements Serializable{
     @Inject
     private PersonService personService;
     
+    @ManagedProperty("#{jsfHelper}")
+    JsfHelper jsfHelper;
+    
     private Person user;
     
     private String userName;
@@ -35,10 +44,33 @@ public class AuthenticationBean implements Serializable{
     
     
     public String doLogin(){
+        FacesContext context = FacesContext.getCurrentInstance();
+        
         
         this.user = personService.login(userName, passWord);
+        if(user == null){
+            jsfHelper.postStatusMessage("Login Failed");
+        }
+        else{
+            jsfHelper.postStatusMessage("Login Success");
+        }
         return "account";
     }
+    
+     public String login () {
+    FacesContext context = FacesContext.getCurrentInstance();
+    HttpServletRequest request = (HttpServletRequest) 
+        context.getExternalContext().getRequest();
+    try {
+      request.login(this.userName , this.passWord);
+      context.addMessage(null, new FacesMessage("Login success."));
+    } catch (ServletException e) {
+      
+      context.addMessage(null, new FacesMessage("Login failed."));
+      return "error";
+    }
+    return "admin/index";
+  }
 
     public Person getUser() {
         return user;
@@ -65,6 +97,15 @@ public class AuthenticationBean implements Serializable{
     public void setPassWord(String passWord) {
         this.passWord = passWord;
     }
+
+    public JsfHelper getJsfHelper() {
+        return jsfHelper;
+    }
+
+    public void setJsfHelper(JsfHelper jsfHelper) {
+        this.jsfHelper = jsfHelper;
+    }
+    
     
     
 }
