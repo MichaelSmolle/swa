@@ -2,20 +2,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tuwien.swalab2</groupId>
-    <artifactId>swazam-peer</artifactId>
-    <version>1.0</version>
+    <groupId>com.kenmccrary</groupId>
+    <artifactId>jtella</artifactId>
+    <version>0.10-rc1</version>
     <packaging>jar</packaging>
 
-    <name>swazam-peer</name>
+    <name>jtella</name>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <build>
-        <plugins>
+        <plugins>  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -24,32 +23,13 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>   
-            <!-- <plugin>  
-                <groupId>org.codehaus.mojo</groupId>  
-                <artifactId>exec-maven-plugin</artifactId>  
-                <version>1.2.1</version>  
-                <executions>  
-                    <execution>  
-                        <phase>test</phase>  
-                        <goals>  
-                            <goal>java</goal>  
-                        </goals>  
-                        <configuration>  
-                            <mainClass>org.tuwien.swalab2.swazam.peer.Peer</mainClass>  
-                            <arguments>  
-                                <argument>1234</argument>  
-                            </arguments> 
-                        </configuration>  
-                    </execution>  
-                </executions>  
-            </plugin> --> 
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.tuwien.swalab2.swazam.peer.Peer</mainClass>
+                            <mainClass>jtella.examples.mynode.JTellaNode</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -58,14 +38,14 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>         
         </plugins>
     </build>
 
@@ -84,22 +64,11 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.tuwien.swalab2</groupId>
-            <artifactId>swazam-util</artifactId>
-            <version>1.0</version>
-        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
-        <dependency>
-            <groupId>com.kenmccrary</groupId>
-            <artifactId>jtella</artifactId>
-            <version>0.10-rc1</version>
-        </dependency>
     </dependencies>
-    
+
 </project>
