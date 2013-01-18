@@ -116,8 +116,11 @@ public class Peer implements MessageReceiver {
 		}
 		
 		//BasicConfigurator.configure();
-		this.connection.getHostCache().addHost(new Host("localhost",37000, 10, 10));
-		this.connection.getHostCache().addHost(new Host("localhost",37001, 10, 10));
+//		this.connection.getHostCache().addHost(new Host("192.168.1.21",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("192.168.1.19",37000, 10, 10));
+		this.connection.getHostCache().addHost(new Host("192.168.1.19",37002, 10, 10));
+		
+//		this.connection.getHostCache().addHost(new Host("localhost",37002, 10, 10));
 //		this.connection.getHostCache().addHost(new Host("188.181.243.73",37001, 10, 10));
 //		this.connection.getHostCache().addHost(new Host("194.166.35.63",37001, 10, 10));
 //		this.connection.getHostCache().addHost(new Host("192.168.1.45",37000, 10, 10));
@@ -196,7 +199,7 @@ public class Peer implements MessageReceiver {
 					}
 				} else if (cmd.equals("list")) {
 					
-					 SearchSession session = connection.createSearchSession("bla",0,1,1, this);
+					 SearchSession session = connection.createSearchSession("bla",0,10,1, this);
 					 try {
 //							wait(10);
 							Thread.sleep(4000);
@@ -207,6 +210,7 @@ public class Peer implements MessageReceiver {
 					 session.close();
 					
 					System.out.println(connection.getConnectionData().getIncomingPort());
+					System.out.println(connection.getConnectionData().getUltrapeer());
 					if(this.connection.isOnline()) {
 						List<NodeConnection> l = connection.getConnectionList();
 						for(int i = 0; i < l.size(); i++) {
