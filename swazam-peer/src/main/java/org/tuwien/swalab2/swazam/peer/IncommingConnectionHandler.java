@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+//Wait for IncommingConnections
 public abstract class IncommingConnectionHandler extends Thread {
 	
 	private ServerSocket s;
