@@ -203,7 +203,7 @@ public class HostCache {
 		Iterator<Host> it = hosts.iterator();
 		if (it.hasNext()) {
 			 thehost=it.next();
-			 it.remove(); //remove the host from the hostcache
+			 //it.remove(); //remove the host from the hostcache
 		}
 		return thehost;
 	}
