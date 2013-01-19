@@ -1,5 +1,7 @@
 package org.tuwien.swalab2.swazam.peer;
 
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+
 //Handle the messages by calling the appropriate methods in the ConnectionHandler and the MusicLibrary
 import java.io.IOException;
 import java.io.ObjectOutputStream;

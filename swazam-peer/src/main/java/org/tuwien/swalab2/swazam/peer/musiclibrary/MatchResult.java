@@ -5,23 +5,29 @@ import java.io.Serializable;
 
 public class MatchResult implements Serializable{	
 
-	private Double startTime;
-	private File file;
+	private String filename = "";
+	private String artist = "";
+	private String title = "";
+	private String album = "";
 	
 	
 	
-	public MatchResult(Double startTime, File file) {
-		super();
-		this.startTime = startTime;
-		this.file = file;
-	}
-	
-	public Double getStartTime() {
-		return startTime;
+	public MatchResult(File file) {
+		this.filename = file.getName();
 	}
 
-	public File getFile() {
-		return file;
-	}
 
+
+	public String getFilename() {
+		return filename;
+	}
+	public String getArtist() {
+		return artist;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public String getAlbum() {
+		return album;
+	}
 }
