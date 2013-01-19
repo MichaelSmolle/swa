@@ -20,15 +20,15 @@ public class SearchReplyMessage extends Message {
 		this.album = album;
 	}
 	
-	private String getArtist() {
+	public String getArtist() {
 		return this.artist;
 	}
 	
-	private String getTitle() {
+	public String getTitle() {
 		return this.title;
 	}
 	
-	private String getAlbum() {
+	public String getAlbum() {
 		return this.album;
 	}
 

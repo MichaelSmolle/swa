@@ -1,27 +1,109 @@
 package org.tuwien.swalab2.swazam.client;
 
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
-
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import org.tuwien.swalab2.swazam.peer.SearchReplyMessage;
 
 public class Client {
 private SwingUI swingUI;
 private Socket socket = null;
+private InetAddress ip;
+private Integer port;
+private static ServerSocket serverSocket;
+
+private static class ClientThread extends Thread {
+		
+		private Socket socket = null;
+                private SearchReplyMessage replyMessage;
+                
+		private int bytes;
+		private static final Integer BUFFERSIZE = 8192;
+
+	    public ClientThread(Socket socket) {
+	    	this.socket = socket;
+	    }
+
+	    public void run() {
+							
+				ObjectInputStream in = null;
+				
+				try {
+					System.out.println("DEBUG: Trying to setup ObjectInputStream...");
+					in = new ObjectInputStream(socket.getInputStream());
+                                try {
+                                    replyMessage = (SearchReplyMessage)in.readObject();
+                                } catch (ClassNotFoundException ex) {
+                                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                                } 
+                                
+                                System.out.println(replyMessage.getArtist());
+
+				    //System.out.println("DEBUG: Peer " + socket.getInetAddress() + ":" + uploadingPort + " has requested the file: " + requestedFile + "\n");
+				    //in.close(); 
+				
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+	    }
+
+		
+	}
+
+	private static class TcpDispatcher implements Runnable {	
+		
+		ServerSocket server;
+		
+		TcpDispatcher (ServerSocket serverSocket) {
+			this.server = serverSocket;
+		}
+		
+		public void run() {
+			
+                    Socket client = null; 
+	     
+	        try 
+	        { 	 
+	        	while (true) {
+	        		client = server.accept();
+	        		 Thread t = new Thread(new ClientThread(client));
+	        	     t.start();
+	        	}
+	        }
+        	 catch ( SocketException e ) { 
+        	System.out.println("DEBUG: SocketException occurred.");
+                System.out.println(e.getMessage());
+        	 }
+	        catch ( IOException e ) { 
+	        	e.printStackTrace(); 
+	        }
+		}
+	} 
     
 	public static void main(String[] args) {
 		Client client = new Client();
-		client.setUp();
-		//client.startSwingUI(args);
+        try {
+            client.setUp();
+            //client.startSwingUI(args);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
 		client.startCLI();
 
@@ -32,18 +114,21 @@ private Socket socket = null;
 
 		// ToDo: somehow bootstrap
                 
+                ip = InetAddress.getByName("127.0.0.1");
+                port = 37010;
+                
                 Socket initSocket = null;
                 DataOutputStream out = null;
-                DataInputStream in = null;
+                //DataInputStream in = null;
 
         try {
         	initSocket = new Socket(ip, port); //TODO: add args
         	out = new DataOutputStream(initSocket.getOutputStream());
         } catch (UnknownHostException e) {
-            System.err.println("Cannot find the peer  " + ip + ".");
+            System.err.println("Cannot find the peer  " + ip + ":" + port + ".");
             //serverSocket.close();
             System.exit(1); //TODO: remove
-        } catch (IOException e) {
+        }  catch (IOException e) {
             System.err.println("Could not connect to peer " + ip + ".");
             initSocket.close();
             //System.exit(1);
