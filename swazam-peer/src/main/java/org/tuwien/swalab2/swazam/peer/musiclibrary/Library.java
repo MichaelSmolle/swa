@@ -49,18 +49,17 @@ public class Library implements Serializable{
 		}
 	}
 	
-	public MatchResultList match(Fingerprint fprint){
-		MatchResultList resultList = new MatchResultList();
-		
+	public MatchResult match(Fingerprint fprint){
+		MatchResult mr;
 		for (Mp3File mFile : library){
 			
 			Double match = mFile.getFingerprint().match(fprint);
 			if (match != -1){
-				resultList.add(new MatchResult(match, mFile.getFile() ));
+				mr = new MatchResult(mFile.getFile());
+			    return mr;	
 			}
 		}
-		
-		return resultList;
+		return null;
 	}
 	
 	public List<String> list(){

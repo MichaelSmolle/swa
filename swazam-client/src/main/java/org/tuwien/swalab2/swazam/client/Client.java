@@ -55,6 +55,7 @@ public class Client {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+                System.out.println("filename: " + replyMessage.getFilename());
                 System.out.println("artist: " + replyMessage.getArtist());
                 System.out.println("album: " + replyMessage.getAlbum());
                 System.out.println("title: " + replyMessage.getTitle());
