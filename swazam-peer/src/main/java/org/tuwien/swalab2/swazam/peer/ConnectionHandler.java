@@ -3,10 +3,12 @@ package org.tuwien.swalab2.swazam.peer;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Vector;
 
 public class ConnectionHandler extends Thread {
 	
+	private String		myAddrString;
 	private int 		myPort;
 	private InetAddress myAddr;
 	private int 		maxConnections;
@@ -20,9 +22,38 @@ public class ConnectionHandler extends Thread {
 		//todo;
 	}
 	
+	public void addNodes(HostCache newHosts) {
+		//todo merge caches
+	}
+	
+	public void replyToRequestNodes(InetAddress requestorIp, int requestorPort) {
+		//todo not thread save
+		requestPeerReplyMessage m = null;
+		try {
+			m = new requestPeerReplyMessage(this.myAddrString, this.myPort, null);
+			m.setHostCache(this.knownNodes);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < this.currentConnections.size(); i++) {
+			if(this.currentConnections.get(i).getRemoteIp().equals(requestorIp) && this.currentConnections.get(i).getRemotePort() == requestorPort) {
+				this.currentConnections.get(i).sendMessage(m);
+				return;
+			}
+		}
+		
+	}
+	
 	private void requestNodes() {
 		if(this.currentConnections.size()!= 0) {
-			Message m = null; //todo
+			Message m = null;
+			try {
+				m = new requestPeerMessage(this.myAddrString, this.myPort, null);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				return;
+			} //todo
 			for(int i=0; i < this.currentConnections.size(); i++) {
 				if (this.currentConnections.get(i).isOnline()) {
 					this.currentConnections.get(i).sendMessage(m);

@@ -191,7 +191,7 @@ public class Peer implements MessageReceiver {
 							if (file.getName().contains("mp3")
 									|| file.getName().contains("MP3")) {
 								fingerprint = FingerprintFile
-										.fingerprint(file);
+										.getFingerprint(file);
 								library.put(fingerprint, file);
 							} else {
 								System.out
@@ -243,7 +243,7 @@ public class Peer implements MessageReceiver {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
 							fingerprint = FingerprintFile
-									.fingerprint(file);
+									.getFingerprint(file);
 							
 							Fingerprint[] fingerprints = fingerprint.split();
 							System.out.println("split fingerprint count");

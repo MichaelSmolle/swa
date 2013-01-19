@@ -15,7 +15,7 @@ import javax.sound.sampled.AudioSystem;
  */
 public class FingerprintFile {
     
-    	public static ac.at.tuwien.infosys.swa.audio.Fingerprint fingerprint(File file) {
+    	public static ac.at.tuwien.infosys.swa.audio.Fingerprint getFingerprint(File file) {
 
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
