@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+//Represents a connection to an existing node
+//TODO Check Thread Safety and kill mehtod
 public class NodeConnection {
 	
 	private Socket 				s;
@@ -41,6 +43,7 @@ public class NodeConnection {
 		return this.remotePort;
 	}
 	
+	//send a message to the connected node
 	public synchronized void sendMessage(Message m) {
 		  
 		try {
@@ -55,6 +58,9 @@ public class NodeConnection {
 		} 
 	}
 	
+	//Inform the ConnectionHandler that this connection is dead
+	//set the online flag to false
+	//ConnectionHandler will clear the node from the list sometime later
 	public synchronized void disconnect() {
 		this.mr.kill();
 		try {
@@ -64,6 +70,7 @@ public class NodeConnection {
 		this.online = false;
 	}
 	
+	//Receive a message and give it to the MessageHandler
 	private class MessageReceiver extends Thread {
 		private MessageHandler mh;
 		private volatile boolean running;

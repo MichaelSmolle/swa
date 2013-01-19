@@ -1,5 +1,7 @@
 package org.tuwien.swalab2.swazam.peer;
 
+//Handle the messages by calling the appropriate methods in the ConnectionHandler and the MusicLibrary
+//TODO nearly everything
 public class MessageHandler {
 	
 	private ConnectionHandler ch;

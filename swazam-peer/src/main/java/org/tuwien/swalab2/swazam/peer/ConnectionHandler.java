@@ -11,6 +11,11 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Vector;
 
+//TODO:
+//Thread Sicherheit kontrollieren
+//Konstruktor
+//Messages weiterleiten, gilt nur für SearchMessages
+//restliche Todos im Source Code
 public class ConnectionHandler extends Thread {
 	
 	private String		myAddrString;
@@ -25,6 +30,9 @@ public class ConnectionHandler extends Thread {
 	private InetAddress serverIp;
 	private int			serverPort;
 	
+	
+	//Connects to server, sends a requestPeerMessage
+	//waits for a Message from server and calls the MessageHandler
 	private void bootstrap() {
 		try {
 			Socket s = new Socket(serverIp, serverPort);
@@ -46,10 +54,12 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
+	//Merge nodes in current Cache and the ones received from a requestPeerMessage
 	public void addNodes(HostCache newHosts) {
 		this.knownNodes.merge(newHosts);
 	}
 	
+	//Helper method to find a connection in the currentConnections list
 	private NodeConnection findConnection(InetAddress requestorIp, int requestorPort) {
 		NodeConnection cur;
 		for(int i = 0; i < this.currentConnections.size(); i++) {
@@ -61,6 +71,7 @@ public class ConnectionHandler extends Thread {
 		return null;
 	}
 	
+	//call sendMessage in corresponding NodeConnection
 	public void sendMessageTo(InetAddress requestorIp, int requestorPort, Message m) {
 		NodeConnection cur = this.findConnection(requestorIp, requestorPort);
 		if(cur != null) {
@@ -68,6 +79,10 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
+	//Called by IncommingPeerConnectionHandler
+	//If we already have engough connections just close the socket
+	//else create a new NodeConnection
+	//TODO: Peer shoudl be added to HostChache if not already there
 	public void handleIncommingPeerConnection(Socket s) {
 		if (this.currentConnections.size() < this.maxConnections) { // check for too many connections
 			// check if we are already connected to this node
@@ -81,6 +96,9 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
+	//Called by MessageHandler 
+	//Send the HostCache to the corresponding NodeConnection
+	//As requests for nodes will only travel for one hop there is no need to create a new connection
 	public void replyToRequestNodes(InetAddress requestorIp, int requestorPort) {
 		//todo not thread save
 		requestPeerReplyMessage m = null;
@@ -94,6 +112,8 @@ public class ConnectionHandler extends Thread {
 		this.sendMessageTo(requestorIp, requestorPort, m);
 	}
 	
+	//send a requestPeerMessage to all NodeConnections
+	//if we have to active connections this means that the HostCache is worthless therefore bootstrap
 	private void requestNodes() {
 		if(this.currentConnections.size()!= 0) {
 			requestPeerMessage m = null;
@@ -113,10 +133,12 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
+	//Remove a node from the connectedNode list, called by a NodeConnection
 	protected synchronized void removeFromConnectedNodes(InetAddress remoteIp, int remotePort) {
 		this.connectedNodes.remove(new HostCacheKeyEntry(remoteIp, remotePort));
 	}
 	
+	//Add a node to the connectedNode list, called by NodeConnection in Constructor if everything went alright
 	protected synchronized void addToConnectedNodes(InetAddress remoteIp, int remotePort) {
 		this.connectedNodes.add(knownNodes.search(new HostCacheKeyEntry(remoteIp, remotePort)));
 	}
@@ -142,6 +164,7 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
+	//Start a conenction to a node
 	private void startConnection(InetAddress remoteIp, int remotePort) {
 		Socket s;
 		try {
@@ -163,8 +186,7 @@ public class ConnectionHandler extends Thread {
 				while(e.hasMoreElements() && this.currentConnections.size() < this.maxConnections) {
 					cur = e.nextElement();
 					if(!this.connectedNodes.getHostCache().containsKey(new HostCacheKeyEntry(cur.getAdr(), cur.getPort()))) {
-					//check if we already have a connection to this node
-					//todo
+					//TODO: check if we already have a connection to this node
 						this.startConnection(cur.getAdr(), cur.getPort());
 					}
 				}
