@@ -36,5 +36,10 @@ public class HostCache {
 		HostCacheKeyEntry key = new HostCacheKeyEntry(entry.getAdr(), entry.getPort());
 		hostCache.put(key, entry);
 	}
+	
+	public void merge(HostCache hostCache){
+		hostCache.merge(hostCache);
+	
+	}
 }
 
