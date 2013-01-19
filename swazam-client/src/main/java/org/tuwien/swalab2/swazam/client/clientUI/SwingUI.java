@@ -7,6 +7,7 @@ package org.tuwien.swalab2.swazam.client.clientUI;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JOptionPane;
+import org.tuwien.swalab2.swazam.client.Client;
 
 /**
  *
@@ -18,6 +19,7 @@ public class SwingUI extends javax.swing.JFrame {
      * Creates new form SwingUI
      */
     public SwingUI() {
+ 
         initComponents();
     }
 

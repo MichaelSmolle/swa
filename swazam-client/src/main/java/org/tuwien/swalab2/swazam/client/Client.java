@@ -1,11 +1,6 @@
 package org.tuwien.swalab2.swazam.client;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -14,17 +9,20 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.tuwien.swalab2.swazam.client.clientUI.Cli;
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
 import org.tuwien.swalab2.swazam.peer.SearchMessage;
 import org.tuwien.swalab2.swazam.peer.SearchReplyMessage;
 
+import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+
 public class Client {
 
-    private SwingUI swingUI;
+    private static SwingUI swingUI;
+    private static Cli cli;
     private Socket socket = null;
     private InetAddress ip;
     private Integer port;
@@ -96,6 +94,10 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
+        
+        cli = new Cli(client);
+//        swingUI = new SwingUI();
+        
         try {
             client.setUp();
             //client.startSwingUI(args);
@@ -103,7 +105,7 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        client.startCLI();
+
 
     }
 
@@ -129,85 +131,14 @@ public class Client {
 
     }
 
-    private void startSwingUI(String[] args) {
-        swingUI = new SwingUI();
-        //TODO: better
-        //swingUI.main(args);
-    }
+//    private void startSwingUI(String[] args) {
+//        swingUI = new SwingUI();
+//        //TODO: better
+//        //swingUI.main(args);
+//    }
 
-    private void startCLI() {
-        String cmd;
-        String filename;
-        Fingerprint fingerprint;
 
-        usage();
-
-        boolean run = true;
-        while (run) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            String input;
-            Scanner s = null;
-
-            try {
-                input = in.readLine();
-                s = new Scanner(input);
-
-            } catch (IOException e) {
-                System.err.println("Couldn't read line.");
-            }
-
-            if (s.hasNext()) {
-                cmd = s.next();
-
-                if (cmd.equals("query")) {
-
-                    filename = s.next();
-
-                    File file = new File(filename);
-                    
-                    try {
-                        if (file.getName().contains("mp3") || file.getName().contains("MP3")) {
-
-                            if (file.exists()) {
-                                fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.getFingerprint(file);
-                                System.out.println("Fingerprint is: " + fingerprint.toString());
-                                
-                                submitRequest(fingerprint);
-                                
-                            } else {
-                                System.out.println("Couldn't find file " + filename + ".\n");
-                            }
-                        } else {
-                            System.out.println("The file must be of type mp3.\n");
-                        }
-                    } catch (Exception e) {
-                        System.out.println("An exception ocurred.");
-                        System.out.println(e.getMessage());
-                    }
-                    
-                } else if (cmd.equals("usage")) {
-                    usage();
-                } else if (cmd.equals("quit")) {
-                    run = false;
-                } else {
-                    usage();
-                }
-            }
-        }
-        //swingUI.close();
-        System.out.println("Shutting down client");
-
-    }
-
-    private void usage() {
-        System.out.println("\n Interactive commands:"
-                + "\n - query <path to mp3>"
-                + "\n - quit"
-                + "\n - usage"
-                + "\n");
-    }
-
-    private void submitRequest(Fingerprint fingerprint) {
+    public void submitRequest(Fingerprint fingerprint) {
         
         System.out.println("Submitting FingerPrint to network...");
         
@@ -225,6 +156,11 @@ public class Client {
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
+    public void shutdown() {
+    	swingUI.close();
+    	cli.close();
+		System.exit(0);
+	}
 }

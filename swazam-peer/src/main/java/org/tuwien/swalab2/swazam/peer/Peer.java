@@ -66,7 +66,7 @@ public class Peer implements MessageReceiver {
 		library.load();
 
 		cli = new Cli(library);
-		cli.run();
+//		cli.run();
                 
                 ConnectionHandler c = new ConnectionHandler(library);
                 

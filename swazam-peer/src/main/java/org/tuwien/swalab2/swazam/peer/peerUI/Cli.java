@@ -14,7 +14,7 @@ import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 
 
-public class Cli implements Runnable{
+public class Cli extends Thread{
 
 	private String cmd = "";
 	private String filename = "";
@@ -24,6 +24,7 @@ public class Cli implements Runnable{
 	public Cli(Library library) {
 		super();
 		this.library = library;
+		this.start();
 	}
 
 
