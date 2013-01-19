@@ -78,11 +78,8 @@ public class Peer implements MessageReceiver {
         try {
             //load a properties file
             prop.load(new FileInputStream("peer.properties"));
-
-            //get the property value and print it out
-            System.out.println(prop.getProperty("database"));
-            System.out.println(prop.getProperty("dbuser"));
-            System.out.println(prop.getProperty("dbpassword"));
+            
+            //int maxConnections = prop.getProperty("maxConnections");
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -90,10 +87,10 @@ public class Peer implements MessageReceiver {
         try {
             ConnectionHandler c = new ConnectionHandler(
                     InetAddress.getLocalHost().getHostAddress(),
-                    arg0,
-                    Integer.getInteger(prop.getProperty("maxConnections")),
+                    arg0.intValue(),
+                    Integer.parseInt(prop.getProperty("maxConnections")),
                     InetAddress.getByName(prop.getProperty("serverIp")),
-                    Integer.getInteger(prop.getProperty("serverPort")),
+                    Integer.parseInt(prop.getProperty("serverPort")),
                     library);
         } catch (UnknownHostException ex) {
             java.util.logging.Logger.getLogger(Peer.class.getName()).log(Level.SEVERE, null, ex);
