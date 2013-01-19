@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,10 +55,10 @@ public class Client {
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                //TODO: Ergebnisse der diversen Peers sammeln und dann das beste auswählen
 
-                System.out.println("artist: " + replyMessage.getArtist());
-                System.out.println("album: " + replyMessage.getAlbum());
-                System.out.println("title: " + replyMessage.getTitle());
+                System.out.println("filename: " + replyMessage.getFilename() + "(found by peer )" + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -115,7 +116,7 @@ public class Client {
         port = 37000;
 
         try {
-            initSocket = new Socket(ip, port); //TODO: add args
+            initSocket = new Socket(ip, port);
             out = new ObjectOutputStream(initSocket.getOutputStream());
         } catch (UnknownHostException e) {
             System.err.println("Cannot find the peer  " + ip + ":" + port + ".");
@@ -123,7 +124,6 @@ public class Client {
             System.exit(1); //TODO: remove
         } catch (IOException e) {
             System.err.println("Could not connect to peer " + ip + ".");
-            //initSocket.close();
             //System.exit(1);
         }
 
@@ -212,8 +212,9 @@ public class Client {
         System.out.println("Submitting FingerPrint to network...");
         
         try {
-
-            SearchMessage searchMessage = new SearchMessage("127.0.0.1", 37010, fingerprint, "test");
+            
+            Date d = new Date();
+            SearchMessage searchMessage = new SearchMessage(ip.toString(), port, fingerprint, ip.toString() + port.toString() + d.toString());
 
             out.writeObject(searchMessage);
             out.flush();
