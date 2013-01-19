@@ -5,7 +5,7 @@ public class ConnectionHandler {
 		System.out.println("stub");
 	}
 	
-	public void closeAndRemove(NodeConnection n) {
+	public void disconnectAndRemove(NodeConnection n) {
 		n.disconnect();
 	}
 }

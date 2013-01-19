@@ -6,7 +6,7 @@ public class MessageHandler {
 		
 	}
 	
-	public void handleMessage(Message m) {
+	public synchronized void handleMessage(Message m) {
 		if(m instanceof SearchMessage) {
 			System.out.println("stub");
 		}

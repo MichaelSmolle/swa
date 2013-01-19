@@ -11,11 +11,17 @@ public abstract class Message implements Serializable {
 	private InetAddress senderAdr;
 	private int         senderPort;
 	private int         ttl;
+	private String      id;
 	
-	public Message(String ip, int port) throws UnknownHostException {
+	public Message(String ip, int port, String id) throws UnknownHostException {
 		this.senderAdr = InetAddress.getByName(ip);
 		this.senderPort = port;
 		this.ttl = 5;
+		this.id = id;
+	}
+	
+	public String getId() {
+		return this.id;
 	}
 	
 	public int getTTL() {

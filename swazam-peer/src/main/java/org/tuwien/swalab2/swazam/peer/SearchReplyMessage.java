@@ -13,8 +13,8 @@ public class SearchReplyMessage extends Message {
 	private String title;
 	private String album;
 	
-	public SearchReplyMessage(String ip, int port, String artist, String title, String album) throws UnknownHostException {
-		super(ip,port);
+	public SearchReplyMessage(String ip, int port, String id, String artist, String title, String album) throws UnknownHostException {
+		super(ip,port, id);
 		this.artist = artist;
 		this.title = title;
 		this.album = album;

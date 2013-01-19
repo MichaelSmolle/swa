@@ -13,8 +13,8 @@ public class SearchMessage extends Message {
 	
 	private Fingerprint fingerPrint;
 	
-	public SearchMessage(String ip, int port, Fingerprint f) throws UnknownHostException {
-		super(ip, port);
+	public SearchMessage(String ip, int port, Fingerprint f, String id) throws UnknownHostException {
+		super(ip, port, id);
 		this.fingerPrint = f;
 	}
 	

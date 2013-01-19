@@ -18,7 +18,7 @@ public class NodeConnection {
 		this.s = socket;
 		this.mh = mh;
 		this.ch = ch;
-		this.mr = new MessageReceiver(this.mh, this.s);
+		this.mr = new MessageReceiver(this.mh, this.s, this);
 	}
 	
 	public synchronized void sendMessage(Message m) {
@@ -36,6 +36,7 @@ public class NodeConnection {
 	}
 	
 	public synchronized void disconnect() {
+		this.mr.kill();
 		try {
 			this.s.close();
 		} catch (IOException e) {
@@ -46,36 +47,46 @@ public class NodeConnection {
 	
 	private class MessageReceiver extends Thread {
 		private MessageHandler mh;
-		private Socket s;
+		private volatile boolean running;
+		private InputStream is;
+		private ObjectInputStream ois;
+		private NodeConnection n;
 		
-		public MessageReceiver(MessageHandler mh, Socket s) {
+		public MessageReceiver(MessageHandler mh, Socket s, NodeConnection n) {
 			this.mh = mh;
-			this.s = s;
-			this.run();
+			this.running = true;
+			this.n = n;
+			try {
+				this.is = s.getInputStream();
+				this.ois = new ObjectInputStream(is);
+				this.run();
+			} catch (Exception e) {
+				this.n.disconnect();
+				e.printStackTrace();
+			}  
+		}
+		
+		public void kill() {
+			this.running = false;
+			try {
+				this.ois.close();
+			} catch (IOException e) {}
+			try {
+				this.is.close();
+			} catch (IOException e) {}
+			try {
+				join();
+			} catch (InterruptedException e) {}
 		}
 		
 		public void run() {
-			InputStream is;
-			ObjectInputStream ois = null;
-			try {
-				is = this.s.getInputStream();
-				ois = new ObjectInputStream(is);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("todo");
-			}  
-			
-			while(true) {
-				try {
-					mh.handleMessage((Message)ois.readObject());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			while(this.running) {
+					try {
+						mh.handleMessage((Message)ois.readObject());
+					} catch (Exception e) {
+						e.printStackTrace();
+						this.n.disconnect();
+					} 
 			}
 		}
 	}
