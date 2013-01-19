@@ -78,7 +78,7 @@ public class NodeConnection {
 			try {
 				this.is = s.getInputStream();
 				this.ois = new ObjectInputStream(is);
-				this.run();
+				this.start();
 			} catch (Exception e) {
 				this.n.disconnect();
 				e.printStackTrace();
