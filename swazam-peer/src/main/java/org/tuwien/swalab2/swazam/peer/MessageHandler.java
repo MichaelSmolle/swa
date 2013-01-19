@@ -10,14 +10,20 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
-import org.tuwien.swalab2.swazam.peer.musiclibrary.MatchResultList;
+import org.tuwien.swalab2.swazam.peer.musiclibrary.MatchResult;
 
 //TODO nearly everything
 public class MessageHandler {
 
-    private ConnectionHandler ch;
+    private ConnectionHandler connectionHandler;
+    private Library library;
+    private Socket communicationPartner = null;
 
-    public MessageHandler() {
+    public MessageHandler(Library library) {
+        
+        //this.connectionHandler = connectionHandler;
+        //this.communicationPartner = communicationPartner;
+        this.library = library;
     }
 
     public synchronized void handleMessage(Message m) {
@@ -27,10 +33,9 @@ public class MessageHandler {
 
             //TODO: message über den ConnectionHandler forwarden
 
-            Library library;
-            MatchResultList matchResultList = library.match(thisMessage.getFingerprint());
+            MatchResult matchResult = library.match(thisMessage.getFingerprint());
 
-            if (matchResultList.getList().size() > 0) {
+            if (matchResult != null) {
 
                 Socket replySocket = null;
                 ObjectOutputStream out = null;
@@ -46,26 +51,31 @@ public class MessageHandler {
                     //System.exit(1);
                 }
                 
-                SearchReplyMessage searchReplyMessage = new SearchReplyMessage(ip, port, thisMessage.getId(), filename);
-                
+                // TODO: IP und Port von beantworteten einbauen
+                SearchReplyMessage searchReplyMessage;
                 try {
-                    
+                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().toString(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
+                      
                     out.writeObject(searchReplyMessage);
                     out.flush();
                     out.close();
-
+                    
+              } catch (UnknownHostException ex) {
+                    Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
 
            } else {
                 System.out.println("No results found for searchMessage:" + thisMessage.getId() + ".");
             }
 
         } else if (m instanceof requestPeerReplyMessage) {
-            ch.addNodes(((requestPeerReplyMessage) m).getHostCache());
+            System.out.println("TODO.");
+            //ch.addNodes(((requestPeerReplyMessage) m).getHostCache());
         } else if (m instanceof requestPeerMessage) {
-            ch.replyToRequestNodes(m.getSender(), m.getSenderPort());
+            System.out.println("TODO.");
+            //ch.replyToRequestNodes(m.getSender(), m.getSenderPort());
         }
     }
 }

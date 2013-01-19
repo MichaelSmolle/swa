@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.Vector;
+import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 //TODO:
 //Thread Sicherheit kontrollieren
@@ -18,18 +19,24 @@ import java.util.Vector;
 //restliche Todos im Source Code
 public class ConnectionHandler extends Thread {
 	
-	private String		myAddrString;
-	private int 		myPort;
+	private String myAddrString;
+	private int myPort;
 	//private InetAddress myAddr;
-	private int 		maxConnections;
-	private HostCache   connectedNodes;
-	private HostCache   knownNodes;
+	private int maxConnections;
+	private HostCache connectedNodes;
+	private HostCache knownNodes;
 	private Vector<NodeConnection> currentConnections;
 	private MessageHandler mh;
 	private volatile boolean running;
 	private InetAddress serverIp;
-	private int			serverPort;
-	
+	private int serverPort;
+        private Library library;
+
+        public ConnectionHandler(Library library) {
+            mh = new MessageHandler(library);
+            this.library = library;
+            this.start();
+        }
 	
 	//Connects to server, sends a requestPeerMessage
 	//waits for a Message from server and calls the MessageHandler
@@ -176,6 +183,9 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	public void run() {
+            
+            IncommingClientConnectionHandler icch = new IncommingClientConnectionHandler(myPort, mh);
+                        
 		while(running) {
 			//clear dead connections
 			this.clearDeadConnections();
@@ -194,7 +204,8 @@ public class ConnectionHandler extends Thread {
 			//if we still have not enough connections get more HostCache entries
 			if(this.currentConnections.size() < this.maxConnections) {
 				this.requestNodes();
-			}
+			}                 
+                        
 			//sleep for some time
 			try {
 				Thread.sleep(20000);

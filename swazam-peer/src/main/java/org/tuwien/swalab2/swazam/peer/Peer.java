@@ -10,6 +10,10 @@ import com.kenmccrary.jtella.PushMessage;
 import com.kenmccrary.jtella.SearchMessage;
 import com.kenmccrary.jtella.SearchMonitorSession;
 import com.kenmccrary.jtella.SearchReplyMessage;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Hello world!
@@ -22,7 +26,7 @@ public class Peer implements MessageReceiver {
 //	private FileServerSession fbla;
 //	private SearchMonitorSession sbla;
 	private Cli cli;
-	private Library library;
+	private static Library library;
 //	private Logger log;
 
 	public Peer(Integer arg0) {
@@ -55,8 +59,6 @@ public class Peer implements MessageReceiver {
 		Peer peer = new Peer(arg0);
 		peer.setUp(arg0);
 
-
-
 	}
 
 	private void setUp(Integer arg0) {
@@ -65,6 +67,12 @@ public class Peer implements MessageReceiver {
 
 		cli = new Cli(library);
 		cli.run();
+                
+                ConnectionHandler c = new ConnectionHandler(library);
+                
+                //Thread t = new Thread(new ConnectionHandler(library));
+                //t.start();
+                
 		//		log = Logger.getLogger(getClass());
 		//		log.info("Welcome to the SWAzam Peer.");	
 		//		System.setProperty("JTella.Debug", "JTella.Debug");
@@ -107,6 +115,32 @@ public class Peer implements MessageReceiver {
 		// ToDo: somehow bootstrap
 	}
 
+    private static class TcpDispatcher implements Runnable {
 
+        ServerSocket server;
+
+        TcpDispatcher(ServerSocket serverSocket) {
+            this.server = serverSocket;
+        }
+
+        public void run() {
+
+            Socket client = null;
+
+            try {
+                while (true) {
+                    client = server.accept();
+                    Thread t = new Thread(new ConnectionHandler(library));
+                    t.start();
+                }
+
+            } catch (SocketException e) {
+                System.out.println("DEBUG: SocketException occurred.");
+                System.out.println(e.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
