@@ -13,6 +13,7 @@ public class SearchMessage extends Message {
 	
 	private Fingerprint fingerPrint;
 	
+        // TODO: ip als InetAddress statt String speichern
 	public SearchMessage(String ip, int port, Fingerprint f, String id) throws UnknownHostException {
 		super(ip, port, id);
 		this.fingerPrint = f;

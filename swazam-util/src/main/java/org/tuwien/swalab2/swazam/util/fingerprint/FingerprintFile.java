@@ -18,18 +18,16 @@ public class FingerprintFile {
     	public static ac.at.tuwien.infosys.swa.audio.Fingerprint getFingerprint(File file) {
 
 		try {
-			AudioInputStream audioInputStream = AudioSystem
-					.getAudioInputStream(file);
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 
-			System.out.println("Trying to fingerprint " + file.getName());
+			System.out.println("Trying to fingerprint " + file.getName() + "...");
 
-			ac.at.tuwien.infosys.swa.audio.Fingerprint resultFingerpring = FingerprintSystem
-					.fingerprint(audioInputStream);
+			ac.at.tuwien.infosys.swa.audio.Fingerprint resultFingerpring = FingerprintSystem.fingerprint(audioInputStream);
 
-			System.out.println("Fingerprinting of file " + file.getName()
-					+ " is: " + resultFingerpring.toString());
+			System.out.println("Fingerprinting of file " + file.getName() + " is: " + resultFingerpring.toString());
 
 			return resultFingerpring;
+                        
 		} catch (Exception e) {
 			System.out.println("Somewhere something went horribly wrong...");
 			System.out.println(e.toString());
