@@ -114,7 +114,8 @@ public class Client {
 
         // ToDo: somehow bootstrap
 
-        ip = InetAddress.getByName("93.82.83.41");
+        ip = InetAddress.getByName("127.0.0.1");
+        ip = InetAddress.getLocalHost();
         port = 37000;
 
         try {
