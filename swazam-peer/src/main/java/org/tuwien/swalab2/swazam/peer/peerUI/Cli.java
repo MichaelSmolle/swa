@@ -64,6 +64,7 @@ public class Cli implements Runnable{
 										|| file.getName().contains("MP3")) {
 									System.out.println("adding file");
 									library.add(file);
+									System.out.println("file added");
 								} else {
 									System.out
 									.println("The file must be of type mp3 \n");

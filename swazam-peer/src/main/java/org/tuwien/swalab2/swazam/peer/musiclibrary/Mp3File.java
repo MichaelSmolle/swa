@@ -22,8 +22,6 @@ public class Mp3File implements Serializable{
 		} else {
 			throw new Exception("The file must be of type mp3");
 		}
-		
-		System.out.println("fingerprinting "+ mp3.getName());
 		this.fingerprint = FingerprintFile.getFingerprint(mp3);
 	}
 	

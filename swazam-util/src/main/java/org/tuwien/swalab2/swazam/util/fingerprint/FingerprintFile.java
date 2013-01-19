@@ -21,11 +21,8 @@ public class FingerprintFile {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 
 			System.out.println("Trying to fingerprint " + file.getName() + "...");
-
 			ac.at.tuwien.infosys.swa.audio.Fingerprint resultFingerpring = FingerprintSystem.fingerprint(audioInputStream);
-
-			System.out.println("Fingerprinting of file " + file.getName() + " is: " + resultFingerpring.toString());
-
+			
 			return resultFingerpring;
                         
 		} catch (Exception e) {
