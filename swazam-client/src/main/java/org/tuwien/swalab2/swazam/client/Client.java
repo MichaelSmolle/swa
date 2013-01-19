@@ -9,13 +9,14 @@ import java.util.Scanner;
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-/**
- * Hello world!
- * 
- */
 public class Client {
 private SwingUI swingUI;
+private Socket socket = null;
     
 	public static void main(String[] args) {
 		Client client = new Client();
@@ -26,10 +27,28 @@ private SwingUI swingUI;
 
 	}
 
-	private void setUp() {
-		System.out.println("Welcome to the SWAzam client.");
+	private void setUp() throws IOException {
+		System.out.println("Welcome to the SWAzam client.");              
 
 		// ToDo: somehow bootstrap
+                
+                Socket initSocket = null;
+                DataOutputStream out = null;
+                DataInputStream in = null;
+
+        try {
+        	initSocket = new Socket(ip, port); //TODO: add args
+        	out = new DataOutputStream(initSocket.getOutputStream());
+        } catch (UnknownHostException e) {
+            System.err.println("Cannot find the peer  " + ip + ".");
+            //serverSocket.close();
+            System.exit(1); //TODO: remove
+        } catch (IOException e) {
+            System.err.println("Could not connect to peer " + ip + ".");
+            initSocket.close();
+            //System.exit(1);
+        }
+                
 	}
 
 	private void startSwingUI(String[] args) {
