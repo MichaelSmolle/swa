@@ -31,5 +31,10 @@ public class HostCache {
 		remove(key);
 		return entry;
 	}
+	
+	public void add(HostCacheEntry entry){
+		HostCacheKeyEntry key = new HostCacheKeyEntry(entry.getAdr(), entry.getPort());
+		hostCache.put(key, entry);
+	}
 }
 
