@@ -6,16 +6,20 @@ import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-public class MusicFile {
+public class Mp3File {
 	private Fingerprint fingerprint;
 	private File 		file;
 	
 	
 	
 	
-	public MusicFile(File file) {
+	public Mp3File(File mp3) throws Exception {
 		super();
-		this.file = file;
+		if (file.getName().contains("mp3") || file.getName().contains("MP3")) {
+			this.file = mp3;
+		} else {
+			throw new Exception("The file must be of type mp3");
+		}
 		
 		this.fingerprint = FingerprintFile.getFingerprint(file);
 	}
