@@ -71,7 +71,7 @@ private SwingUI swingUI;
 					try {
 						if (file.getName().contains("mp3")
 								|| file.getName().contains("MP3")) {
-							fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.fingerprint(file);
+							fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.getFingerprint(file);
 						} else {
 							System.out
 									.println("The file must be of type mp3 \n");
