@@ -97,6 +97,6 @@ public class Cli extends Thread{
 	
 	public void close() {
 		run = false;
-		client.shutdown();
+//		client.shutdown();
 	}
 }
