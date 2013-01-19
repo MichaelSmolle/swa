@@ -206,7 +206,7 @@ class OutgoingConnectionManager extends ConnectionManager {
 		 */
 		void setHost(Host host) {
 			this.host = host;
-			hostCache.removeHost(host); // TODO rethink this
+			//hostCache.removeHost(host); // TODO rethink this
 			synchronized (this) {
 				notify();
 			}

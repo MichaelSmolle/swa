@@ -115,7 +115,7 @@ class IncomingConnectionManager extends ConnectionManager {
 
 				if (!isShutdown()) {
 					if (numLive < connectionData.getIncommingConnectionCount()
-						&& !connectionList.contains(socket.getInetAddress().getHostAddress())) { //, socket.getPort() we ignore the port for now
+						&& !connectionList.contains(socket.getInetAddress().getHostAddress(), socket.getPort())) { 
 						NodeConnection connection =
 							new NodeConnection(
 								router,

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class NodeConnection {
@@ -13,12 +14,31 @@ public class NodeConnection {
 	private MessageHandler 		mh;
 	private ConnectionHandler   ch;
 	private MessageReceiver 	mr;
+	private InetAddress			remoteIp;
+	private int 				remotePort;
+	private volatile boolean	online;
 	
-	public NodeConnection(Socket socket, MessageHandler mh, ConnectionHandler ch) {
+	public NodeConnection(Socket socket, InetAddress remoteIp, int remotePort, MessageHandler mh, ConnectionHandler ch) {
 		this.s = socket;
+		this.remoteIp = remoteIp;
+		this.remotePort = remotePort;
 		this.mh = mh;
 		this.ch = ch;
 		this.mr = new MessageReceiver(this.mh, this.s, this);
+		this.ch.addToConnectedNodes(this.remoteIp, this.remotePort);
+		this.online = true;
+	}
+	
+	public boolean isOnline() {
+		return this.online;
+	}
+	
+	public InetAddress getRemoteIp() {
+		return this.remoteIp;
+	}
+	
+	public int getRemotePort() {
+		return this.remotePort;
 	}
 	
 	public synchronized void sendMessage(Message m) {
@@ -39,10 +59,9 @@ public class NodeConnection {
 		this.mr.kill();
 		try {
 			this.s.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.ch.remove(this);
+		} catch (IOException e) {}
+		this.ch.removeFromConnectedNodes(this.remoteIp, this.remotePort);
+		this.online = false;
 	}
 	
 	private class MessageReceiver extends Thread {
