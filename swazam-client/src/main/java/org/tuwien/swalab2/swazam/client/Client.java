@@ -105,5 +105,13 @@ private SwingUI swingUI;
 				+ "\n - usage"
 				+ "\n");
 	}
+        
+        private void submitRequest(Fingerprint fingerprint) {
+            
+            org.tuwien.swalab2.swazam.peer.SearchMessage searchMessage = new SearchMessage("127.0.0.1", 37010, fingerprint, "test");
+            
+            
+            
+        }
 
 }

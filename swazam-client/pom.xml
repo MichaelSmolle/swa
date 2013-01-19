@@ -116,6 +116,12 @@
             <version>1.0</version>
         </dependency>
 		
+		<dependency>
+            <groupId>org.tuwien.swalab2</groupId>
+            <artifactId>swazam-peer</artifactId>
+            <version>1.0</version>
+        </dependency>
+		
     </dependencies>
 
 </project>
