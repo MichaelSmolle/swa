@@ -1,8 +1,10 @@
 package org.tuwien.swalab2.swazam.peer.musiclibrary;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class MatchResult {	
+public class MatchResult implements Serializable{	
+
 	private Double startTime;
 	private File file;
 	

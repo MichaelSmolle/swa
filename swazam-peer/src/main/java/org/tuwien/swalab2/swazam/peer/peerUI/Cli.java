@@ -96,7 +96,7 @@ public class Cli implements Runnable{
 				} else if (cmd.equals("list")) {
 					// org.tuwien.swalab2.swazam.util.Fingerprint.fingerprint("file");
 
-					library.list();
+					System.out.println( library.list().toString());
 
 
 				} else if (cmd.equals("usage")) {

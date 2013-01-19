@@ -14,8 +14,6 @@ public class Mp3File implements Serializable{
 	private File 		file;
 	
 	
-	
-	
 	public Mp3File(File mp3) throws Exception {
 		super();
 		if (mp3.getName().contains("mp3") || mp3.getName().contains("MP3")) {
