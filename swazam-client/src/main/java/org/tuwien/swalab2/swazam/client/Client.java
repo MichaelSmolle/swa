@@ -20,7 +20,7 @@ private SwingUI swingUI;
 	public static void main(String[] args) {
 		Client client = new Client();
 		client.setUp();
-		client.startSwingUI(args);
+		//client.startSwingUI(args);
 
 		client.startCLI();
 
@@ -35,7 +35,7 @@ private SwingUI swingUI;
 	private void startSwingUI(String[] args) {
 		swingUI = new SwingUI();
 		//TODO: better
-                swingUI.main(args);
+                //swingUI.main(args);
 	}
 
 	private void startCLI() {
@@ -47,8 +47,7 @@ private SwingUI swingUI;
 
 		boolean run = true;
 		while (run) {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			String input;
 			Scanner s = null;
 
@@ -69,15 +68,21 @@ private SwingUI swingUI;
 
 					File file = new File(filename);
 					try {
-						if (file.getName().contains("mp3")
-								|| file.getName().contains("MP3")) {
-							fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.fingerprint(file);
+						if (file.getName().contains("mp3") || file.getName().contains("MP3")) {
+                                                    
+                                                    if(file.exists()) {
+                                                        fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.fingerprint(file);
+                                                        System.out.println("Fingerprint is: " + fingerprint.toString());
+                                                    }
+                                                    else {
+                                                        System.out.println("Couldn't find file " + filename + ".\n");
+                                                    }                                                 
 						} else {
-							System.out
-									.println("The file must be of type mp3 \n");
+							System.out.println("The file must be of type mp3.\n");
 						}
 					} catch (Exception e) {
-						System.out.println("Couldn't find file \n");
+                                                System.out.println("An exception ocurred.");
+						System.out.println(e.getMessage());
 					}
 				} else if (cmd.equals("usage")) {
 					usage();
@@ -88,8 +93,8 @@ private SwingUI swingUI;
 				}
 			}
 		}
-                swingUI.close();
-		System.out.println("Shutting down Client");
+                //swingUI.close();
+		System.out.println("Shutting down client");
                 
 	}
 
