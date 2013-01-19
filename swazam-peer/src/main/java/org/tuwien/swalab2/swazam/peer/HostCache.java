@@ -1,9 +1,14 @@
 package org.tuwien.swalab2.swazam.peer;
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class HostCache {
+public class HostCache implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6511865572072288189L;
 	private ConcurrentHashMap<HostCacheKeyEntry, HostCacheEntry> hostCache = new ConcurrentHashMap< HostCacheKeyEntry, HostCacheEntry>();
 
 	public ConcurrentHashMap<HostCacheKeyEntry, HostCacheEntry> getHostCache() {
