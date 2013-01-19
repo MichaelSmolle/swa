@@ -20,6 +20,10 @@ import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 public class Library implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 530694478778623175L;
 	//	private Logger log = Logger.getLogger(getClass());
 	private HashSet<Mp3File> library = new HashSet<Mp3File>();
 	private Integer id;
