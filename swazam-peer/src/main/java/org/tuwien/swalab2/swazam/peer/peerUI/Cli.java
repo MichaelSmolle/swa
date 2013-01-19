@@ -8,21 +8,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.CharBuffer;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
-import org.tuwien.swalab2.swazam.peer.musiclibrary.Mp3File;
-import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
-
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
-
-import com.kenmccrary.jtella.NodeConnection;
-import com.kenmccrary.jtella.SearchSession;
 
 
 
@@ -31,8 +19,6 @@ public class Cli implements Runnable{
 	private String cmd = "";
 	private String filename = "";
 	private Library library;
-	//		Fingerprint fingerprint = null;
-
 
 
 	public Cli(Library library) {
@@ -116,6 +102,7 @@ public class Cli implements Runnable{
 				} else if (cmd.equals("usage")) {
 					usage();
 				} else if (cmd.equals("quit")) {
+					library.persist();
 					run = false;
 				} else {
 					usage();
@@ -128,6 +115,7 @@ public class Cli implements Runnable{
 				+ "\n - add <path to mp3>" + "\n - add <id> <path to mp3>"
 				+ "\n - remove <path to mp3>" + "\n - list" + "\n - quit"
 				+ "\n - list"
+				+ "\n - quit"
 				+ "\n - usage" + "\n");
 	}
 
