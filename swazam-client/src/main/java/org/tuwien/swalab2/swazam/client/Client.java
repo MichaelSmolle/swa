@@ -90,7 +90,7 @@ private Socket socket = null;
 						if (file.getName().contains("mp3") || file.getName().contains("MP3")) {
                                                     
                                                     if(file.exists()) {
-                                                        fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.fingerprint(file);
+                                                        fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.getFingerprint(file);
                                                         System.out.println("Fingerprint is: " + fingerprint.toString());
                                                     }
                                                     else {
