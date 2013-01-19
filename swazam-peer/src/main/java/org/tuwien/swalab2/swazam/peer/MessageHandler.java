@@ -17,12 +17,10 @@ public class MessageHandler {
 
     private ConnectionHandler connectionHandler;
     private Library library;
-    private Socket communicationPartner = null;
 
-    public MessageHandler(Library library) {
+    public MessageHandler(Library library, ConnectionHandler ch) {
         
-        //this.connectionHandler = connectionHandler;
-        //this.communicationPartner = communicationPartner;
+        this.connectionHandler = connectionHandler;
         this.library = library;
     }
 

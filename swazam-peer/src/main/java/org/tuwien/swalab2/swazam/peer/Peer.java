@@ -11,6 +11,7 @@ import com.kenmccrary.jtella.SearchMessage;
 import com.kenmccrary.jtella.SearchMonitorSession;
 import com.kenmccrary.jtella.SearchReplyMessage;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -67,8 +68,15 @@ public class Peer implements MessageReceiver {
 
 		cli = new Cli(library);
 //		cli.run();
-                
-                ConnectionHandler c = new ConnectionHandler(library);
+                //Todo args
+                ConnectionHandler c = new ConnectionHandler (
+                    	String 		myIp,
+                    	int    		myPort,
+                    	int			maxConnections,
+                    	InetAddress	serverIp,
+                    	int			serverPort,
+                    	library
+                    );
                 
                 //Thread t = new Thread(new ConnectionHandler(library));
                 //t.start();

@@ -30,13 +30,34 @@ public class ConnectionHandler extends Thread {
 	private volatile boolean running;
 	private InetAddress serverIp;
 	private int serverPort;
-        private Library library;
+	private IncommingClientConnectionHandler icch;
+	private IncommingPeerConnectionHandler   ipch;
+    //private Library library;
+    
+    public ConnectionHandler (
+    	String 		myIp,
+    	int    		myPort,
+    	int			maxConnections,
+    	InetAddress	serverIp,
+    	int			serverPort,
+    	Library     lib
+    ) {
+    	this.myAddrString 			= myIp;
+    	this.myPort 	  			= myPort;
+    	this.maxConnections			= maxConnections;
+    	this.connectedNodes 		= new HostCache();
+    	this.knownNodes				= new HostCache(); //Todo von filesystem laden
+    	this.currentConnections		= new Vector<NodeConnection>();
+    	this.mh = new MessageHandler(lib, this);
+    	this.serverIp = serverIp;
+    	this.serverPort = serverPort;
+    	this.icch = new IncommingClientConnectionHandler(this.myPort+1, this.mh);
+    	this.ipch = new IncommingPeerConnectionHandler(this.myPort, this);
+    	this.running = true;
+    	this.start();
+    }
 
-        public ConnectionHandler(Library library) {
-            mh = new MessageHandler(library);
-            this.library = library;
-            this.start();
-        }
+    
 	
 	//Connects to server, sends a requestPeerMessage
 	//waits for a Message from server and calls the MessageHandler
@@ -159,6 +180,8 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	private void shutdown() {
+		this.icch.kill();
+		this.ipch.kill();
 		this.running = false;
 		try {
 			join();
@@ -182,10 +205,7 @@ public class ConnectionHandler extends Thread {
 		this.currentConnections.add(new NodeConnection(s, remoteIp, remotePort, this.mh, this));
 	}
 	
-	public void run() {
-            
-            IncommingClientConnectionHandler icch = new IncommingClientConnectionHandler(myPort, mh);
-                        
+	public void run() { 
 		while(running) {
 			//clear dead connections
 			this.clearDeadConnections();
