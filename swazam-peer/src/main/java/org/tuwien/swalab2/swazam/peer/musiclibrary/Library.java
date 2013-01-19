@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -15,9 +18,10 @@ import org.apache.log4j.Logger;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-public class Library {
-	private Logger log = Logger.getLogger(getClass());
-	private ConcurrentSkipListSet<Mp3File> library = new ConcurrentSkipListSet<Mp3File>();
+public class Library implements Serializable{
+
+	//	private Logger log = Logger.getLogger(getClass());
+	private HashSet<Mp3File> library = new HashSet<Mp3File>();
 	private Integer id;
 //	ConcurrentHashMap<File, MusicFile> library = new ConcurrentHashMap<File, MusicFile>();
 	
@@ -28,10 +32,13 @@ public class Library {
 
 	public void add(File file){
 		try {
-			library.add(new Mp3File(file));
+			System.out.println("creating mp3 file");
+			Mp3File mp3 = new Mp3File(file);
+			library.add(mp3);
+			library.toString();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			log.info(e.getMessage());
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -60,9 +67,19 @@ public class Library {
 	
 	public List<String> list(){
 		LinkedList<String> list = new LinkedList<String>();
+//		Integer i = library.size();
 		
-		for (Mp3File mp3 : library){
-			list.add(mp3.getPath().toString());
+//		while (i > 0) {
+//			Mp3File mp3 = library.
+//		}
+//		
+		Iterator<Mp3File> it = library.iterator();
+		
+		while (it.hasNext()) {
+			Mp3File mp3 =  it.next();
+			list.add(mp3.getPath());
+		
+			
 		}
 		
 		return list;
@@ -72,7 +89,7 @@ public class Library {
 		this.library.addAll(library.getAll());
 	}
 	
-	public ConcurrentSkipListSet<Mp3File> getAll() {
+	public HashSet<Mp3File> getAll() {
 		return library;
 	}
 	
@@ -98,7 +115,7 @@ public class Library {
 	}
 	
 	public void persist(){
-		log.info("Saving library");
+		System.out.println("Saving library");
 		File file = new File(id + ".lib");
 
 		try {

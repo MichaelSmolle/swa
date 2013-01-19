@@ -58,11 +58,11 @@ public class Cli implements Runnable{
 					} else {
 						if (s.hasNext()){
 							filename = s.next();
-
 							File file = new File(filename);
 							try {
 								if (file.getName().contains("mp3")
 										|| file.getName().contains("MP3")) {
+									System.out.println("adding file");
 									library.add(file);
 								} else {
 									System.out

@@ -1,40 +1,15 @@
 package org.tuwien.swalab2.swazam.peer;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.channels.GatheringByteChannel;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 import org.tuwien.swalab2.swazam.peer.peerUI.Cli;
-import org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import ac.at.tuwien.infosys.swa.audio.SubFingerprint;
-
-import com.kenmccrary.jtella.ConnectionData;
 import com.kenmccrary.jtella.FileServerSession;
 import com.kenmccrary.jtella.GNUTellaConnection;
-import com.kenmccrary.jtella.Host;
 import com.kenmccrary.jtella.MessageReceiver;
-import com.kenmccrary.jtella.NodeConnection;
 import com.kenmccrary.jtella.PushMessage;
 import com.kenmccrary.jtella.SearchMessage;
 import com.kenmccrary.jtella.SearchMonitorSession;
 import com.kenmccrary.jtella.SearchReplyMessage;
-import com.kenmccrary.jtella.SearchSession;
 
 /**
  * Hello world!
@@ -83,6 +58,7 @@ public class Peer implements MessageReceiver {
 		peer.library = new Library(id);
 		peer.library.load();
 		peer.cli = new Cli(peer.library);
+		peer.cli.run();
 		peer.startSwingUI();
 
 	}
