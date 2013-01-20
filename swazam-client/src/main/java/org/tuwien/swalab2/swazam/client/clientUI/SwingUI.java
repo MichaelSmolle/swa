@@ -21,6 +21,7 @@ public class SwingUI extends javax.swing.JFrame {
     public SwingUI() {
  
         initComponents();
+        this.setVisible(true);
     }
 
     /**
