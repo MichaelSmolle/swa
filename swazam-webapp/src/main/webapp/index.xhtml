@@ -11,11 +11,11 @@
                 <p:messages id="messages"/>
                 <h:panelGrid columns="2">
 
-                    <h:outputLabel for="userName" value="Username"/>
+                    <h:outputLabel for="userName" value="Username:"/>
                     <h:inputText id="userName" required="true" value="${authenticationBean.userName}" />
 
-                    <h:outputLabel for="lastName" value="Lastname" />
-                    <h:inputSecret id="lastName" required="true" value="${authenticationBean.passWord}" />
+                    <h:outputLabel for="pw" value="Password:" />
+                    <h:inputSecret id="pw" required="true" value="${authenticationBean.passWord}" />
 
                 </h:panelGrid>
                 <h:commandButton  value="Login"   action="${authenticationBean.doLogin}"  />

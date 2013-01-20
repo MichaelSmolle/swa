@@ -5,6 +5,8 @@
 package org.tuwien.swalab2.ejb;
 
 import java.util.List;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 
 /**

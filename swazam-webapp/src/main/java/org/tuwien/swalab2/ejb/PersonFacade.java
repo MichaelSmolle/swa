@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.OverridesAttribute;
 import org.tuwien.swalab2.controller.JsfHelper;
 import org.tuwien.swalab2.swazam.util.model.entities.Account;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
@@ -21,7 +22,6 @@ import org.tuwien.swalab2.swazam.util.model.entities.SwazamAccount;
  *
  * @author gh
  */
-@Stateless
 public class PersonFacade extends AbstractFacade<Person> {
     
     @Inject
@@ -65,6 +65,11 @@ public class PersonFacade extends AbstractFacade<Person> {
             return null;
         
         return pList.get(0);
+    }
+    
+    @Override
+    public Person find(Object id) {
+        return em.find(Person.class,id);
     }
     
 }
