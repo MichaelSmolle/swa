@@ -10,7 +10,6 @@
     <name>Parent Project for SwaZam Lab</name>
 
     <modules>
-        <!--module>jtella</module-->
         <module>swazam-util</module>
         <module>swazam-client</module>
         <module>swazam-peer</module>
