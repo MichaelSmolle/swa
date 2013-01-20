@@ -52,7 +52,7 @@ public class ConnectionHandler extends Thread {
         this.knownNodes = new HostCache();
         this.knownNodes.load();
         try {
-			this.knownNodes.add(new HostCacheEntry(InetAddress.getLocalHost(), 37000, "testpeer1"));
+//			this.knownNodes.add(new HostCacheEntry(InetAddress.getLocalHost(), 37000, "testpeer1"));
 			//always add this node to the HostCache such that exchange will work
 			this.knownNodes.add(new HostCacheEntry(InetAddress.getByName(this.myAddrString), this.myPort, this.uid));
 		} catch (UnknownHostException e) {
@@ -96,7 +96,7 @@ public class ConnectionHandler extends Thread {
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
 			 String uid = result[2];
-			 System.out.println(result[0].toString() + ":" + result[1].toString() );
+			 System.out.println(result[0].toString() + ":" + result[1].toString() + ":" +result[2]);
 			 HostCacheEntry entry = new HostCacheEntry(adr, port, uid);
 			 knownNodes.add(entry);
 			 }
