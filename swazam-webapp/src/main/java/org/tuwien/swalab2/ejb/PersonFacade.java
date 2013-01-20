@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.OverridesAttribute;
+import org.primefaces.component.password.Password;
 import org.tuwien.swalab2.controller.JsfHelper;
 import org.tuwien.swalab2.dataaccess.PersonStorage;
 import org.tuwien.swalab2.swazam.util.model.entities.Account;
@@ -25,7 +26,7 @@ import org.tuwien.swalab2.swazam.util.model.entities.SwazamAccount;
  */
 public class PersonFacade extends AbstractFacade<Person> {
    
-    
+    private String pw = "";
     
 
     
@@ -39,9 +40,7 @@ public class PersonFacade extends AbstractFacade<Person> {
         //getEntityManager().persist(newAccount);
         
         newAccount.setBalance(10);
-        person.setAccount(newAccount);
-        
-        
+        person.setAccount(newAccount);    
         
         
         //getEntityManager().persist(person);

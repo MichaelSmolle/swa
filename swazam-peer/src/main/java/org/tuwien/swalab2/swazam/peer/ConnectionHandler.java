@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.simpleframework.util.buffer.ArrayAllocator;
@@ -71,15 +72,18 @@ public class ConnectionHandler extends Thread {
 	private void bootstrap() {
 		try {
 
-		 ArrayList<String> peers = restClient.getPeerList(ArrayList.class);
+		 String list = (String) restClient.getPeerList();
+//		 TODO: REMOVE
+		 list = "127.0.0.1:37010-127.0.0.1:37012-127.0.0.1:37014";
 		 
-		 for (String peer : peers){
+		 String[] peers = list.split("\\-");
+		 
+		 for (int i = 0; i < peers.length; i++) {
+			 String[] result = peers[i].split("\\:");
 			 
-		     String[] result = peer.split("\\:");
-		     
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
-			 
+			 System.out.println(result[0].toString() + ":" + result[1].toString() );
 			 HostCacheEntry entry = new HostCacheEntry(adr, port);
 			 knownNodes.add(entry);
 		 }
