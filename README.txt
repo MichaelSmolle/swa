@@ -14,3 +14,18 @@ under applications hit deploy and select the war file from \swa\swazam-webapp\ta
 hit ok
 Under resources/ JDBC/JDBC Resources make sure the jdbc/__default is present otherwise create with derby connection pool
 profit
+
+
+
+#Peer
+In order to start the peer you will need a peer.properties file.
+A sample configuration is included in swa/swazam-peer. All properties except
+"bindToIp" are necessary.
+If bindToIp is not specified the peer will search for the first none virtual
+network intface which is online and use it's first assigned IP address.
+To start the client use the following command:
+java -jar swazam-peer-1.0-jar-with-dependencies.jar PORT UNIQUE_ID
+where port is used to listen for new peer connections and UNIQUE_ID is a
+string.
+The peer will open a second port (PORT+1) to listen for incoming client
+requests, keep that in mind while starting mutliple peers.
