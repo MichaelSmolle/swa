@@ -116,7 +116,7 @@ public class Client {
 
         ip = InetAddress.getByName("127.0.0.1");
         ip = InetAddress.getLocalHost();
-        port = 37000;
+        port = 37001;
 
         try {
             initSocket = new Socket(ip, port);
