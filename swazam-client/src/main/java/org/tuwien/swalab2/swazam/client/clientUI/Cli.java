@@ -13,15 +13,18 @@ import java.util.Scanner;
 import org.tuwien.swalab2.swazam.client.Client;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+import org.tuwien.swalab2.swazam.peer.ClientRestClient;
 
 public class Cli extends Thread {
 
+    private ClientRestClient clientRestClient;
     private Client client;
     private String cmd = "";
     private String filename = "";
     private Fingerprint fingerprint;
     private boolean run = true;
-
+    private String clientUserId;
+    
     public Cli(Client client) {
         this.client = client;
         this.start();
@@ -119,6 +122,10 @@ public class Cli extends Thread {
 
         }
         System.out.println("user/pass" + userName + " " + passWord);
+        clientRestClient = new ClientRestClient();
+        clientUserId =  clientRestClient.login(userName, passWord);
+        clientRestClient.close();
+        
 
     }
 
