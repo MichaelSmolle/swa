@@ -16,6 +16,7 @@ import org.tuwien.swalab2.swazam.client.communication.TcpDispatcher;
 import org.tuwien.swalab2.swazam.peer.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,54 +48,64 @@ public class Client {
     
     private void setUp() {
         
-        // TODO: Bootstrapping
-        // a: try known peers from local list
+        // TODO: Bootstrapping  
         
-        FileInputStream knownPeersFileIn;
-        try {
-            knownPeersFileIn = new FileInputStream("knownPeers.swa");
-            ObjectInputStream knownPeersStreamIn;
-            knownPeersStreamIn = new ObjectInputStream(knownPeersFileIn);
-
-            knownPeers = (List<KnownPeer>) knownPeersStreamIn.readObject();
+        File knowPeersFile = new File("knownPeers.swazam");
+        
+        // a: try known peers from local list
+        if (knowPeersFile.exists()) {
             
-            //TODO: remove
-            knownPeers.add(new KnownPeer(InetAddress.getLocalHost(), 37001, "37001"));
+            System.out.println("Loading known peers from file " + knowPeersFile.getName() + ".");
 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        for (KnownPeer currentPeer : knownPeers) {
-            
-            InetAddress currentIp = currentPeer.getIp();
-            Integer currentPort = currentPeer.getPort();
-            
-            //create connection to peer  
             try {
-                initSocket = new Socket(currentIp, currentPort);
+                FileInputStream knownPeersFileIn = new FileInputStream(knowPeersFile);
+                ObjectInputStream knownPeersStreamIn = new ObjectInputStream(knownPeersFileIn);
 
-                // add new knownPeers to list
-                if (!knownPeers.contains(new KnownPeer(currentIp, currentPort, currentPort.toString()))) {
-                    knownPeers.add(new KnownPeer(currentIp, currentPort, currentPort.toString()));
-                    break;
-                }
+                knownPeers = (List<KnownPeer>) knownPeersStreamIn.readObject();
 
+                //TODO: remove
+                knownPeers.add(new KnownPeer(InetAddress.getLocalHost(), 37001, "37001"));
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
-                knownPeers.remove(new KnownPeer(currentIp, currentPort, currentPort.toString()));
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }     
+
+            for (KnownPeer currentPeer : knownPeers) {
+
+                InetAddress currentIp = currentPeer.getIp();
+                Integer currentPort = currentPeer.getPort();
+
+                //create connection to peer  
+                try {
+                    initSocket = new Socket(currentIp, currentPort);
+
+                    // add new knownPeers to list
+                    if (!knownPeers.contains(new KnownPeer(currentIp, currentPort, currentPort.toString()))) {
+                        knownPeers.add(new KnownPeer(currentIp, currentPort, currentPort.toString()));
+                        break;
+                    }
+
+                } catch (IOException ex) {
+                    System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
+                    knownPeers.remove(new KnownPeer(currentIp, currentPort, currentPort.toString()));
+                }
+            }
+
+        }
         
         // TODO
         // b: connect to server and get list of known peers
+        else {
+            System.out.println("No known peers. \n");
+            System.out.println("TODO: get peer list from server");
+        }    
         
         try {
-            FileOutputStream knownPeersFileOut = new FileOutputStream("knownPeers.swa");
+            FileOutputStream knownPeersFileOut = new FileOutputStream(knowPeersFile);
             ObjectOutputStream knownPeersStreamOut = new ObjectOutputStream(knownPeersFileOut);
             knownPeersStreamOut.writeObject(knownPeers); 
             

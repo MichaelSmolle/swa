@@ -1,12 +1,13 @@
 package org.tuwien.swalab2.swazam.client;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
  *
  * @author Christoph Derndorfer
  */
-public class KnownPeer {
+public class KnownPeer implements Serializable {
     
     private InetAddress ip;
     private Integer port;
