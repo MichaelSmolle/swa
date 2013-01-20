@@ -36,13 +36,36 @@ public final class PeerStorage implements Serializable{
     
     
     public void addPeerToStorage(String address){
-        peers.add(address);
-        System.out.println("Added new peer to list "+ address);
+       boolean duplicate = false;
+        for(String a : peers ){
+            if(a.equals(address)){
+                duplicate = true;
+                System.out.println("Duplicate peer "+ address);
+                
+                break;
+                
+            }
+        }
+        
+        if(!duplicate){
+            peers.add(address);
+                System.out.println("Added new peer to list "+ address);
+        }
+        
+        
     
     }
     
     public ArrayList<String> getRegisteredPeerList(){
         return peers;
+    }
+    
+    public String getRegisteredPeerListAsString(){
+        String res = "";
+        for(String x : peers){
+            res += res.concat(x).concat("-");
+        }        
+        return res;
     }
     
 }

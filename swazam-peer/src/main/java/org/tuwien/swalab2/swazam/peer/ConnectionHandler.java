@@ -8,11 +8,13 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.simpleframework.util.buffer.ArrayAllocator;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 public class ConnectionHandler extends Thread {
@@ -22,7 +24,10 @@ public class ConnectionHandler extends Thread {
 	//private InetAddress myAddr;
 	private volatile int maxConnections;
 	private HostCache knownNodes;
+
 	private ConcurrentLinkedQueue<NodeConnection> currentConnections;
+
+	private PeerRestClient restClient = new PeerRestClient();
 	private MessageHandler mh;
 	private volatile boolean running;
 	private InetAddress serverIp;
@@ -78,21 +83,32 @@ public class ConnectionHandler extends Thread {
 	//waits for a Message from server and calls the MessageHandler
 	private void bootstrap() {
 		try {
-			//Socket s = new Socket(serverIp, serverPort);
-			//OutputStream os = s.getOutputStream();
-			//ObjectOutputStream oos = new ObjectOutputStream(os);
-			//InputStream is = s.getInputStream();
-			//ObjectInputStream ois = new ObjectInputStream(is);
-			//oos.writeObject(new requestPeerMessage(myAddrString, myPort, null));
-			//oos.flush();
-			
-			//this.mh.handleMessage((Message)ois.readObject());
-			
-			//oos.close();
-			//os.close();
-			//ois.close();
-			//is.close();
-			//s.close();
+
+//		 getting list from server
+	     System.out.println("Bootstrapping from server!");		
+		 String list = (String) restClient.getPeerList();
+		 
+		 String[] peers = list.split("\\-");
+	
+		 for (int i = 0; i < peers.length; i++) {
+			 String[] result = peers[i].split("\\:");
+			 if (result.length == 3){
+			 InetAddress adr = InetAddress.getByName(result[0]);
+			 int port = Integer.parseInt(result[1]);
+			 String uid = result[2];
+			 System.out.println(result[0].toString() + ":" + result[1].toString() );
+			 HostCacheEntry entry = new HostCacheEntry(adr, port, uid);
+			 knownNodes.add(entry);
+			 }
+		 }
+		 	
+		 
+//		 register me server
+		 System.out.println("Registering to server! \n");
+		 String register = new String (myAddrString + ":" + myPort + ":" + this.uid);
+//		 String register = new String ("127.0.0.1" + ":" + myPort);
+		 restClient.registerPeer(register);
+		 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TcpDispatcher extends Thread {
 
@@ -16,12 +17,20 @@ public class TcpDispatcher extends Thread {
         this.running = true;
         this.start();
     }
-    
+
     public void kill() {
-    	this.running = false;
-    	try {
-			join();
-		} catch (InterruptedException e) {}
+        
+        this.running = false;
+        
+        try {
+            this.server.close();
+        } catch (IOException ex) {
+            Logger.getLogger(TcpDispatcher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //try {
+        //    join();
+        //} catch (InterruptedException e) {
+        //}
     }
 
     public void run() {
@@ -31,18 +40,21 @@ public class TcpDispatcher extends Thread {
         try {
             while (this.running) {
                 client = server.accept();
-                ClientThread c  = new ClientThread(client);  
+                ClientThread c = new ClientThread(client);
             }
 
         } catch (SocketException e) {
             System.out.println("DEBUG: SocketException occurred.");
-            System.out.println(e.getMessage());
+            System.out.println("DEBUG: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
         //wait for client threads
+        System.out.println("DEBUG: wait for client threads");
         try {
-			join();
-		} catch (InterruptedException e) {}
+            join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

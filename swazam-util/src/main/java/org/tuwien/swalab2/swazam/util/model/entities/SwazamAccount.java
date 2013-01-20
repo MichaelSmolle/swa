@@ -5,24 +5,29 @@
 package org.tuwien.swalab2.swazam.util.model.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author gh
  */
 @Entity
+@XmlRootElement
 public class SwazamAccount implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private Integer balance = 0;
+    private int balance = 0;
     
+    private List<SwaZamTransaction> transactions;
 
     public Long getId() {
         return id;
@@ -32,13 +37,26 @@ public class SwazamAccount implements Serializable {
         this.id = id;
     }
 
-    public Integer getBalance() {
+    public int getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(int balance) {
         this.balance = balance;
     }
+
+    public List<SwaZamTransaction> getTransactions() {
+        if(transactions == null){
+            transactions = new ArrayList<SwaZamTransaction>();
+        }
+        return transactions;
+    }
+
+    public void setTransactions(List<SwaZamTransaction> transactions) {
+        this.transactions = transactions;
+    }
+    
+    
     
     
 
