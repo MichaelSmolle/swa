@@ -53,6 +53,13 @@ public class ClientRestClient {
         resource = resource.path("peerlist");
         return resource.accept(MediaType.APPLICATION_JSON).get(String.class);
     }
+    
+    public void updateAccount(String searchTerm,String success,String userId){
+         WebResource resource = webResource;
+        resource = resource.path(java.text.MessageFormat.format("update/{0}/{1}/{2}", new Object[]{searchTerm,success,userId}));
+        String response = (String) resource.accept(MediaType.APPLICATION_JSON).get(String.class);
+        System.out.println("Updateresponse: " + response);
+    }
 
     public void close() {
         client.destroy();
