@@ -76,7 +76,7 @@ public class ConnectionHandler extends Thread {
 		 
 		 String[] peers = list.split("\\-");
 		 
-		 for (int i = 0; i < peers.length; i++) {
+		 for (int i = 0; i < peers.length-1; i++) {
 			 String[] result = peers[i].split("\\:");
 		     
 			 InetAddress adr = InetAddress.getByName(result[0]);

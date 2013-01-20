@@ -11,6 +11,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.impl.provider.entity.StringProvider;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Jersey REST client generated for REST resource:PeerServices [/peer]<br>
@@ -31,7 +33,8 @@ public class PeerRestClient {
 
     public PeerRestClient() {
         com.sun.jersey.api.client.config.ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
-
+        config.getClasses().add(StringProvider.class);
+        
 			client = Client.create(config);
 
         webResource = client.resource(BASE_URI).path("peer");
@@ -47,7 +50,7 @@ public class PeerRestClient {
         WebResource resource = webResource;
         resource = resource.path("peerlist");
 //        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(List.class);
-        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
+        return resource.accept(MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public void close() {
