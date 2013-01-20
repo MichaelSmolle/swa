@@ -82,11 +82,14 @@ public class Client {
                 }               
 
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             }
         }
         
