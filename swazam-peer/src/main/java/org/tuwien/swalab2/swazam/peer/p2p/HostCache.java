@@ -1,4 +1,4 @@
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

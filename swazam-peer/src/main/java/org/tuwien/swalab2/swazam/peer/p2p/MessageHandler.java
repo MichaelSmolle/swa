@@ -1,4 +1,4 @@
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 
 //Handle the messages by calling the appropriate methods in the ConnectionHandler and the MusicLibrary
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.MatchResult;
 

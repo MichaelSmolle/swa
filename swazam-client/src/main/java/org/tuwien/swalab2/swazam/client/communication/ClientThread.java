@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.tuwien.swalab2.swazam.client.Client;
-import org.tuwien.swalab2.swazam.peer.SearchReplyMessage;
+import org.tuwien.swalab2.swazam.peer.p2p.SearchReplyMessage;
 
 public class ClientThread extends Thread {
 

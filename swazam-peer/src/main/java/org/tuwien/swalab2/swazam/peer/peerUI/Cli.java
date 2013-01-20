@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import org.tuwien.swalab2.swazam.peer.ConnectionHandler;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
+import org.tuwien.swalab2.swazam.peer.p2p.ConnectionHandler;
 
 
 

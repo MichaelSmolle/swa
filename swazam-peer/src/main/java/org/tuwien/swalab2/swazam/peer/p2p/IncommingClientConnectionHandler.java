@@ -1,4 +1,4 @@
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 
 import java.io.IOException;
 import java.io.InputStream;
