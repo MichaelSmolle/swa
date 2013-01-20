@@ -2,10 +2,17 @@ package org.tuwien.swalab2.swazam.client;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,13 +23,8 @@ import org.tuwien.swalab2.swazam.client.communication.TcpDispatcher;
 import org.tuwien.swalab2.swazam.peer.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.tuwien.swalab2.swazam.peer.ClientRestClient;
 
 public class Client {
 
@@ -30,13 +32,14 @@ public class Client {
     private static Cli cli;
     private InetAddress ip;
     //private Integer port;
-    private Socket initSocket = null;
+    private Socket socket = null;
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
     private List<KnownPeer> knownPeers = new ArrayList<>();
     private Integer localPort;
     private InetAddress currentIp;
     private Integer currentPort;
+    private ClientRestClient restClient = new ClientRestClient();
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -52,10 +55,8 @@ public class Client {
         //swingUI = new SwingUI(client);
     }
     
-    private boolean setUp() {
-        
-        // TODO: Bootstrapping  
-        
+    private void setUp() {
+                
         File knowPeersFile = new File("knownPeers.swazam");
         
         // a: try known peers from local list
@@ -68,14 +69,16 @@ public class Client {
                 ObjectInputStream knownPeersStreamIn = new ObjectInputStream(knownPeersFileIn);
 
                 knownPeers = (List<KnownPeer>) knownPeersStreamIn.readObject();
-
-                //TODO: remove
-                ip = InetAddress.getLocalHost();
-                localPort = 37001;
-                KnownPeer dirtyHack = new KnownPeer(InetAddress.getLocalHost(), localPort, "37001");
-                if (!knownPeers.contains(dirtyHack)) {
-                    knownPeers.add(dirtyHack);
-                }
+                
+                socket = connectToPeer(knownPeers);
+                
+                if (socket == null) {
+                    socket = connectToPeer(getPeersFromServer());
+                    
+                    if (socket == null) {
+                        System.out.println("Could not connect to SWAzam network");
+                    }               
+                }               
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,43 +87,14 @@ public class Client {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            //List <KnownPeer> tmpKnownPeers = new ArrayList<>();
-            //tmpKnownPeers = knownPeers;
-            
-            for (KnownPeer currentPeer : knownPeers) {
-
-                currentIp = currentPeer.getIp();
-                currentPort = currentPeer.getPort();
-
-                //create connection to peer  
-                try {
-                    initSocket = new Socket(currentIp, currentPort);
-                    //out = new ObjectOutputStream(initSocket.getOutputStream());
-                    
-                    System.out.println("Connected to peer " + currentIp + ":" + currentPort + ".");
-
-                    // add new knownPeers to list
-                    if (!knownPeers.contains(currentPeer)) {
-                        knownPeers.add(currentPeer);
-                        //break;
-                    }
-                    
-                    break;
-
-                } catch (IOException ex) {
-                    System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
-                    //knownPeers.remove(currentPeer);
-                }
-            }
         }
         
-        // TODO
         // b: connect to server and get list of known peers
         else {
-            System.out.println("No known peers. \n");
-            System.out.println("TODO: get peer list from server");
-        }  
+            System.out.println("No locally known peers.");
+            
+            socket = connectToPeer(getPeersFromServer());
+        } 
         
         try {
             FileOutputStream knownPeersFileOut = new FileOutputStream(knowPeersFile);
@@ -133,8 +107,72 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return false;
+    }
+    
+    public Socket connectToPeer(List<KnownPeer> knownPeers) {
+
+        Socket initSocket;
         
+        for (KnownPeer currentPeer : knownPeers) {
+            
+            currentIp = currentPeer.getIp();
+            currentPort = currentPeer.getPort();
+
+            //create connection to peer  
+            try {
+                initSocket = new Socket(currentIp, currentPort);
+                //out = new ObjectOutputStream(initSocket.getOutputStream());
+
+                System.out.println("Connected to peer " + currentIp + ":" + currentPort + ".");
+
+                // add new knownPeers to list
+                if (!knownPeers.contains(currentPeer)) {
+                    knownPeers.add(currentPeer);
+                    //break;
+                }
+
+                return initSocket;
+
+            } catch (IOException ex) {
+                System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
+                //knownPeers.remove(currentPeer);
+            }
+        }
+        
+        return null;
+
+    }
+    
+    public List<KnownPeer> getPeersFromServer() {
+    
+        System.out.println("Trying to get list of peers from server...");
+
+        List<KnownPeer> knownPeersFromServer = new ArrayList<>();
+        
+            String list = (String) restClient.getPeerList();
+
+            String[] peers = list.split("\\-");
+
+            for (int i = 0; i < peers.length; i++) {
+
+                try {
+                    String[] result = peers[i].split("\\:");
+                    if (result.length == 2) {
+                        InetAddress adr;
+                        adr = InetAddress.getByName(result[0]);
+                        Integer port = Integer.valueOf(result[1]);
+                        System.out.println("DEBUG: (getPeersFromServer)" + result[0].toString() + ":" + result[1].toString());
+                        KnownPeer thisPeer;
+                        thisPeer = new KnownPeer(adr, port, port.toString());
+                        knownPeersFromServer.add(thisPeer);
+                    }
+
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            return knownPeersFromServer;
     }
 
     public void submitRequest(Fingerprint fingerprint) {
@@ -164,11 +202,11 @@ public class Client {
         //send message to peer
         try {
 
-            if (initSocket.isClosed()) {
-                initSocket = new Socket(currentIp, currentPort);
+            if (socket.isClosed()) {
+                socket = new Socket(currentIp, currentPort);
             }      
             
-            out = new ObjectOutputStream(initSocket.getOutputStream());
+            out = new ObjectOutputStream(socket.getOutputStream());
             out.writeObject(searchMessage);
             out.flush();
 
@@ -185,7 +223,7 @@ public class Client {
         //close the connection at this point we dont care about errors any more
         try {
             out.close();
-            initSocket.close();
+            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,7 +241,7 @@ public class Client {
 
         try {
             out.close();
-            initSocket.close();
+            socket.close();
             //swingUI.close();
             cli.close();
         } catch (IOException ex) {

@@ -34,21 +34,25 @@ public class ClientRestClient {
     public ClientRestClient() {
         com.sun.jersey.api.client.config.ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
         config.getClasses().add(StringProvider.class);
-        
-			client = Client.create(config);
+
+        client = Client.create(config);
 
         webResource = client.resource(BASE_URI).path("account");
     }
 
     public String login(String userName, String passWord) throws UniformInterfaceException {
         WebResource resource = webResource;
-        resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{userName,passWord}));
-        String userId = (String) resource.accept(MediaType.APPLICATION_JSON).get(String.class);        
-        System.out.println("Got userId "+ userId);       
+        resource = resource.path(java.text.MessageFormat.format("login/{0}/{1}", new Object[]{userName, passWord}));
+        String userId = (String) resource.accept(MediaType.APPLICATION_JSON).get(String.class);
+        System.out.println("Got userId " + userId);
         return userId;
     }
 
-   
+    public String getPeerList() throws UniformInterfaceException {
+        WebResource resource = webResource;
+        resource = resource.path("peerlist");
+        return resource.accept(MediaType.APPLICATION_JSON).get(String.class);
+    }
 
     public void close() {
         client.destroy();
