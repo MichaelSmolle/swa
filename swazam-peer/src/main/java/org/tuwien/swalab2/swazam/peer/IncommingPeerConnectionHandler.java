@@ -28,7 +28,7 @@ public class IncommingPeerConnectionHandler extends IncommingConnectionHandler {
 
 	@Override
 	public void handleSocket(Socket n) {
-		System.out.println("Giving connection to handler");
+		//System.out.println("Giving connection to handler");
 		try {
 			InputStream is = null;
 			is 		 = n.getInputStream();
@@ -38,7 +38,7 @@ public class IncommingPeerConnectionHandler extends IncommingConnectionHandler {
 				return;
 			}
 			this.ch.handleIncommingPeerConnection(n, uid, ois);	
-			System.out.println("Giving connection to handler done");
+			//System.out.println("Giving connection to handler done");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

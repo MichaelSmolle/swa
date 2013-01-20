@@ -89,7 +89,7 @@ public class MessageHandler {
             }
 
         } else if (m instanceof requestPeerReplyMessage) {
-        	System.out.println("Received a requestPeerReplyMessage with the following nodes:");
+        	//System.out.println("Received a requestPeerReplyMessage with the following nodes:");
         	connectionHandler.addNodes(((requestPeerReplyMessage) m).getHostCache());
         } else if (m instanceof requestPeerMessage) {
         	connectionHandler.replyToRequestNodes(uid);
