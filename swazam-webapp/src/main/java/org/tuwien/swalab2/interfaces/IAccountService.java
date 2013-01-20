@@ -14,10 +14,36 @@ import org.tuwien.swalab2.swazam.util.model.entities.SwaZamTransaction;
  * @author gh
  */
 public interface IAccountService {
-    
+
+    /**
+     * Login with the users id
+     * @param userId user id you can find it in account management when you are logging in
+     * @return Person object
+     */
     public Person login(String userId);
-    public int getAccountBalanceForUser(String userId);
-    public Collection<SwaZamTransaction> getSearchHistoryForUser(String userId);
-    public String updateAccountAfterSearch(String search,String success,String userId);    
+
+    /**
+     * Get current account balance for user
+     * @param userId userId
+     * @return String account balance
+     */
+    public String getAccountBalanceForUser(String userId);
+
+
+
+    /**
+     *
+     * @param search   The search term
+     * @param success  0 | 1 to specify success or failure this is important otherwise i can't update.
+     * @param userId   userId
+     * @return String OK or Failed
+     */
+    public String updateAccountAfterSearch(String search,String success,String userId);
+
+    /**
+     * Update users account with +1 to his balance ( eg after serving an succesfull request. )
+     * @param userId  String userId
+     * @return  String OK or failed
+     */
     public String updateAccountBalance(String userId) ;
 }

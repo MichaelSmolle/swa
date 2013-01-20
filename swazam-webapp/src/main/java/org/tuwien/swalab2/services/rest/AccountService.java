@@ -45,16 +45,16 @@ public class AccountService implements IAccountService,Serializable{
         Person res = PersonStorage.getInstance().getPerson(userId);
         return res;
     }
-    
-    @Override
-    public int getAccountBalanceForUser(@PathParam("id") String userId) {
-        Person res = PersonStorage.getInstance().getPerson(userId);
-        return res.getAccount().getBalance();        
-    }
 
+    @GET
+    @Path("/balance/{userId}")
     @Override
-    public Collection<SwaZamTransaction> getSearchHistoryForUser(String userId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAccountBalanceForUser(@PathParam("id") String userId) {
+
+        Person res = PersonStorage.getInstance().getPerson(userId);
+
+        return String.valueOf(res.getAccount().getBalance());
     }
 
     @GET
@@ -65,7 +65,7 @@ public class AccountService implements IAccountService,Serializable{
         
         Person p = PersonStorage.getInstance().getPerson(userId);
         if(p == null){
-            return "Failed - Person no existent";
+            return "Failed";
         }
       
         
@@ -94,7 +94,7 @@ public class AccountService implements IAccountService,Serializable{
         
         Person p = PersonStorage.getInstance().getPerson(userId);
         if(p == null){
-            return "Failed - Person no existent";
+            return "Failed";
         } 
        
         p.getAccount().setBalance(p.getAccount().getBalance() + 1);
