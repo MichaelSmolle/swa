@@ -14,6 +14,7 @@ public class ClientThread extends Thread {
 
     private Socket socket = null;
     private SearchReplyMessage replyMessage;
+    private ClientRestClient clientRestClient;
 
     public ClientThread(Socket socket) {
         this.socket = socket;
@@ -39,10 +40,19 @@ public class ClientThread extends Thread {
         
         if (replyMessage.getFilename().contains("No results found.")) {
             System.out.println(replyMessage.getFilename());  
-            //TODO: record transaction on server
+            //record transaction on server
+            
+            //clientRestClient = new ClientRestClient();
+            //clientUserId =  clientRestClient.updateAccount(String searchTerm, 0, String userId)
+            //clientRestClient.close(); 
+            
         } else {
             System.out.println("filename: " + replyMessage.getFilename() + " (found by peer " + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort() + ")");
-            //TODO: record transaction on server
+            //record transaction on server
+            
+            //clientRestClient = new ClientRestClient();
+            //clientUserId =  clientRestClient.updateAccount(String searchTerm, 1, String userId)
+            //clientRestClient.close();
         }
 
         //Close IO stuff we dont care for an exception as we alread have the message
