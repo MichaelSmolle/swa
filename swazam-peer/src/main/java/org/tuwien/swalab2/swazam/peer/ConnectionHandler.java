@@ -52,7 +52,7 @@ public class ConnectionHandler extends Thread {
     	this.serverIp = serverIp;
     	this.serverPort = serverPort;
     	this.icch = new IncommingClientConnectionHandler(this.myPort+1, this.mh);
-    	this.ipch = new IncommingPeerConnectionHandler(this.myPort, this);
+    	this.ipch = null; //new IncommingPeerConnectionHandler(this.myPort, this);
     	this.running = true;
     	this.start();
     }
@@ -63,20 +63,20 @@ public class ConnectionHandler extends Thread {
 	//waits for a Message from server and calls the MessageHandler
 	private void bootstrap() {
 		try {
-			Socket s = new Socket(serverIp, serverPort);
-			OutputStream os = s.getOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(os);
-			InputStream is = s.getInputStream();
-			ObjectInputStream ois = new ObjectInputStream(is);
-			oos.writeObject(new requestPeerMessage(myAddrString, myPort, null));
+			//Socket s = new Socket(serverIp, serverPort);
+			//OutputStream os = s.getOutputStream();
+			//ObjectOutputStream oos = new ObjectOutputStream(os);
+			//InputStream is = s.getInputStream();
+			//ObjectInputStream ois = new ObjectInputStream(is);
+			//oos.writeObject(new requestPeerMessage(myAddrString, myPort, null));
 			
-			this.mh.handleMessage((Message)ois.readObject());
+			//this.mh.handleMessage((Message)ois.readObject());
 			
-			oos.close();
-			os.close();
-			ois.close();
-			is.close();
-			s.close();
+			//oos.close();
+			//os.close();
+			//ois.close();
+			//is.close();
+			//s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
