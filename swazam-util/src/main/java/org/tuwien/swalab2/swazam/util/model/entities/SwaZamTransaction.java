@@ -25,7 +25,7 @@ public class SwaZamTransaction implements Serializable {
 
     private String searchString;
     
-    private boolean success;
+    private boolean success = false;
 
     public SwaZamTransaction() {
     }
