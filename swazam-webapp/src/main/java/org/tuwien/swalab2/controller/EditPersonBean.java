@@ -10,7 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
-import org.tuwien.swalab2.services.rest.PersonService;
+import org.tuwien.swalab2.dataaccess.PersonService;
 
 /**
  *

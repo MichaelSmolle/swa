@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
@@ -90,9 +92,9 @@ public class HostCache implements Serializable {
 		hostCache.put(key, entry);
 	}
 	
-	public void merge(HostCache hostCache){
-		hostCache.merge(hostCache);
-	
+	public void merge(HostCache a){
+                ConcurrentHashMap cm = a.getHostCache();
+                hostCache.putAll(cm);            
 	}
 }
 
