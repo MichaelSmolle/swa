@@ -61,8 +61,6 @@ public class Cli extends Thread{
 
 							if (file.exists()) {
 								fingerprint = org.tuwien.swalab2.swazam.util.fingerprint.FingerprintFile.getFingerprint(file);
-								System.out.println("Fingerprint is: " + fingerprint.toString());
-
 								client.submitRequest(fingerprint);
 
 							} else {
