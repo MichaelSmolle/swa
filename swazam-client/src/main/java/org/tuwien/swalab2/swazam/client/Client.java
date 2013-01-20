@@ -29,6 +29,7 @@ public class Client {
     private Integer port;
     private Socket initSocket = null;
     private ObjectOutputStream out = null;
+    private TcpDispatcher tcpDispatcher = null; 
  
 //    private static class ClientThread extends Thread {
 //
@@ -130,7 +131,7 @@ public class Client {
             //System.exit(1);
         }
         
-        TcpDispatcher tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
+        tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
 
         
     }
