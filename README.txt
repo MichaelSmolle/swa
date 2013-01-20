@@ -39,3 +39,19 @@ Subsequent requests to the system can only be made every 15 seconds, specificall
 
 
 Copy music in music folder
+
+in case something fails... take those requests and use it in your browser manually to show rest interface functions:
+
+testusers: user1/pass1  user2/pass2
+
+http://localhost:8080/swazam-webapp/api/account/update/filenameXY/1/1       // send a search request to server for userId 1
+http://localhost:8080/swazam-webapp/api/account/update/filenameXYZ/1/2           // send a search request to server for userId 1
+
+login in on website and see the transactions listed.
+
+
+http://localhost:8080/swazam-webapp/api/peer/add/127.0.0.1:37000      //add a peer to peerlist
+http://localhost:8080/swazam-webapp/api/peer/add/127.0.0.1:37002  //add a peer to peerlist
+http://localhost:8080/swazam-webapp/api/peer/peerlist               //get list of all registered peers
+
+http://localhost:8080/swazam-webapp/api/account/login/user1/pass1         // returns userId for reference on client side
