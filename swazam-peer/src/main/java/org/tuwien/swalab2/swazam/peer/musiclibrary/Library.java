@@ -38,6 +38,7 @@ public class Library implements Serializable{
 		try {
 			Mp3File mp3 = new Mp3File(file);
 			library.add(mp3);
+			this.persist();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
