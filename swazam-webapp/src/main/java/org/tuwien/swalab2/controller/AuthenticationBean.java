@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import org.tuwien.swalab2.services.rest.PersonService;
+import org.tuwien.swalab2.dataaccess.PersonService;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
 
 /**

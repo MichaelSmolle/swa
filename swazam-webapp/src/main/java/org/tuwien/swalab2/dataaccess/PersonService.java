@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.services.rest;
+package org.tuwien.swalab2.dataaccess;
 
 import java.io.Serializable;
 import javax.inject.Inject;
@@ -23,7 +23,8 @@ public class PersonService implements Serializable{
     }
     
     public Person saveChanges(Person user){
-        personFacade.edit(user);
+        PersonStorage.getInstance().addPerson(user);
+        
         return user;
     }
     
