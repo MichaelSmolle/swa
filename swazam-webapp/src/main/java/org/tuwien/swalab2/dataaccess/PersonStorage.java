@@ -37,7 +37,8 @@ public final class PersonStorage implements Serializable{
     }
     
     public void addPerson(Person p){
-        persons.put(p.getFirstName()+p.getLastName(), p);
+       p.setId(Long.valueOf(persons.size()+1));
+       persons.put(String.valueOf(p.getId()), p);
     }
     
     public Person getPerson(String key){

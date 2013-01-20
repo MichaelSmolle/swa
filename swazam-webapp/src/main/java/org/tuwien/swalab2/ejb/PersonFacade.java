@@ -38,6 +38,7 @@ public class PersonFacade extends AbstractFacade<Person> {
         
         //getEntityManager().persist(newAccount);
         
+        newAccount.setBalance(10);
         person.setAccount(newAccount);
         
         

@@ -17,4 +17,5 @@ public interface IAccountService {
     public Person login(String userId);
     public int getAccountBalanceForUser(String userId);
     public Collection<SwaZamTransaction> getSearchHistoryForUser(String userId);
+    public String updateAccount(String search,String success,String userId);
 }
