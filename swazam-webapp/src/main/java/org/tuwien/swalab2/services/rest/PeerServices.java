@@ -24,9 +24,9 @@ public class PeerServices implements IPeerServices,Serializable{
     @Override
     @GET
     @Path("/add/{address}")
-    public void registerPeer(@PathParam("address") String address) {
+    public String registerPeer(@PathParam("address") String address) {
         PeerStorage.getInstance().addPeerToStorage(address);
-        
+        return "OK";
     }
 
     @Override

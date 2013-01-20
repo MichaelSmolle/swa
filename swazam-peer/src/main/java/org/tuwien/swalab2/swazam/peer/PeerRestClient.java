@@ -43,6 +43,7 @@ public class PeerRestClient {
     public void registerPeer(String address) throws UniformInterfaceException {
         WebResource resource = webResource;
         resource = resource.path(java.text.MessageFormat.format("add/{0}", new Object[]{address}));
+        resource.get(String.class);
     }
 
     public String getPeerList() throws UniformInterfaceException {

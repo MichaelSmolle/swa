@@ -15,7 +15,7 @@ public interface IPeerServices {
      * Register an peer with its address , use something like ip:port:peerid
      * @param address the address to identify the peer  ip:port:peerid
      */
-    public void registerPeer(String address);
+    public String registerPeer(String address);
 
     /**
      * Get all registerd peers.

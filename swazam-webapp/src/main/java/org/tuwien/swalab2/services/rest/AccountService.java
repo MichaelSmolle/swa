@@ -53,7 +53,9 @@ public class AccountService implements IAccountService,Serializable{
     public String getAccountBalanceForUser(@PathParam("id") String userId) {
 
         Person res = PersonStorage.getInstance().getPerson(userId);
-
+        if(res == null){
+            return "Login failed";
+        }
         return String.valueOf(res.getAccount().getBalance());
     }
 
@@ -106,9 +108,10 @@ public class AccountService implements IAccountService,Serializable{
     @Path("/login/{userName}/{passWord}")
     @Produces(MediaType.APPLICATION_JSON)
     public String login(@PathParam("userName") String userName,@PathParam("passWord") String passWord){
-        Person res = PersonStorage.getInstance().authenticatePerson(userName, passWord);
-        
-        
+        Person res = PersonStorage.getInstance().authenticatePerson(userName, passWord); 
+        if(res == null){
+            return "Login failed";
+        }
         return String.valueOf(res.getId());
     }
   
