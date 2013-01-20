@@ -13,7 +13,7 @@ import java.util.Scanner;
 import org.tuwien.swalab2.swazam.client.Client;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-import org.tuwien.swalab2.swazam.peer.ClientRestClient;
+import org.tuwien.swalab2.swazam.client.communication.ClientRestClient;
 
 public class Cli extends Thread {
 
@@ -101,12 +101,10 @@ public class Cli extends Thread {
     private void login() {
         System.out.print("Enter your username: ");
 
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String userName = null;
         String passWord = null;
-
 
         try {
             userName = br.readLine();
@@ -124,8 +122,7 @@ public class Cli extends Thread {
         System.out.println("user/pass" + userName + " " + passWord);
         clientRestClient = new ClientRestClient();
         clientUserId =  clientRestClient.login(userName, passWord);
-        clientRestClient.close();
-        
+        clientRestClient.close();     
 
     }
 
