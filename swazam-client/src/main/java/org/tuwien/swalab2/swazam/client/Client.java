@@ -36,7 +36,7 @@ public class Client {
         Client client = new Client();
         
         cli = new Cli(client);
-        swingUI = new SwingUI(client);
+//        swingUI = new SwingUI(client);
         
         try {
             client.setUp();
@@ -96,7 +96,7 @@ public class Client {
     }
     
     public void shutdown() {
-    	swingUI.close();
+//    	swingUI.close();
     	cli.close();
 		System.exit(0);
 	}
