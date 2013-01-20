@@ -45,17 +45,20 @@ public class NodeConnection {
 	
 	//send a message to the connected node
 	public synchronized void sendMessage(Message m) {
-		  
-		try {
-			OutputStream os = s.getOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(os);
-			oos.writeObject(m);
-			oos.close();
-			os.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.disconnect();
-		} 
+		//only do this if we are online
+		//if we are offline the ConnectionHandler will take some time to remove this connection
+		if(this.online) {  
+			try {
+				OutputStream os = s.getOutputStream();
+				ObjectOutputStream oos = new ObjectOutputStream(os);
+				oos.writeObject(m);
+				oos.close();
+				os.close();
+			} catch (IOException e) {
+				//expected behaviour
+				this.disconnect();
+			} 
+		}
 	}
 	
 	//Inform the ConnectionHandler that this connection is dead
@@ -88,7 +91,6 @@ public class NodeConnection {
 				this.start();
 			} catch (Exception e) {
 				this.n.disconnect();
-				e.printStackTrace();
 			}  
 		}
 		
@@ -110,7 +112,6 @@ public class NodeConnection {
 					try {
 						mh.handleMessage((Message)ois.readObject());
 					} catch (Exception e) {
-						e.printStackTrace();
 						this.n.disconnect();
 					} 
 			}

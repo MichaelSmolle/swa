@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
@@ -15,19 +16,31 @@ public class MessageHandler {
 
     private ConnectionHandler connectionHandler;
     private Library library;
+    private ConcurrentHashMap<String, Message> knownMessages;
 
     public MessageHandler(Library library, ConnectionHandler ch) {
 
-        this.connectionHandler = connectionHandler;
+        this.connectionHandler = ch;
         this.library = library;
+        this.knownMessages = new ConcurrentHashMap<String, Message>();
     }
 
-    public synchronized void handleMessage(Message m) {
+    public void handleMessage(Message m) {
+    	//check if we already have seen this message
+    	//if the id is null its a message that will not be forwarded and therefore there is no need to remember it
+    	//TODO clear this sometime
+    	if(m.getId() != null) {
+    		if(this.knownMessages.containsKey(m.getId())) {
+    			return;
+    		}
+    		this.knownMessages.put(m.getId(), m);
+    	}
+    	
         if (m instanceof SearchMessage) {
 
             SearchMessage thisMessage = (SearchMessage) m;
 
-            //TODO: message über den ConnectionHandler forwarden
+            this.connectionHandler.forwardMessage(m);
 
             MatchResult matchResult = library.match(thisMessage.getFingerprint());
 
@@ -68,17 +81,16 @@ public class MessageHandler {
                 out.writeObject(searchReplyMessage);
                 out.flush();
                 out.close();
+                replySocket.close();
 
             } catch (IOException ex) {
                 Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else if (m instanceof requestPeerReplyMessage) {
-            System.out.println("TODO.");
-            //ch.addNodes(((requestPeerReplyMessage) m).getHostCache());
+        	connectionHandler.addNodes(((requestPeerReplyMessage) m).getHostCache());
         } else if (m instanceof requestPeerMessage) {
-            System.out.println("TODO.");
-            //ch.replyToRequestNodes(m.getSender(), m.getSenderPort());
+        	connectionHandler.replyToRequestNodes(m.getSender(), m.getSenderPort());
         }
     }
 }

@@ -5,14 +5,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
-import java.util.Vector;
+import java.util.LinkedList;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
-//TODO:
-//Thread Sicherheit kontrollieren
-//Konstruktor
-//Messages weiterleiten, gilt nur für SearchMessages
-//restliche Todos im Source Code
 public class ConnectionHandler extends Thread {
 	
 	private String myAddrString;
@@ -21,13 +18,14 @@ public class ConnectionHandler extends Thread {
 	private int maxConnections;
 	private HostCache connectedNodes;
 	private HostCache knownNodes;
-	private Vector<NodeConnection> currentConnections;
+	private LinkedList<NodeConnection> currentConnections;
 	private MessageHandler mh;
 	private volatile boolean running;
 	private InetAddress serverIp;
 	private int serverPort;
 	private IncommingClientConnectionHandler icch;
 	private IncommingPeerConnectionHandler   ipch;
+	private ReentrantLock l;
     //private Library library;
     
     public ConnectionHandler(
@@ -42,14 +40,26 @@ public class ConnectionHandler extends Thread {
         this.maxConnections = maxConnections;
         this.connectedNodes = new HostCache();
         this.knownNodes = new HostCache(); //Todo von filesystem laden
-        this.currentConnections = new Vector<NodeConnection>();
+        this.currentConnections = new LinkedList<NodeConnection>();
         this.mh = new MessageHandler(lib, this);
         this.serverIp = serverIp;
         this.serverPort = serverPort;
         this.icch = new IncommingClientConnectionHandler(this.myPort + 1, this.mh);
         this.ipch = null; //new IncommingPeerConnectionHandler(this.myPort, this);
+        this.l = new ReentrantLock();
         this.running = true;
         this.start();
+    }
+    
+    public void forwardMessage(Message m) {
+    	this.l.lock();
+    	m.decreaseTTL();
+    	if(m.getTTL()>0) {
+    		for(int i = 0; i < this.currentConnections.size(); i++) {
+    			this.currentConnections.get(i).sendMessage(m);
+    		}
+    	}
+    	this.l.unlock();
     }
 	
 	//Connects to server, sends a requestPeerMessage
@@ -77,7 +87,9 @@ public class ConnectionHandler extends Thread {
 	
 	//Merge nodes in current Cache and the ones received from a requestPeerMessage
 	public void addNodes(HostCache newHosts) {
+		this.l.lock();
 		this.knownNodes.merge(newHosts);
+		this.l.unlock();
 	}
 	
 	//Helper method to find a connection in the currentConnections list
@@ -94,34 +106,38 @@ public class ConnectionHandler extends Thread {
 	
 	//call sendMessage in corresponding NodeConnection
 	public void sendMessageTo(InetAddress requestorIp, int requestorPort, Message m) {
+		this.l.lock();
 		NodeConnection cur = this.findConnection(requestorIp, requestorPort);
 		if(cur != null) {
 			cur.sendMessage(m);
 		}
+		this.l.unlock();
 	}
 	
 	//Called by IncommingPeerConnectionHandler
 	//If we already have engough connections just close the socket
 	//else create a new NodeConnection
-	//TODO: Peer shoudl be added to HostChache if not already there
 	public void handleIncommingPeerConnection(Socket s) {
+		this.l.lock();
 		if (this.currentConnections.size() < this.maxConnections) { // check for too many connections
 			// check if we are already connected to this node
 			if(this.findConnection(s.getInetAddress(), s.getPort()) == null) {
 				this.currentConnections.add(new NodeConnection(s, s.getInetAddress(), s.getPort(), this.mh, this));
+				this.knownNodes.add(new HostCacheEntry(s.getInetAddress(),s.getPort()));
 			}
 		} else {
 			try {
 				s.close();
 			} catch (IOException e) {}
 		}
+		this.l.unlock();
 	}
 	
 	//Called by MessageHandler 
 	//Send the HostCache to the corresponding NodeConnection
 	//As requests for nodes will only travel for one hop there is no need to create a new connection
 	public void replyToRequestNodes(InetAddress requestorIp, int requestorPort) {
-		//todo not thread save
+		this.l.lock();
 		requestPeerReplyMessage m = null;
 		try {
 			m = new requestPeerReplyMessage(this.myAddrString, this.myPort, null);
@@ -131,6 +147,7 @@ public class ConnectionHandler extends Thread {
 		}
 		
 		this.sendMessageTo(requestorIp, requestorPort, m);
+		this.l.unlock();
 	}
 	
 	//send a requestPeerMessage to all NodeConnections
@@ -155,13 +172,17 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	//Remove a node from the connectedNode list, called by a NodeConnection
-	protected synchronized void removeFromConnectedNodes(InetAddress remoteIp, int remotePort) {
+	protected void removeFromConnectedNodes(InetAddress remoteIp, int remotePort) {
+		this.l.lock();
 		this.connectedNodes.remove(new HostCacheKeyEntry(remoteIp, remotePort));
+		this.l.unlock();
 	}
 	
 	//Add a node to the connectedNode list, called by NodeConnection in Constructor if everything went alright
-	protected synchronized void addToConnectedNodes(InetAddress remoteIp, int remotePort) {
+	protected void addToConnectedNodes(InetAddress remoteIp, int remotePort) {
+		this.l.lock();
 		this.connectedNodes.add(knownNodes.search(new HostCacheKeyEntry(remoteIp, remotePort)));
+		this.l.unlock();
 	}
 	
 	private void clearDeadConnections() {
@@ -172,16 +193,14 @@ public class ConnectionHandler extends Thread {
 		}
 	}
 	
-	private void shutdown() {
+	public void shutdown() {
+		//ignore the lock just kill everything
 		this.icch.kill();
 		this.ipch.kill();
 		this.running = false;
 		try {
 			join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 		for (int i = this.currentConnections.size(); i >=0; i++) {
 			this.currentConnections.get(i).disconnect();
 		}
@@ -200,6 +219,7 @@ public class ConnectionHandler extends Thread {
 	
 	public void run() { 
 		while(running) {
+			this.l.lock();
 			//clear dead connections
 			this.clearDeadConnections();
 			//check if we need more connections
@@ -209,7 +229,6 @@ public class ConnectionHandler extends Thread {
 				while(e.hasMoreElements() && this.currentConnections.size() < this.maxConnections) {
 					cur = e.nextElement();
 					if(!this.connectedNodes.getHostCache().containsKey(new HostCacheKeyEntry(cur.getAdr(), cur.getPort()))) {
-					//TODO: check if we already have a connection to this node
 						this.startConnection(cur.getAdr(), cur.getPort());
 					}
 				}
@@ -218,7 +237,7 @@ public class ConnectionHandler extends Thread {
 			if(this.currentConnections.size() < this.maxConnections) {
 				this.requestNodes();
 			}                 
-                        
+            this.l.unlock();           
 			//sleep for some time
 			try {
 				Thread.sleep(20000);

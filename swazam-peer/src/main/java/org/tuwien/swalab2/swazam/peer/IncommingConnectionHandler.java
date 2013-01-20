@@ -30,9 +30,7 @@ public abstract class IncommingConnectionHandler extends Thread {
 		while(this.running) {
 			try {
 				this.handleSocket(s.accept());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (IOException e) {}
 		}
 	}
 	
