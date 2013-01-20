@@ -8,11 +8,20 @@ import java.net.SocketException;
 
 public class TcpDispatcher extends Thread {
 
-    ServerSocket server;
+    private ServerSocket server;
+    private volatile boolean running;
 
     public TcpDispatcher(ServerSocket serverSocket) {
         this.server = serverSocket;
+        this.running = true;
         this.start();
+    }
+    
+    public void kill() {
+    	this.running = false;
+    	try {
+			join();
+		} catch (InterruptedException e) {}
     }
 
     public void run() {
@@ -20,7 +29,7 @@ public class TcpDispatcher extends Thread {
         Socket client = null;
 
         try {
-            while (true) {
+            while (this.running) {
                 client = server.accept();
                 ClientThread c  = new ClientThread(client);  
             }
@@ -31,5 +40,9 @@ public class TcpDispatcher extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //wait for client threads
+        try {
+			join();
+		} catch (InterruptedException e) {}
     }
 }

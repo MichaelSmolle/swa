@@ -1,6 +1,7 @@
 package org.tuwien.swalab2.swazam.client.communication;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -24,27 +25,29 @@ public class ClientThread extends Thread {
         System.out.println("Received a SearchReplyMessage...");
 
         ObjectInputStream in = null;
-
+        InputStream		  is = null;
+        
         try {
-            in = new ObjectInputStream(socket.getInputStream());
-
-            try {
-                replyMessage = (SearchReplyMessage) in.readObject();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            //TODO: Ergebnisse der diversen Peers sammeln und dann das beste auswählen
-
-            if (replyMessage.getFilename().contains("No results found.")) {
-             System.out.println(replyMessage.getFilename());   
-            }
-            else {
-                System.out.println("filename: " + replyMessage.getFilename() + " (found by peer " + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort() + ")");
-            }       
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        	is = socket.getInputStream();
+        	in = new ObjectInputStream(is);
+        	replyMessage = (SearchReplyMessage) in.readObject();
+        } catch (Exception ex) {
+        	//Exceptions at this point are an error
+        	ex.printStackTrace();
+        	Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        if (replyMessage.getFilename().contains("No results found.")) {
+            System.out.println(replyMessage.getFilename());   
+        } else {
+            System.out.println("filename: " + replyMessage.getFilename() + " (found by peer " + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort() + ")");
+        }
+
+        //Close IO stuff we dont care for an exception as we alread have the message
+        try {
+        	in.close();
+            is.close();
+            this.socket.close();
+        } catch (IOException e) {}
     }
 }
