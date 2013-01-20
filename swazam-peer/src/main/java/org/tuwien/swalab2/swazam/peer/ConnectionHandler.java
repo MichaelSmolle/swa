@@ -30,30 +30,27 @@ public class ConnectionHandler extends Thread {
 	private IncommingPeerConnectionHandler   ipch;
     //private Library library;
     
-    public ConnectionHandler (
-    	String 		myIp,
-    	int    		myPort,
-    	int			maxConnections,
-    	InetAddress	serverIp,
-    	int			serverPort,
-    	Library     lib
-    ) {
-    	this.myAddrString 			= myIp;
-    	this.myPort 	  			= myPort;
-    	this.maxConnections			= maxConnections;
-    	this.connectedNodes 		= new HostCache();
-    	this.knownNodes				= new HostCache(); //Todo von filesystem laden
-    	this.currentConnections		= new Vector<NodeConnection>();
-    	this.mh = new MessageHandler(lib, this);
-    	this.serverIp = serverIp;
-    	this.serverPort = serverPort;
-    	this.icch = new IncommingClientConnectionHandler(this.myPort+1, this.mh);
-    	this.ipch = null; //new IncommingPeerConnectionHandler(this.myPort, this);
-    	this.running = true;
-    	this.start();
+    public ConnectionHandler(
+            String myIp,
+            int myPort,
+            int maxConnections,
+            InetAddress serverIp,
+            int serverPort,
+            Library lib) {
+        this.myAddrString = myIp;
+        this.myPort = myPort;
+        this.maxConnections = maxConnections;
+        this.connectedNodes = new HostCache();
+        this.knownNodes = new HostCache(); //Todo von filesystem laden
+        this.currentConnections = new Vector<NodeConnection>();
+        this.mh = new MessageHandler(lib, this);
+        this.serverIp = serverIp;
+        this.serverPort = serverPort;
+        this.icch = new IncommingClientConnectionHandler(this.myPort + 1, this.mh);
+        this.ipch = null; //new IncommingPeerConnectionHandler(this.myPort, this);
+        this.running = true;
+        this.start();
     }
-
-    
 	
 	//Connects to server, sends a requestPeerMessage
 	//waits for a Message from server and calls the MessageHandler

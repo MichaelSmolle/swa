@@ -29,15 +29,14 @@ public class Client {
     private Integer port;
     private Socket initSocket = null;
     private ObjectOutputStream out = null;
-    private TcpDispatcher tcpDispatcher = null; 
- 
+    private TcpDispatcher tcpDispatcher = null;
 
     public static void main(String[] args) {
         Client client = new Client();
-        
+
         cli = new Cli(client);
-        swingUI = new SwingUI(client);
-        
+        //swingUI = new SwingUI(client);
+
         try {
             client.setUp();
             //client.startSwingUI(args);
@@ -69,24 +68,22 @@ public class Client {
             System.err.println("Could not connect to peer " + ip + ".");
             //System.exit(1);
         }
-        
-        tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
 
-        
+        tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
     }
 
     public void submitRequest(Fingerprint fingerprint) {
-        
+
         System.out.println("Submitting FingerPrint to network...");
-        
+
         try {
-            
+
             Date d = new Date();
             SearchMessage searchMessage = new SearchMessage(ip.getHostAddress(), port, fingerprint, ip.toString() + port.toString() + d.toString());
 
             out.writeObject(searchMessage);
             out.flush();
-            out.close();
+            //out.close();
 
         } catch (UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,10 +91,17 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void shutdown() {
-    	swingUI.close();
-    	cli.close();
-		System.exit(0);
-	}
+
+        try {
+            out.close();
+            initSocket.close();
+            //swingUI.close();
+            cli.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.exit(0);
+    }
 }
