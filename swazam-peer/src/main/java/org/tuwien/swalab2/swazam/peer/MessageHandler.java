@@ -37,7 +37,7 @@ public class MessageHandler {
                 ObjectOutputStream out = null;
 
                 try {
-                    replySocket = new Socket(thisMessage.getSender(), thisMessage.getSenderPort());
+                    replySocket = new Socket(thisMessage.getSender(), thisMessage.getSenderPort() + 1);
                     out = new ObjectOutputStream(replySocket.getOutputStream());
                 } catch (UnknownHostException e) {
                     System.err.println("Cannot find the client  " + thisMessage.getSender() + ":" + thisMessage.getSenderPort() + ".");
