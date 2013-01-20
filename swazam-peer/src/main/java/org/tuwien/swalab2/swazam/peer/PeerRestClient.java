@@ -49,7 +49,6 @@ public class PeerRestClient {
     public String getPeerList() throws UniformInterfaceException {
         WebResource resource = webResource;
         resource = resource.path("peerlist");
-//        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(List.class);
         return resource.accept(MediaType.APPLICATION_JSON).get(String.class);
     }
 
