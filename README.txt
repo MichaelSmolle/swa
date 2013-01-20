@@ -15,7 +15,7 @@ hit ok
 Under resources/ JDBC/JDBC Resources make sure the jdbc/__default is present otherwise create with derby connection pool
 profit
 
-
+The source code of the assignment is available at https://github.com/msmolle/swa and can be built with mvn clean install.
 
 #Peer
 In order to start the peer you will need a peer.properties file.
@@ -29,3 +29,10 @@ where port is used to listen for new peer connections and UNIQUE_ID is a
 string.
 The peer will open a second port (PORT+1) to listen for incoming client
 requests, keep that in mind while starting mutliple peers.
+
+#Client
+
+start with java -jar swa-client-1.0-jar-with-dependencies.jar
+
+Known issues:
+Subsequent requests to the system can only be made every 15 seconds, specifically after the "DEBUG: wait for client threads" message appears on the console.
