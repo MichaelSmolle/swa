@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import org.tuwien.swalab2.services.PersonService;
+import org.tuwien.swalab2.services.rest.PersonService;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
 
 /**
@@ -57,21 +57,6 @@ public class AuthenticationBean implements Serializable{
         return "account";
     }
     
-     public String login () {
-    FacesContext context = FacesContext.getCurrentInstance();
-    HttpServletRequest request = (HttpServletRequest) 
-        context.getExternalContext().getRequest();
-    try {
-      request.login(this.userName , this.passWord);
-      context.addMessage(null, new FacesMessage("Login success."));
-    } catch (ServletException e) {
-      
-      context.addMessage(null, new FacesMessage("Login failed."));
-      return "error";
-    }
-    return "admin/index";
-  }
-
     public Person getUser() {
         return user;
     }
