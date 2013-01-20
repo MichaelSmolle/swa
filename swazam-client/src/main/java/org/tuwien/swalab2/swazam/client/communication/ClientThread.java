@@ -36,7 +36,12 @@ public class ClientThread extends Thread {
             
             //TODO: Ergebnisse der diversen Peers sammeln und dann das beste auswählen
 
-            System.out.println("filename: " + replyMessage.getFilename() + "(found by peer )" + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort());
+            if (replyMessage.getFilename().contains("No results found.")) {
+             System.out.println(replyMessage.getFilename());   
+            }
+            else {
+                System.out.println("filename: " + replyMessage.getFilename() + " (found by peer " + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort() + ")");
+            }       
 
         } catch (IOException e) {
             e.printStackTrace();

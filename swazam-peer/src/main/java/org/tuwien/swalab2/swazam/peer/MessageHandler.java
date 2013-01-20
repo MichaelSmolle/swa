@@ -17,7 +17,7 @@ public class MessageHandler {
     private Library library;
 
     public MessageHandler(Library library, ConnectionHandler ch) {
-        
+
         this.connectionHandler = connectionHandler;
         this.library = library;
     }
@@ -31,41 +31,46 @@ public class MessageHandler {
 
             MatchResult matchResult = library.match(thisMessage.getFingerprint());
 
+            Socket replySocket = null;
+            ObjectOutputStream out = null;
+
+            try {
+                replySocket = new Socket(thisMessage.getSender(), thisMessage.getSenderPort() + 1);
+                out = new ObjectOutputStream(replySocket.getOutputStream());
+            } catch (UnknownHostException e) {
+                System.err.println("Cannot find the client  " + thisMessage.getSender() + ":" + thisMessage.getSenderPort() + ".");
+                System.exit(1); //TODO: remove
+            } catch (IOException e) {
+                System.err.println("Could not connect to client " + thisMessage.getSender() + ":" + thisMessage.getSenderPort() + ".");
+                //System.exit(1);
+            }
+
+            // TODO: IP und Port von beantworteten einbauen
+            SearchReplyMessage searchReplyMessage = null;
+
             if (matchResult != null) {
-
-                Socket replySocket = null;
-                ObjectOutputStream out = null;
-
-                try {
-                    replySocket = new Socket(thisMessage.getSender(), thisMessage.getSenderPort() + 1);
-                    out = new ObjectOutputStream(replySocket.getOutputStream());
-                } catch (UnknownHostException e) {
-                    System.err.println("Cannot find the client  " + thisMessage.getSender() + ":" + thisMessage.getSenderPort() + ".");
-                    System.exit(1); //TODO: remove
-                } catch (IOException e) {
-                    System.err.println("Could not connect to client " + thisMessage.getSender() + ":" + thisMessage.getSenderPort() + ".");
-                    //System.exit(1);
-                }
-                
-                // TODO: IP und Port von beantworteten einbauen
-                SearchReplyMessage searchReplyMessage;
                 try {
                     searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
-                      
                     System.out.println("searchReplyMessage: " + searchReplyMessage.getFilename());
-                    
-                    out.writeObject(searchReplyMessage);
-                    out.flush();
-                    out.close();
-                    
-              } catch (UnknownHostException ex) {
+                } catch (UnknownHostException ex) {
                     Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
 
-           } else {
-                System.out.println("No results found for searchMessage:" + thisMessage.getId() + ".");
+            } else {
+                try {
+                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), "No results found.");
+                    System.out.println("No results found for searchMessage:" + thisMessage.getId() + ".");
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            try {
+                out.writeObject(searchReplyMessage);
+                out.flush();
+                out.close();
+
+            } catch (IOException ex) {
+                Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         } else if (m instanceof requestPeerReplyMessage) {
