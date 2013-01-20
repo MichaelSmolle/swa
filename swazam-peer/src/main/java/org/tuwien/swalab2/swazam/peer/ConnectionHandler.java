@@ -73,15 +73,17 @@ public class ConnectionHandler extends Thread {
 		try {
 
 		 String list = (String) restClient.getPeerList();
+//		 TODO: REMOVE
+		 list = "127.0.0.1:37010-127.0.0.1:37012-127.0.0.1:37014";
 		 
 		 String[] peers = list.split("\\-");
 		 
-		 for (int i = 0; i < peers.length-1; i++) {
+		 for (int i = 0; i < peers.length; i++) {
 			 String[] result = peers[i].split("\\:");
-		     
+			 
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
-			 
+			 System.out.println(result[0].toString() + ":" + result[1].toString() );
 			 HostCacheEntry entry = new HostCacheEntry(adr, port);
 			 knownNodes.add(entry);
 		 }
