@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.OverridesAttribute;
 import org.tuwien.swalab2.controller.JsfHelper;
+import org.tuwien.swalab2.dataaccess.PersonStorage;
 import org.tuwien.swalab2.swazam.util.model.entities.Account;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
 import org.tuwien.swalab2.swazam.util.model.entities.SwazamAccount;
@@ -23,35 +24,30 @@ import org.tuwien.swalab2.swazam.util.model.entities.SwazamAccount;
  * @author gh
  */
 public class PersonFacade extends AbstractFacade<Person> {
+   
     
-    @Inject
-    AccountFacade accountFacade;
     
- 
-    
-    @PersistenceContext(unitName= "myPu")
-    private EntityManager em;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
+    
     @Override
     public void create(Person person) {
     
         System.out.println("Persisting entity:" + person.toString());
         SwazamAccount newAccount = new SwazamAccount();
+        //getEntityManager().persist(person);
         
-        getEntityManager().persist(person);
-        
-        getEntityManager().persist(newAccount);
+        //getEntityManager().persist(newAccount);
         
         person.setAccount(newAccount);
         
         
-        getEntityManager().persist(person);
         
+        
+        //getEntityManager().persist(person);
+        
+        PersonStorage.getInstance().addPerson(person);
+     
+
     }
     
     public PersonFacade() {
@@ -59,17 +55,19 @@ public class PersonFacade extends AbstractFacade<Person> {
     }
     
     public Person authenticatePerson(String userName,String passWord){
-        PreparedStatement pStmt;
-        List<Person> pList = em.createQuery("select p from Person p where p.userName =:user and p.passWord =:pass ").setParameter("user", userName).setParameter("pass",passWord).getResultList();
-        if(pList.size() < 1) 
-            return null;
-        
-        return pList.get(0);
+       
+        return PersonStorage.getInstance().authenticatePerson(userName, passWord);        
     }
     
     @Override
     public Person find(Object id) {
-        return em.find(Person.class,id);
+        return PersonStorage.getInstance().getPerson(String.valueOf(id));
+        
+    }
+
+    @Override
+    protected EntityManager getEntityManager() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

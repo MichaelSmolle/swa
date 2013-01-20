@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.services.rest;
+package org.tuwien.swalab2.dataaccess;
 
 import java.io.Serializable;
 import java.util.ArrayList;

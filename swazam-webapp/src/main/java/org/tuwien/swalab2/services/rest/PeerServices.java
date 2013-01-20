@@ -4,6 +4,7 @@
  */
 package org.tuwien.swalab2.services.rest;
 
+import org.tuwien.swalab2.dataaccess.PeerStorage;
 import java.io.Serializable;
 import java.util.List;
 import javax.ws.rs.GET;

@@ -13,7 +13,6 @@ import org.tuwien.swalab2.swazam.util.model.entities.Account;
  *
  * @author gh
  */
-@Stateless
 public class AccountFacade extends AbstractFacade<Account> {
     @PersistenceContext(unitName = "myPu")
     private EntityManager em;

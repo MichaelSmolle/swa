@@ -4,6 +4,7 @@
  */
 package org.tuwien.swalab2.ejb;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -13,7 +14,7 @@ import javax.persistence.EntityManager;
  *
  * @author gh
  */
-public abstract class AbstractFacade<T> {
+public abstract class AbstractFacade<T> implements Serializable{
     private Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
