@@ -64,8 +64,7 @@ public final class PeerStorage implements Serializable{
         String res = "";
         for(String x : peers){
             res += res.concat(x).concat("-");
-        }
-        
+        }        
         return res;
     }
     
