@@ -10,7 +10,7 @@ public class TcpDispatcher extends Thread {
 
     ServerSocket server;
 
-    TcpDispatcher(ServerSocket serverSocket) {
+    public TcpDispatcher(ServerSocket serverSocket) {
         this.server = serverSocket;
         this.start();
     }
