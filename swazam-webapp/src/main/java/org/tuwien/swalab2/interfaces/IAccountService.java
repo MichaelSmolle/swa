@@ -5,6 +5,7 @@
 package org.tuwien.swalab2.interfaces;
 
 import java.util.Collection;
+import javax.ws.rs.PathParam;
 import org.tuwien.swalab2.swazam.util.model.entities.Person;
 import org.tuwien.swalab2.swazam.util.model.entities.SwaZamTransaction;
 
@@ -17,5 +18,6 @@ public interface IAccountService {
     public Person login(String userId);
     public int getAccountBalanceForUser(String userId);
     public Collection<SwaZamTransaction> getSearchHistoryForUser(String userId);
-    public String updateAccount(String search,String success,String userId);
+    public String updateAccountAfterSearch(String search,String success,String userId);    
+    public String updateAccountBalance(String userId) ;
 }

@@ -61,7 +61,7 @@ public class AccountService implements IAccountService,Serializable{
     @Path("/update/{search}/{success}/{userId}")    
     @Override
     @Produces(MediaType.APPLICATION_JSON)
-    public String updateAccount(@PathParam("search")String search,@PathParam("success")String success,@PathParam("userId")String userId) {
+    public String updateAccountAfterSearch(@PathParam("search")String search,@PathParam("success")String success,@PathParam("userId")String userId) {
         
         Person p = PersonStorage.getInstance().getPerson(userId);
         if(p == null){
@@ -71,7 +71,7 @@ public class AccountService implements IAccountService,Serializable{
         
         SwaZamTransaction t = new SwaZamTransaction();
         t.setSearchString(search);
-        if(success == "0"){
+        if("0".equals(success)){
             t.setSuccess(false);
         }else {
             t.setSuccess(true);
@@ -82,6 +82,22 @@ public class AccountService implements IAccountService,Serializable{
         
         
         
+        return "OK";
+    }
+    
+    
+    @GET
+    @Path("/update/{userId}")    
+    @Produces(MediaType.APPLICATION_JSON)
+    @Override
+    public String updateAccountBalance(@PathParam("userId")String userId) {
+        
+        Person p = PersonStorage.getInstance().getPerson(userId);
+        if(p == null){
+            return "Failed - Person no existent";
+        } 
+       
+        p.getAccount().setBalance(p.getAccount().getBalance() + 1);
         return "OK";
     }
     
