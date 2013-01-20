@@ -25,7 +25,7 @@ public class ClientThread extends Thread {
         System.out.println("Received a SearchReplyMessage...");
 
         ObjectInputStream in = null;
-        InputStream		  is = null;
+        InputStream is = null;
         
         try {
         	is = socket.getInputStream();
@@ -45,9 +45,12 @@ public class ClientThread extends Thread {
 
         //Close IO stuff we dont care for an exception as we alread have the message
         try {
-        	in.close();
+            System.out.println("Closing IO stuff");
+            in.close();
             is.close();
             this.socket.close();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
