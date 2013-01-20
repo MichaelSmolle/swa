@@ -198,7 +198,7 @@ public class ConnectionHandler extends Thread {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Sending " + m.getHostCache().size() + "peers");
+		//System.out.println("Sending " + m.getHostCache().size() + "peers");
 		this.sendMessageTo(remoteUid, m);
 	}
 	
@@ -210,7 +210,7 @@ public class ConnectionHandler extends Thread {
 			
 			Iterator<NodeConnection> itr = this.currentConnections.iterator();
 			while(itr.hasNext()) {
-				System.out.println("sending request messages");
+				//System.out.println("sending request messages");
 				try {
 					m = new requestPeerMessage(this.myAddrString, this.myPort, null);
 				} catch (UnknownHostException e) {
@@ -254,10 +254,10 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	private void sendUid(Socket n, ObjectOutputStream oos) throws Exception {
-		System.out.println("4");
+		//System.out.println("4");
 		oos.writeObject(this.uid);
 		oos.flush();
-		System.out.println("done with writing");
+		//System.out.println("done with writing");
 		//or.close();
 		//os.close();
 	}
@@ -266,20 +266,20 @@ public class ConnectionHandler extends Thread {
 	private void startConnection(InetAddress remoteIp, int remotePort, String remoteUid) {
 		Socket s = null;
 		try {
-			System.out.println("1");
+			//System.out.println("1");
 			s = new Socket(remoteIp, remotePort);
-			System.out.println("2");
+			//System.out.println("2");
 			OutputStream os = s.getOutputStream();
-			System.out.println("3");
+			//System.out.println("3");
 			ObjectOutputStream oos = new ObjectOutputStream(os);
-			System.out.println("4");
-			System.out.println("2");
+			//System.out.println("4");
+			//System.out.println("2");
 			this.sendUid(s, oos);
 			InputStream is = s.getInputStream();
 			ObjectInputStream ois = new ObjectInputStream(is);
 			this.currentConnections.add(new NodeConnection(s, remoteIp, remotePort, remoteUid, ois, oos, this.mh));
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			if(s != null) {
 				try {
 					s.close();
@@ -296,14 +296,14 @@ public class ConnectionHandler extends Thread {
 			this.clearDeadConnections();
 			//check if we need more connections
 			if(this.currentConnections.size() < this.maxConnections) {
-				System.out.println("Trying more connections");
+				//System.out.println("Trying more connections");
 				Enumeration<HostCacheEntry> e = this.knownNodes.getHostCache().elements();
 				HostCacheEntry cur = null;
 				while(e.hasMoreElements() && this.currentConnections.size() < this.maxConnections) {
 					cur = e.nextElement();
-					System.out.println("Trying connection to " + cur.getAdr().getHostAddress() + ":" + cur.getPort() + " id " +cur.getUid());
+					//System.out.println("Trying connection to " + cur.getAdr().getHostAddress() + ":" + cur.getPort() + " id " +cur.getUid());
 					if(this.findConnection(cur.getUid()) == null && this.uid.compareTo(cur.getUid())!=0) {
-						System.out.println("Starting connection to " + cur.getAdr().getHostAddress() + ":" + cur.getPort());
+						//System.out.println("Starting connection to " + cur.getAdr().getHostAddress() + ":" + cur.getPort());
 						this.startConnection(cur.getAdr(), cur.getPort(), cur.getUid());
 					}
 				}

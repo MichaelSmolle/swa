@@ -74,7 +74,7 @@ public class NodeConnection {
 			this.s.close();
 		} catch (Exception e) {}
 		this.mr.kill();
-		System.out.println("Done with disconnect");
+		//System.out.println("Done with disconnect");
 	}
 	
 	//Receive a message and give it to the MessageHandler
