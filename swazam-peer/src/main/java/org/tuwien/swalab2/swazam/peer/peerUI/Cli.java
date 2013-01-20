@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+import org.tuwien.swalab2.swazam.peer.ConnectionHandler;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 
@@ -19,11 +20,13 @@ public class Cli extends Thread{
 	private String cmd = "";
 	private String filename = "";
 	private Library library;
+	private ConnectionHandler ch;
 
 
-	public Cli(Library library) {
+	public Cli(Library library, ConnectionHandler ch) {
 		super();
 		this.library = library;
+		this.ch = ch;
 		this.start();
 	}
 
@@ -103,8 +106,11 @@ public class Cli extends Thread{
 
 				} else if (cmd.equals("usage")) {
 					usage();
+				} else if (cmd.equals("connection-status")) {
+					this.ch.printStatus();
 				} else if (cmd.equals("quit")) {
 					library.persist();
+					ch.shutdown();
 					run = false;
 				} else {
 					usage();
@@ -117,7 +123,8 @@ public class Cli extends Thread{
 				+ "\n - add <path to mp3>" 
 				+ "\n - add <id> <path to mp3>"
 				+ "\n - remove <path to mp3>" 
-				+ "\n - list" 
+				+ "\n - list"
+				+ "\n - connection-status"
 				+ "\n - quit"
 				+ "\n - usage" 
 				+ "\n");

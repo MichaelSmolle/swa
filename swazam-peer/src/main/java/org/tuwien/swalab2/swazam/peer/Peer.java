@@ -49,10 +49,9 @@ public class Peer {
     private void setUp(Integer arg0) {
         library = new Library(id);
         library.load();
-
-        cli = new Cli(library);
-//		cli.run();
-
+        ConnectionHandler c = null;
+        String NAT_IP;
+        
         Properties prop = new Properties();
 
         try {
@@ -65,27 +64,37 @@ public class Peer {
             ex.printStackTrace();
         }
         
-        //find the real ip
         InetAddress myIp = null;
-        Enumeration<NetworkInterface> eI = null;
-		try {
-			eI = NetworkInterface.getNetworkInterfaces();
-		} catch (SocketException e) {
-			e.printStackTrace();
-		}
-        NetworkInterface ni;
-        try {
-        	while(eI.hasMoreElements()) {
-        		ni = eI.nextElement();
-        		if(!ni.isLoopback() && ni.isUp() && !ni.isVirtual()) {
-        			myIp = ni.getInetAddresses().nextElement(); //try the first ip
+        NAT_IP = prop.getProperty("bindToIp");
+        
+        //If no ip has been specified then try to find the real ip
+        if (NAT_IP == null) {
+        	Enumeration<NetworkInterface> eI = null;
+        	try {
+        		eI = NetworkInterface.getNetworkInterfaces();
+        	} catch (SocketException e) {
+        		e.printStackTrace();
+        	}
+        	NetworkInterface ni;
+        	try {
+        		while(eI.hasMoreElements()) {
+        			ni = eI.nextElement();
+        			if(!ni.isLoopback() && ni.isUp() && !ni.isVirtual()) {
+        				myIp = ni.getInetAddresses().nextElement(); //try the first ip
+        			}
         		}
-        }
-        } catch (Exception e) {
-        	e.printStackTrace();
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
+        } else {
+        	try {
+				myIp = InetAddress.getByName(NAT_IP);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
         }
         try {
-            ConnectionHandler c = new ConnectionHandler(
+            c = new ConnectionHandler(
             		myIp.getHostAddress(),		//InetAddress.getLocalHost().getHostAddress(), use real ip
                     arg0.intValue(),
                     Integer.parseInt(prop.getProperty("maxConnections")),
@@ -95,6 +104,8 @@ public class Peer {
         } catch (UnknownHostException ex) {
             java.util.logging.Logger.getLogger(Peer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        cli = new Cli(library, c);
         //Thread t = new Thread(new ConnectionHandler(library));
         //t.start();
 
