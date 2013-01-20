@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.simpleframework.util.buffer.ArrayAllocator;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 public class ConnectionHandler extends Thread {
@@ -18,6 +20,7 @@ public class ConnectionHandler extends Thread {
 	private int maxConnections;
 	private HostCache connectedNodes;
 	private HostCache knownNodes;
+	private PeerRestClient restClient = new PeerRestClient();
 	private LinkedList<NodeConnection> currentConnections;
 	private MessageHandler mh;
 	private volatile boolean running;
@@ -67,21 +70,22 @@ public class ConnectionHandler extends Thread {
 	//waits for a Message from server and calls the MessageHandler
 	private void bootstrap() {
 		try {
-			//Socket s = new Socket(serverIp, serverPort);
-			//OutputStream os = s.getOutputStream();
-			//ObjectOutputStream oos = new ObjectOutputStream(os);
-			//InputStream is = s.getInputStream();
-			//ObjectInputStream ois = new ObjectInputStream(is);
-			//oos.writeObject(new requestPeerMessage(myAddrString, myPort, null));
-			//oos.flush();
+
+		 ArrayList<String> peers = restClient.getPeerList(ArrayList.class);
+		 
+		 for (String peer : peers){
+			 
+		     String[] result = peer.split("\\:");
+		     
+			 InetAddress adr = InetAddress.getByName(result[0]);
+			 int port = Integer.parseInt(result[1]);
+			 
+			 HostCacheEntry entry = new HostCacheEntry(adr, port);
+			 knownNodes.add(entry);
+		 }
 			
-			//this.mh.handleMessage((Message)ois.readObject());
 			
-			//oos.close();
-			//os.close();
-			//ois.close();
-			//is.close();
-			//s.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
