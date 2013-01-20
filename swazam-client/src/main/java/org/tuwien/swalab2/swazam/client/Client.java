@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 import org.tuwien.swalab2.swazam.client.clientUI.Cli;
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
 import org.tuwien.swalab2.swazam.client.communication.TcpDispatcher;
-import org.tuwien.swalab2.swazam.peer.HostCacheEntry;
-import org.tuwien.swalab2.swazam.peer.SearchMessage;
+import org.tuwien.swalab2.swazam.peer.p2p.HostCacheEntry;
+import org.tuwien.swalab2.swazam.peer.p2p.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 

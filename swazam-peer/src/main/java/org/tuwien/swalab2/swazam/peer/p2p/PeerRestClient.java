@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 
 import java.util.ArrayList;
 import java.util.List;

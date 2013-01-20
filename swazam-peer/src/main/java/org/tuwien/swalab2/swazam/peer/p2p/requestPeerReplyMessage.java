@@ -1,7 +1,8 @@
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 
 import java.net.UnknownHostException;
 import java.util.LinkedList;
+
 
 public class requestPeerReplyMessage extends Message{
 	

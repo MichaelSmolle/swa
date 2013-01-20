@@ -2,6 +2,7 @@ package org.tuwien.swalab2.swazam.peer;
 
 import org.apache.log4j.Logger;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
+import org.tuwien.swalab2.swazam.peer.p2p.ConnectionHandler;
 import org.tuwien.swalab2.swazam.peer.peerUI.Cli;
 
 import java.io.FileInputStream;

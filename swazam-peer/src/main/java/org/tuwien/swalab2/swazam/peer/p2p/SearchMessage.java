@@ -1,6 +1,7 @@
-package org.tuwien.swalab2.swazam.peer;
+package org.tuwien.swalab2.swazam.peer.p2p;
 
 import java.net.UnknownHostException;
+
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
