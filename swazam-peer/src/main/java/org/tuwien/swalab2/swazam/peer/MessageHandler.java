@@ -1,7 +1,5 @@
 package org.tuwien.swalab2.swazam.peer;
 
-import ac.at.tuwien.infosys.swa.audio.Fingerprint;
-
 //Handle the messages by calling the appropriate methods in the ConnectionHandler and the MusicLibrary
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -54,7 +52,7 @@ public class MessageHandler {
                 try {
                     searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
                       
-                    System.out.println("searchReplyMessage" + searchReplyMessage.toString());
+                    System.out.println("searchReplyMessage: " + searchReplyMessage.getFilename());
                     
                     out.writeObject(searchReplyMessage);
                     out.flush();
