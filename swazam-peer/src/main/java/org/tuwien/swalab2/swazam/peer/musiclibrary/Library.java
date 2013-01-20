@@ -49,6 +49,7 @@ public class Library implements Serializable{
 		for (Mp3File mF : library){
 			if (mF.getFile().equals(file)){
 				library.remove(mF);
+				this.persist();
 			}
 		}
 	}

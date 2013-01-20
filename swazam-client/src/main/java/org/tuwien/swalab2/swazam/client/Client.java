@@ -36,7 +36,7 @@ public class Client {
         Client client = new Client();
         
         cli = new Cli(client);
-//        swingUI = new SwingUI();
+        swingUI = new SwingUI();
         
         try {
             client.setUp();
