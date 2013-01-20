@@ -93,7 +93,7 @@ public class ConnectionHandler extends Thread {
 //		 register me server
 		 System.out.println("Registering to server! \n");
 //		 String register = new String (myAddrString + ":" + myPort);
-		 String register = new String ("192.168.1.21" + ":" + myPort);
+		 String register = new String ("127.0.0.1" + ":" + myPort);
 		 restClient.registerPeer(register);
 		 
 		} catch (Exception e) {
