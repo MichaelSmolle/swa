@@ -33,7 +33,7 @@ public class PeerServices implements IPeerServices,Serializable{
     @GET
     @Path("/peerlist")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getPeerList() {
-        return PeerStorage.getInstance().getRegisteredPeerList();
+    public String getPeerList() {
+        return PeerStorage.getInstance().getRegisteredPeerListAsString();
     }
 }

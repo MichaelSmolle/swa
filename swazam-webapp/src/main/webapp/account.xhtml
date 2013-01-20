@@ -29,7 +29,24 @@
                     <h:outputText  id="balance" value="#{authenticationBean.user.account.balance}"/>                    
 
                 </h:panelGrid>
-                
+                         
+                            <h2>Transactions:</h2>
+                            <h:dataTable var="trans" value="#{authenticationBean.user.account.transactions}">
+                                <h:column>
+                                    <f:facet name="header">
+                                        SearchTerm
+                                    </f:facet>
+                                    <h:outputText value="#{trans.searchString}" />
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        Successful
+                                    </f:facet>
+                                    <h:outputText value="#{trans.success}" />
+                                </h:column>
+                                
+                                
+                            </h:dataTable>
                 <h:commandButton  value="Change"  action="editPerson" />
            </h:form>
 
