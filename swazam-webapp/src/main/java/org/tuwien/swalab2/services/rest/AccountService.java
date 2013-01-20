@@ -6,6 +6,9 @@ package org.tuwien.swalab2.services.rest;
 
 import java.io.Serializable;
 import java.util.Collection;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,11 +27,12 @@ import org.tuwien.swalab2.swazam.util.model.entities.SwaZamTransaction;
  */
 @Path("/account")
 public class AccountService implements IAccountService,Serializable{
-  @Inject
-  private AccountFacade accountFacade;
   
-  @Inject
-  private PersonFacade personFacade;
+   AccountFacade accountFacade = new AccountFacade();
+  
+  
+   @Inject 
+    private PersonFacade personFacade;
 
     public AccountService() {
     }
@@ -40,7 +44,8 @@ public class AccountService implements IAccountService,Serializable{
     @Produces(MediaType.APPLICATION_JSON)
 
     public Person login(@PathParam("id") String userId){
-        return personFacade.find( Long.valueOf(userId));         
+        Person res = personFacade.find( Long.valueOf(userId));
+        return res;
     }
     
     @Override
