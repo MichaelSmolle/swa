@@ -4,20 +4,15 @@ import org.apache.log4j.Logger;
 import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 import org.tuwien.swalab2.swazam.peer.peerUI.Cli;
 
-import com.kenmccrary.jtella.FileServerSession;
-import com.kenmccrary.jtella.GNUTellaConnection;
-import com.kenmccrary.jtella.MessageReceiver;
-import com.kenmccrary.jtella.PushMessage;
-import com.kenmccrary.jtella.SearchMessage;
-import com.kenmccrary.jtella.SearchMonitorSession;
-import com.kenmccrary.jtella.SearchReplyMessage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -25,31 +20,16 @@ import java.util.logging.Level;
  * Hello world!
  *
  */
-public class Peer implements MessageReceiver {
+public class Peer {
 
     private static Integer arg0;
     private static Integer id = null;
-//	private GNUTellaConnection connection;
-//	private FileServerSession fbla;
-//	private SearchMonitorSession sbla;
     private Cli cli;
     private static Library library;
 //	private Logger log;
 
     public Peer(Integer arg0) {
         id = arg0;
-    }
-
-    public void receiveSearch(SearchMessage m) {
-        System.out.println("stub");
-    }
-
-    public void receiveSearchReply(SearchReplyMessage m) {
-        System.out.println("stub");
-    }
-
-    public void receivePush(PushMessage m) {
-        System.out.println("stub");
     }
 
     public static void main(String[] args) {
@@ -84,9 +64,29 @@ public class Peer implements MessageReceiver {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        
+        //find the real ip
+        InetAddress myIp = null;
+        Enumeration<NetworkInterface> eI = null;
+		try {
+			eI = NetworkInterface.getNetworkInterfaces();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+        NetworkInterface ni;
+        try {
+        	while(eI.hasMoreElements()) {
+        		ni = eI.nextElement();
+        		if(!ni.isLoopback() && ni.isUp() && !ni.isVirtual()) {
+        			myIp = ni.getInetAddresses().nextElement(); //try the first ip
+        		}
+        }
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
         try {
             ConnectionHandler c = new ConnectionHandler(
-                    InetAddress.getLocalHost().getHostAddress(),
+            		myIp.getHostAddress(),		//InetAddress.getLocalHost().getHostAddress(), use real ip
                     arg0.intValue(),
                     Integer.parseInt(prop.getProperty("maxConnections")),
                     InetAddress.getByName(prop.getProperty("serverIp")),
