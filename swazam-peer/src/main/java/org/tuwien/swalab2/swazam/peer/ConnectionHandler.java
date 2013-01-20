@@ -40,6 +40,7 @@ public class ConnectionHandler extends Thread {
         this.maxConnections = maxConnections;
         this.connectedNodes = new HostCache();
         this.knownNodes = new HostCache(); //Todo von filesystem laden
+        this.knownNodes.load();
         this.currentConnections = new LinkedList<NodeConnection>();
         this.mh = new MessageHandler(lib, this);
         this.serverIp = serverIp;
@@ -72,6 +73,7 @@ public class ConnectionHandler extends Thread {
 			//InputStream is = s.getInputStream();
 			//ObjectInputStream ois = new ObjectInputStream(is);
 			//oos.writeObject(new requestPeerMessage(myAddrString, myPort, null));
+			//oos.flush();
 			
 			//this.mh.handleMessage((Message)ois.readObject());
 			
@@ -82,6 +84,21 @@ public class ConnectionHandler extends Thread {
 			//s.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void printStatus() {
+		System.out.println("Number of known nodes: " + this.knownNodes.getHostCache().size());
+		System.out.println("MAX_CONNECTIONS: " + this.maxConnections);
+		System.out.println("IP: " + this.myAddrString);
+		System.out.println("Peer listening port: " + this.myPort);
+		System.out.println("Client listening port: " + this.myPort+1);
+		System.out.println("----------");
+		System.out.println("Active Connections:");
+		for (int i = 0; i < this.currentConnections.size(); i++) {
+			if(this.currentConnections.get(i).isOnline()) {
+				System.out.println(this.currentConnections.get(i).getRemoteIp().getHostAddress() + ":" + this.currentConnections.get(i).getRemotePort());
+			}
 		}
 	}
 	
@@ -194,6 +211,8 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	public void shutdown() {
+		//persist the host cache
+		this.knownNodes.persist();
 		//ignore the lock just kill everything
 		this.icch.kill();
 		this.ipch.kill();

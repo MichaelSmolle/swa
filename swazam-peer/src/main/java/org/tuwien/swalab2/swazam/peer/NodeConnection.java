@@ -52,6 +52,7 @@ public class NodeConnection {
 				OutputStream os = s.getOutputStream();
 				ObjectOutputStream oos = new ObjectOutputStream(os);
 				oos.writeObject(m);
+				oos.flush();
 				oos.close();
 				os.close();
 			} catch (IOException e) {
