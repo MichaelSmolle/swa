@@ -4,7 +4,11 @@
  */
 package org.tuwien.swalab2.swazam.peer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 
@@ -23,11 +27,13 @@ import com.sun.jersey.api.client.WebResource;
 public class PeerRestClient {
     private WebResource webResource;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080//api";
+    private static final String BASE_URI = "http://localhost:8080/swazam-webapp/api";
 
     public PeerRestClient() {
         com.sun.jersey.api.client.config.ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
-        client = Client.create(config);
+
+			client = Client.create(config);
+
         webResource = client.resource(BASE_URI).path("peer");
     }
 
@@ -37,10 +43,11 @@ public class PeerRestClient {
         return resource.get(responseType);
     }
 
-    public <T> T getPeerList(Class<T> responseType) throws UniformInterfaceException {
+    public String getPeerList() throws UniformInterfaceException {
         WebResource resource = webResource;
         resource = resource.path("peerlist");
-        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(responseType);
+//        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(List.class);
+        return resource.accept(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
     }
 
     public void close() {
