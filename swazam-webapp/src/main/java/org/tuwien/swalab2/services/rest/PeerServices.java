@@ -31,7 +31,7 @@ public class PeerServices implements IPeerServices,Serializable{
     @Override
     @GET
     @Path("/peerlist")
-   @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public List<String> getPeerList() {
         return PeerStorage.getInstance().getRegisteredPeerList();
     }

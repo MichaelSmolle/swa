@@ -4,6 +4,7 @@
  */
 package org.tuwien.swalab2.controller;
 
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -17,7 +18,7 @@ import javax.inject.Inject;
  */
 @SessionScoped
 @ManagedBean
-public class JsfHelper {
+public class JsfHelper implements Serializable{
     
     
     
