@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.tuwien.swalab2.swazam.peer.musiclibrary.Library;
 
 
 public class HostCache implements Serializable {
@@ -69,6 +68,16 @@ public class HostCache implements Serializable {
 
 	}
 	
+	public LinkedList<HostCacheEntry> toLinkedList() {
+		Enumeration<HostCacheEntry> e = this.hostCache.elements();
+		HostCacheEntry cur = null;
+		LinkedList<HostCacheEntry> l = new LinkedList<HostCacheEntry>();
+		while(e.hasMoreElements()) {
+			l.add(e.nextElement());
+		}
+		return l;
+	}
+	
 	
 	public HostCacheEntry search(HostCacheKeyEntry key){
 		HostCacheEntry entry = null;
@@ -88,13 +97,51 @@ public class HostCache implements Serializable {
 	}
 	
 	public void add(HostCacheEntry entry){
-		HostCacheKeyEntry key = new HostCacheKeyEntry(entry.getAdr(), entry.getPort());
+		HostCacheKeyEntry key = new HostCacheKeyEntry(entry.getUid());
 		hostCache.put(key, entry);
 	}
 	
-	public void merge(HostCache a){
-                ConcurrentHashMap cm = a.getHostCache();
-                hostCache.putAll(cm);            
+	public void merge(LinkedList<HostCacheEntry> a){
+		boolean found;
+		HostCacheEntry cur = null;
+		for(int i = 0; i< a.size(); i++) {
+			found = false;
+			cur = a.get(i);
+			Enumeration<HostCacheEntry> b = this.hostCache.elements();
+			HostCacheEntry old = null;
+			while(b.hasMoreElements()) {
+				old = b.nextElement();
+				if(old.getUid().compareTo(cur.getUid()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				this.hostCache.put(new HostCacheKeyEntry(cur.getUid()), cur);
+			}
+		} 
 	}
+	
+	public void merge(HostCache a){
+		Enumeration<HostCacheEntry> e = a.getHostCache().elements();
+		HostCacheEntry cur = null;
+		boolean found;
+		while(e.hasMoreElements()) {
+			found = false;
+			cur = e.nextElement();
+			Enumeration<HostCacheEntry> b = this.hostCache.elements();
+			HostCacheEntry old = null;
+			while(b.hasMoreElements()) {
+				old = b.nextElement();
+				if(old.getUid().compareTo(cur.getUid()) == 0) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) {
+				this.hostCache.put(new HostCacheKeyEntry(cur.getUid()), cur);
+			}
+		} 
+	}	
 }
 

@@ -13,11 +13,13 @@ public class HostCacheEntry implements Serializable {
 	private InetAddress adr;
 	private int         port;
 	private Date		timestamp;
+	String  uid;
 
 	
-	public HostCacheEntry(InetAddress adr, int port) {
+	public HostCacheEntry(InetAddress adr, int port, String uid) {
 		this.adr = adr;
 		this.port = port;
+		this.uid = uid;
 	}
 	
 	public InetAddress getAdr() {
@@ -30,6 +32,10 @@ public class HostCacheEntry implements Serializable {
 
 	public Date getTimestamp() {
 		return timestamp;
+	}
+	
+	public String getUid() {
+		return this.uid;
 	}
 
 	public void setTimestamp(Date timestamp) {

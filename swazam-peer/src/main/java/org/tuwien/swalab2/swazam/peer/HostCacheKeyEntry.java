@@ -1,7 +1,6 @@
 package org.tuwien.swalab2.swazam.peer;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 
 public class HostCacheKeyEntry implements Serializable {
 	
@@ -9,21 +8,19 @@ public class HostCacheKeyEntry implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6951132774557785036L;
-	private InetAddress adr;
-	private int         port;
+	private String uid;
 
 	
-	public HostCacheKeyEntry(InetAddress adr, int port) {
-		this.adr = adr;
-		this.port = port;
+	public HostCacheKeyEntry(String uid) {
+		this.uid = uid;
 	}
 	
-	public InetAddress getAdr() {
-		return this.adr;
+	public boolean equals(HostCacheKeyEntry k) {
+		return this.uid.compareTo(k.getUid()) == 0;
 	}
 	
-	public int getPort() {
-		return this.port;
+	public String getUid() {
+		return this.uid;
 	}
 
 }
