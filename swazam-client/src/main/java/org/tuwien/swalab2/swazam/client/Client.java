@@ -24,7 +24,7 @@ import org.tuwien.swalab2.swazam.peer.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
-import org.tuwien.swalab2.swazam.peer.ClientRestClient;
+import org.tuwien.swalab2.swazam.client.communication.ClientRestClient;
 
 public class Client {
 

@@ -2,13 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tuwien.swalab2.swazam.peer;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.tuwien.swalab2.swazam.client.communication;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.core.impl.provider.entity.StringProvider;
