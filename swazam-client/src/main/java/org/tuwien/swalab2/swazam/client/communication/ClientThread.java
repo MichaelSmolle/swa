@@ -38,9 +38,11 @@ public class ClientThread extends Thread {
         }
         
         if (replyMessage.getFilename().contains("No results found.")) {
-            System.out.println(replyMessage.getFilename());   
+            System.out.println(replyMessage.getFilename());  
+            //TODO: record transaction on server
         } else {
             System.out.println("filename: " + replyMessage.getFilename() + " (found by peer " + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort() + ")");
+            //TODO: record transaction on server
         }
 
         //Close IO stuff we dont care for an exception as we alread have the message
