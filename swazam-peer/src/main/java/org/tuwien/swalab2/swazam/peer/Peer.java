@@ -26,6 +26,7 @@ public class Peer {
     private static Integer id = null;
     private Cli cli;
     private static Library library;
+    private static String myUid;
 //	private Logger log;
 
     public Peer(Integer arg0) {
@@ -36,9 +37,10 @@ public class Peer {
 
         try {
             arg0 = Integer.valueOf(args[0]);
+            myUid = args[1];
         } catch (Exception e) {
 
-            System.out.println("peer [id]");
+            System.out.println("peer [id][uid]");
             return;
         }
         Peer peer = new Peer(arg0);
@@ -95,6 +97,7 @@ public class Peer {
         }
         try {
             c = new ConnectionHandler(
+            		myUid,
             		myIp.getHostAddress(),		//InetAddress.getLocalHost().getHostAddress(), use real ip
                     arg0.intValue(),
                     Integer.parseInt(prop.getProperty("maxConnections")),

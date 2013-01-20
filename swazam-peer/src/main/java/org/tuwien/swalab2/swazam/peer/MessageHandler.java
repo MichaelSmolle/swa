@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +26,7 @@ public class MessageHandler {
         this.knownMessages = new ConcurrentHashMap<String, Message>();
     }
 
-    public void handleMessage(Message m) {
+    public void handleMessage(Message m, String uid) {
     	//check if we already have seen this message
     	//if the id is null its a message that will not be forwarded and therefore there is no need to remember it
     	//TODO clear this sometime
@@ -88,9 +89,10 @@ public class MessageHandler {
             }
 
         } else if (m instanceof requestPeerReplyMessage) {
+        	//System.out.println("Received a requestPeerReplyMessage with the following nodes:");
         	connectionHandler.addNodes(((requestPeerReplyMessage) m).getHostCache());
         } else if (m instanceof requestPeerMessage) {
-        	connectionHandler.replyToRequestNodes(m.getSender(), m.getSenderPort());
+        	connectionHandler.replyToRequestNodes(uid);
         }
     }
 }

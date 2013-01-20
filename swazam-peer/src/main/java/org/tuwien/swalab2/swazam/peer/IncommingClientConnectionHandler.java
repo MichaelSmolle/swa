@@ -22,7 +22,7 @@ public class IncommingClientConnectionHandler extends IncommingConnectionHandler
 		try {
 			is = n.getInputStream();
 			ois = new ObjectInputStream(is);
-			this.mh.handleMessage((Message)ois.readObject());
+			this.mh.handleMessage((Message)ois.readObject(), null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

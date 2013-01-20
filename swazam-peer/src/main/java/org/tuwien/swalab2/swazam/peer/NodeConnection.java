@@ -9,25 +9,27 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 //Represents a connection to an existing node
-//TODO Check Thread Safety and kill mehtod
+//TODO Check Thread Safety and kill method
 public class NodeConnection {
 	
 	private Socket 				s;
 	private MessageHandler 		mh;
-	private ConnectionHandler   ch;
 	private MessageReceiver 	mr;
 	private InetAddress			remoteIp;
 	private int 				remotePort;
 	private volatile boolean	online;
+	private ObjectOutputStream  oos;
+	private String 				remoteUid;
 	
-	public NodeConnection(Socket socket, InetAddress remoteIp, int remotePort, MessageHandler mh, ConnectionHandler ch) {
+	public NodeConnection(Socket socket, InetAddress remoteIp, int remotePort, String remoteUid, 
+						  ObjectInputStream ois, ObjectOutputStream oos, MessageHandler mh) {
 		this.s = socket;
 		this.remoteIp = remoteIp;
 		this.remotePort = remotePort;
+		this.remoteUid = remoteUid;
 		this.mh = mh;
-		this.ch = ch;
-		this.mr = new MessageReceiver(this.mh, this.s, this);
-		this.ch.addToConnectedNodes(this.remoteIp, this.remotePort);
+		this.oos = oos;
+		this.mr = new MessageReceiver(this.mh, this.s, this, ois);
 		this.online = true;
 	}
 	
@@ -37,6 +39,10 @@ public class NodeConnection {
 	
 	public InetAddress getRemoteIp() {
 		return this.remoteIp;
+	}
+	
+	public String getRemoteUid() {
+		return this.remoteUid;
 	}
 	
 	public int getRemotePort() {
@@ -49,14 +55,9 @@ public class NodeConnection {
 		//if we are offline the ConnectionHandler will take some time to remove this connection
 		if(this.online) {  
 			try {
-				OutputStream os = s.getOutputStream();
-				ObjectOutputStream oos = new ObjectOutputStream(os);
-				oos.writeObject(m);
-				oos.flush();
-				oos.close();
-				os.close();
+				this.oos.writeObject(m);
+				this.oos.flush();
 			} catch (IOException e) {
-				//expected behaviour
 				this.disconnect();
 			} 
 		}
@@ -66,33 +67,31 @@ public class NodeConnection {
 	//set the online flag to false
 	//ConnectionHandler will clear the node from the list sometime later
 	public synchronized void disconnect() {
-		this.mr.kill();
+		this.online = false;
 		try {
 			this.s.close();
-		} catch (IOException e) {}
-		this.ch.removeFromConnectedNodes(this.remoteIp, this.remotePort);
-		this.online = false;
+			this.oos.close();
+			this.s.close();
+		} catch (Exception e) {}
+		this.mr.kill();
+		//System.out.println("Done with disconnect");
 	}
 	
 	//Receive a message and give it to the MessageHandler
 	private class MessageReceiver extends Thread {
 		private MessageHandler mh;
 		private volatile boolean running;
-		private InputStream is;
 		private ObjectInputStream ois;
 		private NodeConnection n;
+		private Socket s;
 		
-		public MessageReceiver(MessageHandler mh, Socket s, NodeConnection n) {
+		public MessageReceiver(MessageHandler mh, Socket s, NodeConnection n, ObjectInputStream ois) {
 			this.mh = mh;
 			this.running = true;
 			this.n = n;
-			try {
-				this.is = s.getInputStream();
-				this.ois = new ObjectInputStream(is);
-				this.start();
-			} catch (Exception e) {
-				this.n.disconnect();
-			}  
+			this.s = s;
+			this.ois = ois;
+			this.start(); 
 		}
 		
 		public void kill() {
@@ -101,8 +100,8 @@ public class NodeConnection {
 				this.ois.close();
 			} catch (IOException e) {}
 			try {
-				this.is.close();
-			} catch (IOException e) {}
+				this.s.close();
+			} catch (IOException e1) {}
 			try {
 				join();
 			} catch (InterruptedException e) {}
@@ -111,7 +110,7 @@ public class NodeConnection {
 		public void run() {
 			while(this.running) {
 					try {
-						mh.handleMessage((Message)ois.readObject());
+						mh.handleMessage((Message)ois.readUnshared(), this.n.getRemoteUid());
 					} catch (Exception e) {
 						this.n.disconnect();
 					} 
