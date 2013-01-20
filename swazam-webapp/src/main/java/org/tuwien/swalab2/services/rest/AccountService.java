@@ -101,7 +101,16 @@ public class AccountService implements IAccountService,Serializable{
         return "OK";
     }
     
-    
+    @Override
+    @GET
+    @Path("/login/{userName}/{passWord}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String login(@PathParam("userName") String userName,@PathParam("passWord") String passWord){
+        Person res = PersonStorage.getInstance().authenticatePerson(userName, passWord);
+        
+        
+        return String.valueOf(res.getId());
+    }
   
   
     

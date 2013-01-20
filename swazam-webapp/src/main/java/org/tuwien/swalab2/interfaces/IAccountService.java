@@ -21,6 +21,14 @@ public interface IAccountService {
      * @return Person object
      */
     public Person login(String userId);
+    
+    /**
+     * Login with the users username and password
+     * @param password password
+     * @param userName Username
+     * @return String users id
+     */
+    public String login(String userName,String passWord );
 
     /**
      * Get current account balance for user
