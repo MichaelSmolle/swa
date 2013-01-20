@@ -37,9 +37,9 @@ public class Client {
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
     private List<KnownPeer> knownPeers = new ArrayList<KnownPeer>();
-    private Integer localPort = 38000;
+    private int localPort = 38000;
     private InetAddress currentIp;
-    private Integer currentPort;
+    private int currentPort;
     private ClientRestClient restClient = new ClientRestClient();
 
     public static void main(String[] args) {
@@ -199,7 +199,7 @@ public class Client {
         SearchMessage searchMessage = null;
         try {
             System.out.println("DEBUG: building searchMessage...");
-            searchMessage = new SearchMessage(ip.getHostAddress(), localPort, fingerprint, ip.getHostAddress() + localPort.toString() + d.toString());
+            searchMessage = new SearchMessage(ip.getHostAddress(), localPort, fingerprint, ip.getHostAddress() + localPort + d.toString());
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -208,7 +208,7 @@ public class Client {
         //send message to peer
         try {
 
-            if (socket.isClosed()) {
+            if (socket == null || socket.isClosed()) {
                 socket = new Socket(currentIp, currentPort);
             }      
             
