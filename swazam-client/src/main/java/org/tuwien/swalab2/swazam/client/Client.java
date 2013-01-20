@@ -31,67 +31,6 @@ public class Client {
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null; 
  
-//    private static class ClientThread extends Thread {
-//
-//        private Socket socket = null;
-//        private SearchReplyMessage replyMessage;
-//
-//        public ClientThread(Socket socket) {
-//            this.socket = socket;
-//        }
-//
-//        public void run() {
-//
-//            System.out.println("Received a SearchReplyMessage...");
-//
-//            ObjectInputStream in = null;
-//
-//            try {
-//                in = new ObjectInputStream(socket.getInputStream());
-//
-//                try {
-//                    replyMessage = (SearchReplyMessage) in.readObject();
-//                } catch (ClassNotFoundException ex) {
-//                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                
-//                //TODO: Ergebnisse der diversen Peers sammeln und dann das beste auswählen
-//
-//                System.out.println("filename: " + replyMessage.getFilename() + "(found by peer )" + replyMessage.getSender().toString() + ":" + replyMessage.getSenderPort());
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
-//    private static class TcpDispatcher implements Runnable {
-//
-//        ServerSocket server;
-//
-//        TcpDispatcher(ServerSocket serverSocket) {
-//            this.server = serverSocket;
-//        }
-//
-//        public void run() {
-//
-//            Socket client = null;
-//
-//            try {
-//                while (true) {
-//                    client = server.accept();
-//                    Thread t = new Thread(new ClientThread(client));
-//                    t.start();
-//                }
-//
-//            } catch (SocketException e) {
-//                System.out.println("DEBUG: SocketException occurred.");
-//                System.out.println(e.getMessage());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -135,13 +74,6 @@ public class Client {
 
         
     }
-
-//    private void startSwingUI(String[] args) {
-//        swingUI = new SwingUI();
-//        //TODO: better
-//        //swingUI.main(args);
-//    }
-
 
     public void submitRequest(Fingerprint fingerprint) {
         
