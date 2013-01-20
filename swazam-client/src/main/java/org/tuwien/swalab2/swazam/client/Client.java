@@ -34,9 +34,6 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
 
-        cli = new Cli(client);
-        //swingUI = new SwingUI(client);
-
         try {
             client.setUp();
             //client.startSwingUI(args);
@@ -44,13 +41,16 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
-
+        cli = new Cli(client);
+        //swingUI = new SwingUI(client);
     }
 
     private void setUp() throws IOException {
         System.out.println("Welcome to the SWAzam client.");
-        // ToDo: somehow bootstrap   
+        // ToDo: somehow bootstrap
+
+        ip = InetAddress.getLocalHost();
+        port = 37001;
     }
 
     public void submitRequest(Fingerprint fingerprint) {
@@ -59,32 +59,32 @@ public class Client {
 
         //Create the port we are listening on
         try {
-			tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//create the message
-		Date d = new Date();
-		SearchMessage searchMessage = null;
+            System.out.println("building TcpDispatcher...");
+            tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //create the message
+        Date d = new Date();
+        SearchMessage searchMessage = null;
         try {
-			searchMessage = new SearchMessage(ip.getHostAddress(), port, fingerprint, ip.getHostAddress() + port.toString() + d.toString());
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//create connection to peer and send message
-		try {
-			ip = InetAddress.getByName("127.0.0.1");
-			ip = InetAddress.getLocalHost();
-			port = 37001;
+            System.out.println("building searchMessage...");
+            searchMessage = new SearchMessage(ip.getHostAddress(), port, fingerprint, ip.getHostAddress() + port.toString() + d.toString());
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //create connection to peer and send message
+        try {
+
             initSocket = new Socket(ip, port);
             out = new ObjectOutputStream(initSocket.getOutputStream());
-
             out.writeObject(searchMessage);
             out.flush();
+
         } catch (UnknownHostException e) {
             System.err.println("Cannot find the peer  " + ip + ":" + port + ".");
             //serverSocket.close();
@@ -93,18 +93,20 @@ public class Client {
             System.err.println("Could not connect to peer " + ip + ".");
             //System.exit(1);
         }
-        
+
         //close the connection at this point we dont care about errors any more
         try {
-        	out.close();
-        	initSocket.close();
-        } catch (Exception e) {}
-        
+            out.close();
+            initSocket.close();
+        } catch (Exception e) {
+        }
+
         //give the listening thread 15 seconds time to wait for answers then kill it
         try {
-			Thread.sleep(15000);
-		} catch (Exception e) {}
-		tcpDispatcher.kill();
+            Thread.sleep(15000);
+        } catch (Exception e) {
+        }
+        tcpDispatcher.kill();
     }
 
     public void shutdown() {
