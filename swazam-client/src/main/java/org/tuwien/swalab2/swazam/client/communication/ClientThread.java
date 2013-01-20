@@ -22,7 +22,7 @@ public class ClientThread extends Thread {
 
     public void run() {
 
-        System.out.println("Received a SearchReplyMessage...");
+        System.out.println("DEBUG: Received a SearchReplyMessage...");
 
         ObjectInputStream in = null;
         InputStream is = null;
@@ -45,10 +45,11 @@ public class ClientThread extends Thread {
 
         //Close IO stuff we dont care for an exception as we alread have the message
         try {
-            System.out.println("Closing IO stuff");
+            System.out.println("DEBUG: Closing IO stuff");
             in.close();
             is.close();
             this.socket.close();
+            System.out.println("DEBUG: Closed IO stuff");
         } catch (IOException e) {
             e.printStackTrace();
         }

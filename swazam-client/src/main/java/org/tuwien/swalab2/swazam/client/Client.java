@@ -29,11 +29,14 @@ public class Client {
     private static SwingUI swingUI;
     private static Cli cli;
     private InetAddress ip;
-    private Integer port;
+    //private Integer port;
     private Socket initSocket = null;
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
     private List<KnownPeer> knownPeers = new ArrayList<>();
+    private Integer localPort;
+    private InetAddress currentIp;
+    private Integer currentPort;
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -41,12 +44,15 @@ public class Client {
         System.out.println("Welcome to the SWAzam client.");
         
         client.setUp();
+        //if (!client.setUp()) {
+        //    client.shutdown();
+        //}
         //client.startSwingUI(args);
         cli = new Cli(client);
         //swingUI = new SwingUI(client);
     }
     
-    private void setUp() {
+    private boolean setUp() {
         
         // TODO: Bootstrapping  
         
@@ -64,7 +70,12 @@ public class Client {
                 knownPeers = (List<KnownPeer>) knownPeersStreamIn.readObject();
 
                 //TODO: remove
-                knownPeers.add(new KnownPeer(InetAddress.getLocalHost(), 37001, "37001"));
+                ip = InetAddress.getLocalHost();
+                localPort = 37001;
+                KnownPeer dirtyHack = new KnownPeer(InetAddress.getLocalHost(), localPort, "37001");
+                if (!knownPeers.contains(dirtyHack)) {
+                    knownPeers.add(dirtyHack);
+                }
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,27 +85,34 @@ public class Client {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            //List <KnownPeer> tmpKnownPeers = new ArrayList<>();
+            //tmpKnownPeers = knownPeers;
+            
             for (KnownPeer currentPeer : knownPeers) {
 
-                InetAddress currentIp = currentPeer.getIp();
-                Integer currentPort = currentPeer.getPort();
+                currentIp = currentPeer.getIp();
+                currentPort = currentPeer.getPort();
 
                 //create connection to peer  
                 try {
                     initSocket = new Socket(currentIp, currentPort);
+                    //out = new ObjectOutputStream(initSocket.getOutputStream());
+                    
+                    System.out.println("Connected to peer " + currentIp + ":" + currentPort + ".");
 
                     // add new knownPeers to list
-                    if (!knownPeers.contains(new KnownPeer(currentIp, currentPort, currentPort.toString()))) {
-                        knownPeers.add(new KnownPeer(currentIp, currentPort, currentPort.toString()));
-                        break;
+                    if (!knownPeers.contains(currentPeer)) {
+                        knownPeers.add(currentPeer);
+                        //break;
                     }
+                    
+                    break;
 
                 } catch (IOException ex) {
                     System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
-                    knownPeers.remove(new KnownPeer(currentIp, currentPort, currentPort.toString()));
+                    //knownPeers.remove(currentPeer);
                 }
             }
-
         }
         
         // TODO
@@ -102,7 +120,7 @@ public class Client {
         else {
             System.out.println("No known peers. \n");
             System.out.println("TODO: get peer list from server");
-        }    
+        }  
         
         try {
             FileOutputStream knownPeersFileOut = new FileOutputStream(knowPeersFile);
@@ -115,6 +133,8 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        return false;
+        
     }
 
     public void submitRequest(Fingerprint fingerprint) {
@@ -123,8 +143,8 @@ public class Client {
 
         //Create the port we are listening on
         try {
-            System.out.println("building TcpDispatcher...");
-            tcpDispatcher = new TcpDispatcher(new ServerSocket(port + 1));
+            System.out.println("DEBUG: building TcpDispatcher...");
+            tcpDispatcher = new TcpDispatcher(new ServerSocket(localPort + 1));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,8 +154,8 @@ public class Client {
         Date d = new Date();
         SearchMessage searchMessage = null;
         try {
-            System.out.println("building searchMessage...");
-            searchMessage = new SearchMessage(ip.getHostAddress(), port, fingerprint, ip.getHostAddress() + port.toString() + d.toString());
+            System.out.println("DEBUG: building searchMessage...");
+            searchMessage = new SearchMessage(ip.getHostAddress(), localPort, fingerprint, ip.getHostAddress() + localPort.toString() + d.toString());
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -144,30 +164,35 @@ public class Client {
         //send message to peer
         try {
 
+            if (initSocket.isClosed()) {
+                initSocket = new Socket(currentIp, currentPort);
+            }      
+            
             out = new ObjectOutputStream(initSocket.getOutputStream());
             out.writeObject(searchMessage);
             out.flush();
 
         } catch (UnknownHostException e) {
-            System.err.println("Cannot find the peer  " + ip + ":" + port + ".");
+            System.err.println("Cannot find the peer  " + ip + ":" + localPort + ".");
             //serverSocket.close();
             System.exit(1); //TODO: remove
         } catch (IOException e) {
-            System.err.println("Could not connect to peer " + ip + ".");
+            System.err.println("Could not send the search request to peer " + ip + ".");
+            e.printStackTrace();
             //System.exit(1);
         }
 
         //close the connection at this point we dont care about errors any more
         try {
             out.close();
-            //initSocket.close();
+            initSocket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //give the listening thread 15 seconds time to wait for answers then kill it
+        //give the listening thread 10 seconds time to wait for answers then kill it
         try {
-            Thread.sleep(15000);
+            Thread.sleep(10000);
         } catch (Exception e) {
             e.printStackTrace();
         }

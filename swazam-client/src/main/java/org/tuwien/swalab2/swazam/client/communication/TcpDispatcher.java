@@ -27,10 +27,10 @@ public class TcpDispatcher extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(TcpDispatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            join();
-        } catch (InterruptedException e) {
-        }
+        //try {
+        //    join();
+        //} catch (InterruptedException e) {
+        //}
     }
 
     public void run() {
@@ -45,15 +45,16 @@ public class TcpDispatcher extends Thread {
 
         } catch (SocketException e) {
             System.out.println("DEBUG: SocketException occurred.");
-            System.out.println(e.getMessage());
+            System.out.println("DEBUG: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
         //wait for client threads
-        System.out.println("wait for client threads");
+        System.out.println("DEBUG: wait for client threads");
         try {
             join();
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
