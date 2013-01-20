@@ -40,6 +40,7 @@ public class ConnectionHandler extends Thread {
         this.maxConnections = maxConnections;
         this.connectedNodes = new HostCache();
         this.knownNodes = new HostCache(); //Todo von filesystem laden
+        this.knownNodes.load();
         this.currentConnections = new LinkedList<NodeConnection>();
         this.mh = new MessageHandler(lib, this);
         this.serverIp = serverIp;
@@ -210,6 +211,8 @@ public class ConnectionHandler extends Thread {
 	}
 	
 	public void shutdown() {
+		//persist the host cache
+		this.knownNodes.persist();
 		//ignore the lock just kill everything
 		this.icch.kill();
 		this.ipch.kill();
