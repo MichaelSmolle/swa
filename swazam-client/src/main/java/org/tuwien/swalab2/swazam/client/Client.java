@@ -146,7 +146,7 @@ public class Client {
         try {
             
             Date d = new Date();
-            SearchMessage searchMessage = new SearchMessage(ip.toString(), port, fingerprint, ip.toString() + port.toString() + d.toString());
+            SearchMessage searchMessage = new SearchMessage(ip.getHostAddress(), port, fingerprint, ip.toString() + port.toString() + d.toString());
 
             out.writeObject(searchMessage);
             out.flush();

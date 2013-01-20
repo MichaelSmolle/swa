@@ -52,7 +52,7 @@ public class MessageHandler {
                 // TODO: IP und Port von beantworteten einbauen
                 SearchReplyMessage searchReplyMessage;
                 try {
-                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().toString(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
+                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
                       
                     out.writeObject(searchReplyMessage);
                     out.flush();
