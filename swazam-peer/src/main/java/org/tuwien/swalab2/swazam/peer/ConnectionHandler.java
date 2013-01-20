@@ -39,14 +39,14 @@ public class ConnectionHandler extends Thread {
         this.myPort = myPort;
         this.maxConnections = maxConnections;
         this.connectedNodes = new HostCache();
-        this.knownNodes = new HostCache(); //Todo von filesystem laden
+        this.knownNodes = new HostCache();
         this.knownNodes.load();
         this.currentConnections = new LinkedList<NodeConnection>();
         this.mh = new MessageHandler(lib, this);
         this.serverIp = serverIp;
         this.serverPort = serverPort;
         this.icch = new IncommingClientConnectionHandler(this.myPort + 1, this.mh);
-        this.ipch = null; //new IncommingPeerConnectionHandler(this.myPort, this);
+        this.ipch = new IncommingPeerConnectionHandler(this.myPort, this);
         this.l = new ReentrantLock();
         this.running = true;
         this.start();
