@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import org.tuwien.swalab2.swazam.client.clientUI.Cli;
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
 import org.tuwien.swalab2.swazam.client.communication.TcpDispatcher;
+import org.tuwien.swalab2.swazam.peer.HostCacheEntry;
 import org.tuwien.swalab2.swazam.peer.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
@@ -36,7 +37,7 @@ public class Client {
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
     private List<KnownPeer> knownPeers = new ArrayList<>();
-    private Integer localPort;
+    private Integer localPort = 38000;
     private InetAddress currentIp;
     private Integer currentPort;
     private ClientRestClient restClient = new ClientRestClient();
@@ -152,18 +153,20 @@ public class Client {
             String list = (String) restClient.getPeerList();
 
             String[] peers = list.split("\\-");
+            
 
             for (int i = 0; i < peers.length; i++) {
 
                 try {
                     String[] result = peers[i].split("\\:");
-                    if (result.length == 2) {
-                        InetAddress adr;
-                        adr = InetAddress.getByName(result[0]);
-                        Integer port = Integer.valueOf(result[1]);
+                    if (result.length == 3) {
+                    	InetAddress adr = InetAddress.getByName(result[0]);
+                    	int port = Integer.parseInt(result[1]);
+                    	String uid = result[2];
+                    	System.out.println(result[0].toString() + ":" + result[1].toString() + ":" +result[2]);
                         System.out.println("DEBUG: (getPeersFromServer)" + result[0].toString() + ":" + result[1].toString());
                         KnownPeer thisPeer;
-                        thisPeer = new KnownPeer(adr, port, port.toString());
+                        thisPeer = new KnownPeer(adr, port, uid);
                         knownPeersFromServer.add(thisPeer);
                     }
 
