@@ -72,24 +72,30 @@ public class ConnectionHandler extends Thread {
 	private void bootstrap() {
 		try {
 
+//		 getting list from server
+	     System.out.println("Bootstrapping from server!");		
 		 String list = (String) restClient.getPeerList();
-//		 TODO: REMOVE
-		 list = "127.0.0.1:37010-127.0.0.1:37012-127.0.0.1:37014";
 		 
 		 String[] peers = list.split("\\-");
-		 
+	
 		 for (int i = 0; i < peers.length; i++) {
 			 String[] result = peers[i].split("\\:");
-			 
+			 if (result.length == 2){
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
 			 System.out.println(result[0].toString() + ":" + result[1].toString() );
 			 HostCacheEntry entry = new HostCacheEntry(adr, port);
 			 knownNodes.add(entry);
+			 }
 		 }
-			
-			
-
+		 	
+		 
+//		 register me server
+		 System.out.println("Registering to server! \n");
+//		 String register = new String (myAddrString + ":" + myPort);
+		 String register = new String ("192.168.1.21" + ":" + myPort);
+		 restClient.registerPeer(register);
+		 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -156,7 +162,7 @@ public class ConnectionHandler extends Thread {
 			} catch (IOException e) {}
 		}
 		this.l.unlock();
-	}
+	}	
 	
 	//Called by MessageHandler 
 	//Send the HostCache to the corresponding NodeConnection

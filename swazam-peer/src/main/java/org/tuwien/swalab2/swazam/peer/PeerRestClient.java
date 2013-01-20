@@ -40,10 +40,9 @@ public class PeerRestClient {
         webResource = client.resource(BASE_URI).path("peer");
     }
 
-    public <T> T registerPeer(Class<T> responseType, String address) throws UniformInterfaceException {
+    public void registerPeer(String address) throws UniformInterfaceException {
         WebResource resource = webResource;
         resource = resource.path(java.text.MessageFormat.format("add/{0}", new Object[]{address}));
-        return resource.get(responseType);
     }
 
     public String getPeerList() throws UniformInterfaceException {

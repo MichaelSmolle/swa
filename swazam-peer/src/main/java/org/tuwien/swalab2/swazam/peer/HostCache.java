@@ -93,7 +93,7 @@ public class HostCache implements Serializable {
 	}
 	
 	public void merge(HostCache a){
-                ConcurrentHashMap cm = a.getHostCache();
+                ConcurrentHashMap<HostCacheKeyEntry, HostCacheEntry> cm = a.getHostCache();
                 hostCache.putAll(cm);            
 	}
 }
