@@ -114,11 +114,13 @@ public class Cli extends Thread{
 	}
 	private void usage() {
 		System.out.println("\n Interactive commands:"
-				+ "\n - add <path to mp3>" + "\n - add <id> <path to mp3>"
-				+ "\n - remove <path to mp3>" + "\n - list" + "\n - quit"
-				+ "\n - list"
+				+ "\n - add <path to mp3>" 
+				+ "\n - add <id> <path to mp3>"
+				+ "\n - remove <path to mp3>" 
+				+ "\n - list" 
 				+ "\n - quit"
-				+ "\n - usage" + "\n");
+				+ "\n - usage" 
+				+ "\n");
 	}
 
 
