@@ -36,3 +36,6 @@ start with java -jar swa-client-1.0-jar-with-dependencies.jar
 
 Known issues:
 Subsequent requests to the system can only be made every 15 seconds, specifically after the "DEBUG: wait for client threads" message appears on the console.
+
+
+Copy music in music folder
