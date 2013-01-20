@@ -54,6 +54,8 @@ public class MessageHandler {
                 try {
                     searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
                       
+                    System.out.println("searchReplyMessage" + searchReplyMessage.toString());
+                    
                     out.writeObject(searchReplyMessage);
                     out.flush();
                     out.close();
