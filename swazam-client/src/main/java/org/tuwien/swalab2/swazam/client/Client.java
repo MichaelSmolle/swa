@@ -36,7 +36,7 @@ public class Client {
     private Socket socket = null;
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
-    private List<KnownPeer> knownPeers = new ArrayList<>();
+    private List<KnownPeer> knownPeers = new ArrayList<KnownPeer>();
     private Integer localPort = 38000;
     private InetAddress currentIp;
     private Integer currentPort;
@@ -82,11 +82,14 @@ public class Client {
                 }               
 
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+//                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            	ex.printStackTrace();
             }
         }
         
@@ -148,7 +151,7 @@ public class Client {
     
         System.out.println("Trying to get list of peers from server...");
 
-        List<KnownPeer> knownPeersFromServer = new ArrayList<>();
+        List<KnownPeer> knownPeersFromServer = new ArrayList<KnownPeer>();
         
             String list = (String) restClient.getPeerList();
 
