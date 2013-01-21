@@ -130,7 +130,6 @@ public class Cli {
 	private void usage() {
 		System.out.println("\n Interactive commands:"
 				+ "\n - add <path to mp3>" 
-				+ "\n - add <id> <path to mp3>"
 				+ "\n - remove <path to mp3>" 
 				+ "\n - list"
 				+ "\n - connection-status"

@@ -96,7 +96,6 @@ public class ConnectionHandler extends Thread {
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
 			 String uid = result[2];
-//			 System.out.println(result[0].toString() + ":" + result[1].toString() + ":" +result[2]);
 			 HostCacheEntry entry = new HostCacheEntry(adr, port, uid);
 			 knownNodes.add(entry);
 			 }
@@ -104,9 +103,7 @@ public class ConnectionHandler extends Thread {
 		 	
 		 
 //		 register me server
-//		 System.out.println("Registering to server! \n");
 		 String register = new String (myAddrString + " " + myPort + " " + this.uid);
-//		 String register = new String ("127.0.0.1" + ":" + myPort);
 		 restClient.registerPeer(register);
 		 
 		} catch (Exception e) {
