@@ -15,7 +15,7 @@ import org.tuwien.swalab2.swazam.peer.p2p.ConnectionHandler;
 
 
 
-public class Cli extends Thread{
+public class Cli {
 
 	private String cmd = "";
 	private String filename = "";
@@ -27,7 +27,7 @@ public class Cli extends Thread{
 		super();
 		this.library = library;
 		this.ch = ch;
-		this.start();
+		this.run();
 	}
 
 
@@ -35,8 +35,8 @@ public class Cli extends Thread{
 
 		usage();
 
-		boolean run = true;
-		while (run) {
+		boolean running = true;
+		while (running) {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					System.in));
 			String input;
@@ -109,9 +109,18 @@ public class Cli extends Thread{
 				} else if (cmd.equals("connection-status")) {
 					this.ch.printStatus();
 				} else if (cmd.equals("quit")) {
+					running = false;
+					s.close();
+					try {
+						in.close();
+					} catch (IOException e) {}
 					library.persist();
 					ch.shutdown();
-					run = false;
+					try {
+						ch.join();
+					} catch (InterruptedException e) {}
+					System.out.println("Done with shutdown");
+					return;
 				} else {
 					usage();
 				}

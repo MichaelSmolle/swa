@@ -24,6 +24,9 @@ public abstract class IncommingConnectionHandler extends Thread {
 		try {
 			this.s.close();
 		} catch (IOException e) {}
+		try {
+			join();
+		} catch (InterruptedException e) {}
 	}
 	
 	public void run() {
@@ -31,7 +34,7 @@ public abstract class IncommingConnectionHandler extends Thread {
 			try {
 				this.handleSocket(s.accept());
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

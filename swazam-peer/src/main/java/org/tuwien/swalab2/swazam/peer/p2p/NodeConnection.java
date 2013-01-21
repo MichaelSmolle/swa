@@ -66,15 +66,21 @@ public class NodeConnection {
 	//Inform the ConnectionHandler that this connection is dead
 	//set the online flag to false
 	//ConnectionHandler will clear the node from the list sometime later
-	public synchronized void disconnect() {
+	public void disconnect() {
 		this.online = false;
 		try {
 			this.s.close();
 			this.oos.close();
 			this.s.close();
 		} catch (Exception e) {}
-		this.mr.kill();
-		//System.out.println("Done with disconnect");
+		if(this.mr.isRunning()) {
+			System.out.println("killing message receiver");
+			this.mr.kill();
+			try {
+				this.mr.join();
+			} catch (InterruptedException e) {}
+		}
+		System.out.println("Done with disconnect");
 	}
 	
 	//Receive a message and give it to the MessageHandler
@@ -94,6 +100,10 @@ public class NodeConnection {
 			this.start(); 
 		}
 		
+		public boolean isRunning() {
+			return this.running;
+		}
+		
 		public void kill() {
 			this.running = false;
 			try {
@@ -102,9 +112,6 @@ public class NodeConnection {
 			try {
 				this.s.close();
 			} catch (IOException e1) {}
-			try {
-				join();
-			} catch (InterruptedException e) {}
 		}
 		
 		public void run() {

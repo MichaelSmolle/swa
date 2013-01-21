@@ -238,19 +238,22 @@ public class ConnectionHandler extends Thread {
 	
 	public void shutdown() {
 		//persist the host cache
+		this.running = false;
 		this.knownNodes.persist();
 		//ignore the lock just kill everything
 		this.icch.kill();
+		System.out.println("killed IncommingClientConnectionHandler");
 		this.ipch.kill();
-		this.running = false;
-		try {
-			join();
-		} catch (InterruptedException e) {}
+		System.out.println("killed IncommingPeerConnectionHandler");
 		
 		Iterator<NodeConnection> itr = this.currentConnections.iterator();
 		while(itr.hasNext()) {
 			itr.next().disconnect();
 		}
+		try {
+			join();
+		} catch (InterruptedException e) {}
+		System.out.println("killed all connections");
 	}
 	
 	private void sendUid(Socket n, ObjectOutputStream oos) throws Exception {
