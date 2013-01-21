@@ -25,6 +25,7 @@ import org.tuwien.swalab2.swazam.peer.p2p.SearchMessage;
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
 
 import org.tuwien.swalab2.swazam.client.communication.ClientRestClient;
+import org.tuwien.swalab2.swazam.peer.p2p.HostCacheEntry;
 
 public class Client {
 
@@ -75,7 +76,7 @@ public class Client {
                     socket = connectToPeer(getPeersFromServer());
                     
                     if (socket == null) {
-                        System.out.println("Could not connect to SWAzam network");
+                        System.out.println("Could not connect to SWAzam network.");
                     }               
                 }               
 
@@ -156,17 +157,15 @@ public class Client {
 
             String[] peers = list.split("\\-");
             
-
             for (int i = 0; i < peers.length; i++) {
 
                 try {
-                    String[] result = peers[i].split("\\:");
+                    String[] result = peers[i].split("\\ ");
                     if (result.length == 3) {
                     	InetAddress adr = InetAddress.getByName(result[0]);
                     	int port = Integer.parseInt(result[1]);
                     	String uid = result[2];
-                    	System.out.println(result[0].toString() + ":" + result[1].toString() + ":" +result[2]);
-                        System.out.println("DEBUG: (getPeersFromServer)" + result[0].toString() + ":" + result[1].toString());
+                        System.out.println("DEBUG: got peer from server: IP: " + result[0].toString() + ":" + result[1].toString() + " id: " + result[2].toString());
                         KnownPeer thisPeer;
                         thisPeer = new KnownPeer(adr, port, uid);
                         knownPeersFromServer.add(thisPeer);
@@ -175,7 +174,7 @@ public class Client {
                 } catch (UnknownHostException ex) {
                     Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            }      
             
             return knownPeersFromServer;
     }
@@ -250,6 +249,7 @@ public class Client {
         try {
             out.close();
             socket.close();
+            restClient.close();
             //swingUI.close();
             cli.close();
         } catch (IOException ex) {
