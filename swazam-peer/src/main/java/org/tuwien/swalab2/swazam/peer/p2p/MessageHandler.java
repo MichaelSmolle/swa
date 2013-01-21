@@ -60,12 +60,11 @@ public class MessageHandler {
                 //System.exit(1);
             }
 
-            // TODO: IP und Port von beantworteten einbauen
             SearchReplyMessage searchReplyMessage = null;
 
             if (matchResult != null) {
                 try {
-                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), matchResult.getFilename());
+                    searchReplyMessage = new SearchReplyMessage(connectionHandler.getMyIp(), connectionHandler.getMyPort(), thisMessage.getId(), matchResult.getFilename());
                     System.out.println("searchReplyMessage: " + searchReplyMessage.getFilename());
                 } catch (UnknownHostException ex) {
                     Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,7 +72,7 @@ public class MessageHandler {
 
             } else {
                 try {
-                    searchReplyMessage = new SearchReplyMessage(thisMessage.getSender().getHostAddress(), thisMessage.getSenderPort(), thisMessage.getId(), "No results found.");
+                    searchReplyMessage = new SearchReplyMessage(connectionHandler.getMyIp(), connectionHandler.getMyPort(), thisMessage.getId(), "No results found.");
                     System.out.println("No results found for searchMessage:" + thisMessage.getId() + ".");
                 } catch (UnknownHostException ex) {
                     Logger.getLogger(MessageHandler.class.getName()).log(Level.SEVERE, null, ex);
