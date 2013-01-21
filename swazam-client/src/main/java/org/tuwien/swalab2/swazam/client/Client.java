@@ -186,7 +186,7 @@ public class Client {
 
         //Create the port we are listening on
         try {
-            System.out.println("DEBUG: building TcpDispatcher...");
+            //System.out.println("DEBUG: building TcpDispatcher...");
             tcpDispatcher = new TcpDispatcher(new ServerSocket(localPort + 1));
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -197,7 +197,7 @@ public class Client {
         Date d = new Date();
         SearchMessage searchMessage = null;
         try {
-            System.out.println("DEBUG: building searchMessage...");
+            //System.out.println("DEBUG: building searchMessage...");
             searchMessage = new SearchMessage(localIp.getHostAddress(), localPort, fingerprint, localIp.getHostAddress() + localPort + d.toString());
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
@@ -208,13 +208,13 @@ public class Client {
         try {
 
             if (socket == null || socket.isClosed()) {
-                System.out.println("socket is null or closed");
+                //System.out.println("socket is null or closed");
                 socket = new Socket(currentPeerIp, currentPeerPort);
             }      
             
-            System.out.println("just before sending");
+            //System.out.println("just before sending");
             out = new ObjectOutputStream(socket.getOutputStream());
-            System.out.println("searchMessage: " + searchMessage);
+            //System.out.println("searchMessage: " + searchMessage);
             out.writeObject(searchMessage);
             out.flush();
 

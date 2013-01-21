@@ -50,7 +50,7 @@ public class TcpDispatcher extends Thread {
             e.printStackTrace();
         }
         //wait for client threads
-        System.out.println("DEBUG: wait for client threads");
+        System.out.println("Ready for new query.");
         try {
             join();
         } catch (InterruptedException e) {
