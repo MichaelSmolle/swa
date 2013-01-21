@@ -118,7 +118,7 @@ public class Client {
         for (KnownPeer currentPeer : knownPeers) {
             
             currentPeerIp = currentPeer.getIp();
-            currentPeerPort = currentPeer.getPort();
+            currentPeerPort = currentPeer.getPort()+1;
 
             //create connection to peer  
             try {
