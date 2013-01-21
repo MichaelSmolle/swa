@@ -91,7 +91,7 @@ public class ConnectionHandler extends Thread {
 		 String[] peers = list.split("\\-");
 	
 		 for (int i = 0; i < peers.length; i++) {
-			 String[] result = peers[i].split("\\:");
+			 String[] result = peers[i].split("\\ ");
 			 if (result.length == 3){
 			 InetAddress adr = InetAddress.getByName(result[0]);
 			 int port = Integer.parseInt(result[1]);
@@ -105,7 +105,7 @@ public class ConnectionHandler extends Thread {
 		 
 //		 register me server
 		 System.out.println("Registering to server! \n");
-		 String register = new String (myAddrString + ":" + myPort + ":" + this.uid);
+		 String register = new String (myAddrString + " " + myPort + " " + this.uid);
 //		 String register = new String ("127.0.0.1" + ":" + myPort);
 		 restClient.registerPeer(register);
 		 

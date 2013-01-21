@@ -67,18 +67,20 @@ public class NodeConnection {
 	//set the online flag to false
 	//ConnectionHandler will clear the node from the list sometime later
 	public void disconnect() {
-		this.online = false;
-		try {
-			this.s.close();
-			this.oos.close();
-			this.s.close();
-		} catch (Exception e) {}
-		if(this.mr.isRunning()) {
-			System.out.println("killing message receiver");
-			this.mr.kill();
+		if (this.online) {
+			this.online = false;
+			if(this.mr.isRunning()) {
+				System.out.println("killing message receiver");
+				this.mr.kill();
+				try {
+					this.mr.join();
+				} catch (InterruptedException e) {}
+			}
 			try {
-				this.mr.join();
-			} catch (InterruptedException e) {}
+				this.s.close();
+				this.oos.close();
+				this.s.close();
+			} catch (Exception e) {}
 		}
 		System.out.println("Done with disconnect");
 	}
@@ -105,13 +107,15 @@ public class NodeConnection {
 		}
 		
 		public void kill() {
-			this.running = false;
-			try {
-				this.ois.close();
-			} catch (IOException e) {}
-			try {
-				this.s.close();
-			} catch (IOException e1) {}
+			if(this.running) {
+				this.running = false;
+				try {
+					this.ois.close();
+				} catch (IOException e) {}
+				try {
+					this.s.close();
+				} catch (IOException e1) {}
+			}
 		}
 		
 		public void run() {
@@ -119,7 +123,10 @@ public class NodeConnection {
 					try {
 						mh.handleMessage((Message)ois.readUnshared(), this.n.getRemoteUid());
 					} catch (Exception e) {
-						this.n.disconnect();
+						if(this.running) {
+							this.kill();
+							this.n.disconnect();
+						}
 					} 
 			}
 		}
