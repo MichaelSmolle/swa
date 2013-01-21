@@ -318,4 +318,11 @@ public class ConnectionHandler extends Thread {
 			} catch (InterruptedException e) {}
 		}
 	}
+        
+        public int getMyPort(){
+            return this.myPort;
+        }
+        public String getMyIp(){
+            return this.myAddrString;
+        }
 }
