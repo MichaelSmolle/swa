@@ -57,11 +57,11 @@ public class ClientThread extends Thread {
 
         //Close IO stuff we dont care for an exception as we alread have the message
         try {
-            System.out.println("DEBUG: Closing IO stuff");
+            //System.out.println("DEBUG: Closing IO stuff");
             in.close();
             is.close();
             this.socket.close();
-            System.out.println("DEBUG: Closed IO stuff");
+            //System.out.println("DEBUG: Closed IO stuff");
         } catch (IOException e) {
             e.printStackTrace();
         }

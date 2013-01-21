@@ -44,8 +44,8 @@ public class TcpDispatcher extends Thread {
             }
 
         } catch (SocketException e) {
-            System.out.println("DEBUG: SocketException occurred.");
-            System.out.println("DEBUG: " + e.getMessage());
+            //System.out.println("DEBUG: SocketException occurred.");
+            //System.out.println("DEBUG: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }

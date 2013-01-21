@@ -77,6 +77,7 @@ public class Client {
                     
                     if (socket == null) {
                         System.out.println("Could not connect to SWAzam network.");
+                        shutdown();
                     }               
                 }               
 
@@ -253,7 +254,9 @@ public class Client {
             //swingUI.close();
             cli.close();
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex0) {
+            //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.exit(0);
     }
