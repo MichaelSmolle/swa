@@ -255,6 +255,6 @@ public class Client {
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.exit(0);
+        System.exit(1);
     }
 }
