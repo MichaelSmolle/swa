@@ -258,6 +258,6 @@ public class Client {
         } catch (NullPointerException ex0) {
             //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.exit(0);
+        System.exit(1);
     }
 }
