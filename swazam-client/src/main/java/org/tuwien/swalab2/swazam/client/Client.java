@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import org.tuwien.swalab2.swazam.client.clientUI.Cli;
 import org.tuwien.swalab2.swazam.client.clientUI.SwingUI;
 import org.tuwien.swalab2.swazam.client.communication.TcpDispatcher;
-import org.tuwien.swalab2.swazam.peer.p2p.HostCacheEntry;
 import org.tuwien.swalab2.swazam.peer.p2p.SearchMessage;
 
 import ac.at.tuwien.infosys.swa.audio.Fingerprint;
@@ -31,15 +30,14 @@ public class Client {
 
     private static SwingUI swingUI;
     private static Cli cli;
-    private InetAddress ip;
-    //private Integer port;
+    private InetAddress localIp;
     private Socket socket = null;
     private ObjectOutputStream out = null;
     private TcpDispatcher tcpDispatcher = null;
     private List<KnownPeer> knownPeers = new ArrayList<KnownPeer>();
     private int localPort = 38000;
-    private InetAddress currentIp;
-    private int currentPort;
+    private InetAddress currentPeerIp;
+    private int currentPeerPort;
     private ClientRestClient restClient = new ClientRestClient();
 
     public static void main(String[] args) {
@@ -119,15 +117,16 @@ public class Client {
         
         for (KnownPeer currentPeer : knownPeers) {
             
-            currentIp = currentPeer.getIp();
-            currentPort = currentPeer.getPort()+1;
+            currentPeerIp = currentPeer.getIp();
+            currentPeerPort = currentPeer.getPort();
 
             //create connection to peer  
             try {
-                initSocket = new Socket(currentIp, currentPort);
+                initSocket = new Socket(currentPeerIp, currentPeerPort);
+                localIp = initSocket.getLocalAddress();
                 //out = new ObjectOutputStream(initSocket.getOutputStream());
 
-                System.out.println("Connected to peer " + currentIp + ":" + currentPort + ".");
+                System.out.println("Connected to peer " + currentPeerIp + ":" + currentPeerPort + ".");
 
                 // add new knownPeers to list
                 if (!knownPeers.contains(currentPeer)) {
@@ -138,7 +137,7 @@ public class Client {
                 return initSocket;
 
             } catch (IOException ex) {
-                System.out.println("Could not connect to peer " + currentIp + ":" + currentPort + ".");
+                System.out.println("Could not connect to peer " + currentPeerIp + ":" + currentPeerPort + ".");
                 //knownPeers.remove(currentPeer);
             }
         }
@@ -199,7 +198,7 @@ public class Client {
         SearchMessage searchMessage = null;
         try {
             System.out.println("DEBUG: building searchMessage...");
-            searchMessage = new SearchMessage(ip.getHostAddress(), localPort, fingerprint, ip.getHostAddress() + localPort + d.toString());
+            searchMessage = new SearchMessage(localIp.getHostAddress(), localPort, fingerprint, localIp.getHostAddress() + localPort + d.toString());
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -209,19 +208,22 @@ public class Client {
         try {
 
             if (socket == null || socket.isClosed()) {
-                socket = new Socket(currentIp, currentPort);
+                System.out.println("socket is null or closed");
+                socket = new Socket(currentPeerIp, currentPeerPort);
             }      
             
+            System.out.println("just before sending");
             out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("searchMessage: " + searchMessage);
             out.writeObject(searchMessage);
             out.flush();
 
         } catch (UnknownHostException e) {
-            System.err.println("Cannot find the peer  " + ip + ":" + localPort + ".");
+            System.err.println("Cannot find the peer  " + localIp + ":" + localPort + ".");
             //serverSocket.close();
             System.exit(1); //TODO: remove
         } catch (IOException e) {
-            System.err.println("Could not send the search request to peer " + ip + ".");
+            System.err.println("Could not send the search request to peer " + localIp + ".");
             e.printStackTrace();
             //System.exit(1);
         }
